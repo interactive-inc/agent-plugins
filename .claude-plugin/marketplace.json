@@ -4,36 +4,19 @@
     "name": "Interactive Inc.",
     "email": "info@inta.co.jp"
   },
+  "description": "Interactive Inc. が提供する Claude Code 用プラグイン集",
   "plugins": [
     {
       "name": "claude",
       "description": "claude開発に利用しているプラグイン",
       "version": "1.1.0",
-      "source": "./",
-      "skills": [
-        "./skills/claude/hooks-review",
-        "./skills/claude/marketplace-review",
-        "./skills/claude/mcp-review",
-        "./skills/claude/skill-review",
-        "./skills/claude/slash-command-review",
-        "./skills/claude/subagent-review"
-      ]
+      "source": "./plugins/claude"
     },
     {
       "name": "jobantenna",
       "description": "ジョブアンテナ開発で利用しているプラグイン",
       "version": "0.4.1",
-      "source": "./",
-      "agents": [
-        "./skills/jobantenna/laravel-command/agents/laravel-command-reviewer.md",
-        "./skills/jobantenna/laravel-mail/agents/laravel-mail-reviewer.md",
-        "./skills/jobantenna/phpunit-runner/agents/phpunit-test-runner.md"
-      ],
-      "skills": [
-        "./skills/jobantenna/laravel-command",
-        "./skills/jobantenna/laravel-mail",
-        "./skills/jobantenna/phpunit-runner"
-      ]
+      "source": "./plugins/jobantenna"
     }
   ]
 }

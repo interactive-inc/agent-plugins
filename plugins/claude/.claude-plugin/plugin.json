@@ -1,0 +1,9 @@
+{
+  "name": "claude",
+  "description": "claude開発に利用しているプラグイン",
+  "version": "1.1.0",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  }
+}

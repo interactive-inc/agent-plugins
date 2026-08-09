@@ -59,7 +59,7 @@ Claude Code CLI がインストールされている必要があります。
 ## ファイル構成
 
 ```
-skills/claude/hooks-review/
+plugins/claude/skills/hooks-review/
 ├── README.md                          # このファイル
 ├── SKILL.md                          # メインスキル定義
 ├── assets/

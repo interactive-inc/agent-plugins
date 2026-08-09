@@ -54,7 +54,7 @@ JobAntenna の Laradock ベース Docker 環境で PHPUnit テストを実行す
 ## ファイル構成
 
 ```
-skills/jobantenna/phpunit-runner/
+plugins/jobantenna/skills/phpunit-runner/
 ├── README.md                      # このファイル
 ├── SKILL.md                       # スキル定義とワークフロー
 ├── agents/

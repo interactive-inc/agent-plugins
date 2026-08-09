@@ -77,7 +77,7 @@ Claude Code CLI がインストールされている必要があります。
 ## ファイル構成
 
 ```
-skills/claude/marketplace-review/
+plugins/claude/skills/marketplace-review/
 ├── README.md              # このファイル
 ├── SKILL.md              # メインスキル定義
 ├── scripts/
@@ -169,9 +169,9 @@ python3 scripts/validate_marketplace.py .claude-plugin/marketplace.json --verbos
 ✅ Plugin 'claude' definition is valid
 
 Validating plugin 'claude':
-  ✅ Skill 'skill-review' path exists: skills/claude/skill-review/SKILL.md
-  ✅ Agent 'review-agent' path exists: skills/claude/skill-review/agents/review-agent.md
-  ❌ Skill 'missing-skill' path NOT found: skills/claude/missing-skill/SKILL.md
+  ✅ Skill 'skill-review' path exists: plugins/claude/skills/skill-review/SKILL.md
+  ✅ Agent 'review-agent' path exists: plugins/claude/skills/skill-review/agents/review-agent.md
+  ❌ Skill 'missing-skill' path NOT found: plugins/claude/skills/missing-skill/SKILL.md
 
 Summary:
   Total checks: 15

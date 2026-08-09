@@ -96,7 +96,7 @@ Claude Code CLI がインストールされている必要があります。
 ## ファイル構成
 
 ```
-skills/claude/mcp-review/
+plugins/claude/skills/mcp-review/
 ├── README.md              # このファイル
 ├── SKILL.md              # メインスキル定義
 └── references/

@@ -1,6 +1,7 @@
 ---
 name: slash-command-review
-description: Review Claude Code slash command implementations against best practices across six dimensions: metadata quality, argument handling, dynamic features (Bash/file integration), security, scope, and skill boundary. Provides A-F grades with actionable recommendations. Use when users request "slash command review," "validate slash command," "check command quality," "review .claude/commands/," or mention command evaluation or standards compliance.
+description: >-
+  Review Claude Code slash command implementations against best practices across six dimensions: metadata quality, argument handling, dynamic features (Bash/file integration), security, scope, and skill boundary. Provides A-F grades with actionable recommendations. Use when users request "slash command review," "validate slash command," "check command quality," "review .claude/commands/," or mention command evaluation or standards compliance.
 ---
 
 # Slash Command Review

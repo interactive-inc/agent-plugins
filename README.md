@@ -32,15 +32,15 @@ Interactive Inc. が提供する Claude Code 用のプラグイン集です。
 
 | スキル名 | プラグイン | 用途 | ドキュメント |
 |---------|-----------|------|------------|
-| skill-review | claude | Claude Code スキルのレビュー | [📖](./skills/claude/skill-review/README.md) |
-| subagent-review | claude | サブエージェントのレビュー | [📖](./skills/claude/subagent-review/README.md) |
-| hooks-review | claude | フック設定のレビュー・構成 | [📖](./skills/claude/hooks-review/README.md) |
-| marketplace-review | claude | マーケットプレース設定の検証 | [📖](./skills/claude/marketplace-review/README.md) |
-| mcp-review | claude | MCP サーバー設定のレビュー | [📖](./skills/claude/mcp-review/README.md) |
-| slash-command-review | claude | スラッシュコマンドのレビュー | [📖](./skills/claude/slash-command-review/README.md) |
-| laravel-command | jobantenna | Laravel コマンド実装・レビュー | [📖](./skills/jobantenna/laravel-command/README.md) |
-| laravel-mail | jobantenna | Laravel メール実装・レビュー | [📖](./skills/jobantenna/laravel-mail/README.md) |
-| phpunit-runner | jobantenna | PHPUnit テスト実行 | [📖](./skills/jobantenna/phpunit-runner/README.md) |
+| skill-review | claude | Claude Code スキルのレビュー | [📖](./plugins/claude/skills/skill-review/README.md) |
+| subagent-review | claude | サブエージェントのレビュー | [📖](./plugins/claude/skills/subagent-review/README.md) |
+| hooks-review | claude | フック設定のレビュー・構成 | [📖](./plugins/claude/skills/hooks-review/README.md) |
+| marketplace-review | claude | マーケットプレース設定の検証 | [📖](./plugins/claude/skills/marketplace-review/README.md) |
+| mcp-review | claude | MCP サーバー設定のレビュー | [📖](./plugins/claude/skills/mcp-review/README.md) |
+| slash-command-review | claude | スラッシュコマンドのレビュー | [📖](./plugins/claude/skills/slash-command-review/README.md) |
+| laravel-command | jobantenna | Laravel コマンド実装・レビュー | [📖](./plugins/jobantenna/skills/laravel-command/README.md) |
+| laravel-mail | jobantenna | Laravel メール実装・レビュー | [📖](./plugins/jobantenna/skills/laravel-mail/README.md) |
+| phpunit-runner | jobantenna | PHPUnit テスト実行 | [📖](./plugins/jobantenna/skills/phpunit-runner/README.md) |
 
 ## 利用可能なプラグイン
 
@@ -54,41 +54,41 @@ Claude Code スキルとサブエージェント開発を支援するプラグ�
 - Claude Code スキルをベストプラクティスに照らして包括的にレビュー
 - 6つの観点（Description 品質、Progressive Disclosure、コンテンツ品質、ワークフロー、テンプレート・例、技術的詳細）から評価
 - A-F 評価とスコアを算出し、優先度付き改善提案を提供
-- 📖 [詳細ドキュメント](./skills/claude/skill-review/README.md)
+- 📖 [詳細ドキュメント](./plugins/claude/skills/skill-review/README.md)
 
 **subagent-review**
 - Claude Code サブエージェント実装をレビュー
 - 5つの観点（単一責任原則、システムプロンプト品質、ツールアクセス制限、バージョン管理統合、適切な基盤）から評価
 - セキュリティ、フォーカス、効果性を確保するための具体的な改善提案
-- 📖 [詳細ドキュメント](./skills/claude/subagent-review/README.md)
+- 📖 [詳細ドキュメント](./plugins/claude/skills/subagent-review/README.md)
 
 **hooks-review**
 - Claude Code フック設定をレビュー・構成し、ワークフロー自動化を支援
 - セキュリティ脆弱性、パフォーマンス問題、ベストプラクティス違反を検出
 - 9種類のフックイベント（PreToolUse、PostToolUse、UserPromptSubmit など）をサポート
 - 優先度付き推奨事項と具体的な修正例を提供
-- 📖 [詳細ドキュメント](./skills/claude/hooks-review/README.md)
+- 📖 [詳細ドキュメント](./plugins/claude/skills/hooks-review/README.md)
 
 **marketplace-review**
 - `.claude-plugin/marketplace.json` の構造と参照パスを検証
 - プラグイン、スキル、エージェントの定義を自動チェック
 - Python スクリプトによる包括的な検証とエラーレポート
 - マーケットプレース公開前の品質保証
-- 📖 [詳細ドキュメント](./skills/claude/marketplace-review/README.md)
+- 📖 [詳細ドキュメント](./plugins/claude/skills/marketplace-review/README.md)
 
 **mcp-review**
 - MCP サーバー設定（.mcp.json）をベストプラクティスに照らして検証
 - 7つの観点（セキュリティ、スコープ管理、トランスポートタイプなど）から評価
 - ハードコードされた秘密情報、不適切な環境変数使用を検出
 - stdio/HTTP/SSE の適切なトランスポート選択をガイド
-- 📖 [詳細ドキュメント](./skills/claude/mcp-review/README.md)
+- 📖 [詳細ドキュメント](./plugins/claude/skills/mcp-review/README.md)
 
 **slash-command-review**
 - スラッシュコマンド実装をベストプラクティスに照らしてレビュー
 - 6つの観点（メタデータ、引数処理、動的機能、セキュリティ、スコープ、スキル境界）から評価
 - A-F 評価とスコアリング、優先度付き改善提案
 - コマンドインジェクション、パストラバーサルなどのセキュリティリスクを検出
-- 📖 [詳細ドキュメント](./skills/claude/slash-command-review/README.md)
+- 📖 [詳細ドキュメント](./plugins/claude/skills/slash-command-review/README.md)
 
 ---
 
@@ -103,7 +103,7 @@ JobAntenna プロジェクト固有の開発支援プラグインです。Larave
 - 7つのコマンドテンプレート（Basic、ServiceIntegration、BatchProcessing、Scheduled、LongRunning、Isolatable）
 - 8つのコアパターン（カスタムベースクラス、サービス統合、大規模データ処理、Dry-Run、エラーハンドリングなど）
 - 10の観点からの包括的なコマンドレビュー機能
-- 📖 [詳細ドキュメント](./skills/jobantenna/laravel-command/README.md)
+- 📖 [詳細ドキュメント](./plugins/jobantenna/skills/laravel-command/README.md)
 
 **laravel-mail**
 - Laravel メール機能（Mailable、Notification、Twig テンプレート、テスト）を JobAntenna の確立されたパターンに従って実装
@@ -111,14 +111,14 @@ JobAntenna プロジェクト固有の開発支援プラグインです。Larave
 - 8つの Sanitize Traits による安全なデータ変換
 - カスタム MailFake による期待値ファイル比較テスト
 - 10の観点からのメール実装レビュー機能
-- 📖 [詳細ドキュメント](./skills/jobantenna/laravel-mail/README.md)
+- 📖 [詳細ドキュメント](./plugins/jobantenna/skills/laravel-mail/README.md)
 
 **phpunit-runner**
 - JobAntenna の Laradock Docker 環境で PHPUnit テストを非同期実行
 - 専用エージェントによる時間のかかるテスト実行
 - 特定のクラス、ファイル、またはすべてのテストを柔軟に選択可能
 - メイン会話をブロックしないバックグラウンド実行
-- 📖 [詳細ドキュメント](./skills/jobantenna/phpunit-runner/README.md)
+- 📖 [詳細ドキュメント](./plugins/jobantenna/skills/phpunit-runner/README.md)
 
 #### 含まれるエージェント
 

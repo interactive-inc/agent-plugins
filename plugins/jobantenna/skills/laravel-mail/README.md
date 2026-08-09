@@ -54,7 +54,7 @@ Claude Code CLI がインストールされている必要があります。
 ## ディレクトリ構造
 
 ```
-skills/jobantenna/laravel-mail/
+plugins/jobantenna/skills/laravel-mail/
 ├── README.md                           # このファイル
 ├── SKILL.md                            # スキル定義とアーキテクチャ概要
 ├── QUICK_START.md                      # ステップバイステップ実装ガイド

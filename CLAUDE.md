@@ -20,18 +20,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 .
 ├── .claude-plugin/
 │   └── marketplace.json     # プラグインマーケットプレース定義
-└── skills/                  # スキル実装
-    ├── claude/              # Claude Code 開発支援スキル
-    │   ├── skill-review/        # スキルレビュー
-    │   ├── subagent-review/     # サブエージェントレビュー
-    │   ├── hooks-review/        # フック設定レビュー
-    │   ├── marketplace-review/  # マーケットプレース検証
-    │   ├── mcp-review/          # MCP サーバー設定レビュー
-    │   └── slash-command-review/ # スラッシュコマンドレビュー
-    └── jobantenna/          # プロジェクト固有スキル
-        ├── laravel-command/ # Laravel コマンド実装
-        ├── laravel-mail/    # Laravel メール実装
-        └── phpunit-runner/  # PHPUnit テスト実行
+└── plugins/
+    ├── claude/              # Claude Code 開発支援プラグイン
+    │   ├── .claude-plugin/plugin.json
+    │   └── skills/
+    │       ├── skill-review/
+    │       ├── subagent-review/
+    │       ├── hooks-review/
+    │       ├── marketplace-review/
+    │       ├── mcp-review/
+    │       └── slash-command-review/
+    └── jobantenna/          # プロジェクト固有プラグイン
+        ├── .claude-plugin/plugin.json
+        └── skills/
+            ├── laravel-command/
+            ├── laravel-mail/
+            └── phpunit-runner/
 ```
 
 ## 利用可能なプラグイン
@@ -45,13 +49,13 @@ Claude Code 開発支援プラグイン。スキルとサブエージェント�
 - **skill-review**: Claude Code スキル自体をベストプラクティスに照らして包括的にレビュー
   - 6つの観点から評価（Description 品質、Progressive Disclosure、コンテンツ品質、ワークフロー、テンプレート・例、技術的詳細）
   - A-F 評価とスコアを算出し、優先度付き改善提案を提供
-  - チェックリスト: `skills/claude/skill-review/CHECKLIST.md`
-  - レポートテンプレート: `skills/claude/skill-review/REPORT_TEMPLATE.md`
+  - チェックリスト: `plugins/claude/skills/skill-review/CHECKLIST.md`
+  - レポートテンプレート: `plugins/claude/skills/skill-review/REPORT_TEMPLATE.md`
 
 - **subagent-review**: Claude Code サブエージェント実装をレビュー
   - 5つの観点から評価（単一責任原則、システムプロンプト品質、ツールアクセス制限、バージョン管理統合、適切な基盤）
   - セキュリティ、フォーカス、効果性を確保するための具体的な改善提案
-  - ベストプラクティス例: `skills/claude/subagent-review/references/examples.md`
+  - ベストプラクティス例: `plugins/claude/skills/subagent-review/references/examples.md`
 
 - **hooks-review**: Claude Code フック設定をレビュー・構成し、ワークフロー自動化を支援
   - セキュリティ脆弱性、パフォーマンス問題、ベストプラクティス違反を検出
@@ -86,8 +90,8 @@ JobAntenna プロジェクト固有の開発支援プラグイン。Laravel ア�
   - Laravel 9+ 公式推奨に準拠
   - 7種類のテンプレート（Basic、ServiceIntegration、BatchProcessing、Scheduled、LongRunning、Isolatable）
   - 8つのコアパターン（カスタムベースクラス、サービス統合、大規模データ処理、Dry-Run、エラーハンドリングなど）
-  - リファレンス: `skills/jobantenna/laravel-command/references/command-patterns.md`
-  - 専門レビューエージェント: `skills/jobantenna/laravel-command/agents/laravel-command-reviewer.md`
+  - リファレンス: `plugins/jobantenna/skills/laravel-command/references/command-patterns.md`
+  - 専門レビューエージェント: `plugins/jobantenna/skills/laravel-command/agents/laravel-command-reviewer.md`
 
 - **laravel-mail**: Laravel メール機能の実装とレビュー
   - Mailable、Notification、Twig テンプレート、テストの作成
@@ -95,15 +99,15 @@ JobAntenna プロジェクト固有の開発支援プラグイン。Laravel ア�
   - 二層アーキテクチャ（Notification + Mailable）による明確な責任分離
   - 8つの Sanitize Traits による安全なデータ変換
   - カスタム MailFake による期待値ファイル比較テスト
-  - リファレンス: `skills/jobantenna/laravel-mail/references/sanitize-traits-reference.md`
-  - 専門レビューエージェント: `skills/jobantenna/laravel-mail/agents/laravel-mail-reviewer.md`
+  - リファレンス: `plugins/jobantenna/skills/laravel-mail/references/sanitize-traits-reference.md`
+  - 専門レビューエージェント: `plugins/jobantenna/skills/laravel-mail/agents/laravel-mail-reviewer.md`
 
 - **phpunit-runner**: PHPUnit テストの実行
   - JobAntenna の Laradock Docker 環境で PHPUnit テストを非同期実行
   - 専用エージェントによる時間のかかるテスト実行
   - 特定のクラス、ファイル、またはすべてのテストを柔軟に選択可能
   - メイン会話をブロックしないバックグラウンド実行
-  - 専門実行エージェント: `skills/jobantenna/phpunit-runner/agents/phpunit-test-runner.md`
+  - 専門実行エージェント: `plugins/jobantenna/skills/phpunit-runner/agents/phpunit-test-runner.md`
 
 **含まれるエージェント:**
 
@@ -153,7 +157,7 @@ skills/{skill-name}/
 
 **配置例:**
 ```
-skills/jobantenna/laravel-command/
+plugins/jobantenna/skills/laravel-command/
 ├── agents/
 │   └── laravel-command-reviewer.md
 ├── SKILL.md
@@ -172,10 +176,11 @@ skills/jobantenna/laravel-command/
 
 ## 新規プラグインの追加方法
 
-1. `.claude-plugin/marketplace.json` に新しいプラグイン定義を追加
-2. 必要なスキルを `skills/` ディレクトリに作成
-3. 必要なエージェントを `agents/` ディレクトリに作成
-4. 各ファイルが構造ベストプラクティスに従っているか確認
+1. `plugins/{plugin-name}/.claude-plugin/plugin.json` を作成
+2. 必要なスキルを `plugins/{plugin-name}/skills/` に作成
+3. 必要なエージェントをプラグイン内に作成し、`plugin.json` で公開
+4. `.claude-plugin/marketplace.json` の `plugins` 配列に `source: "./plugins/{plugin-name}"` の定義を追加
+5. `claude plugin validate .` と `claude plugin validate ./plugins/{plugin-name}` を実行
 
 ## スキルの使用方法
 
@@ -185,7 +190,7 @@ skills/jobantenna/laravel-command/
 
 **使用例:**
 ```
-このスキルをレビューしてください: skills/jobantenna/laravel-command
+このスキルをレビューしてください: plugins/jobantenna/skills/laravel-command
 ```
 
 ### サブエージェントのレビュー
@@ -194,7 +199,7 @@ skills/jobantenna/laravel-command/
 
 **使用例:**
 ```
-このサブエージェントをレビューしてください: skills/jobantenna/laravel-command/agents/laravel-command-reviewer.md
+このサブエージェントをレビューしてください: plugins/jobantenna/skills/laravel-command/agents/laravel-command-reviewer.md
 ```
 
 ### フック設定のレビュー

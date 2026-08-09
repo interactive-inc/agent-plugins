@@ -45,7 +45,7 @@ Claude Code CLI がインストールされている必要があります。
 ## ファイル構成
 
 ```
-skills/claude/subagent-review/
+plugins/claude/skills/subagent-review/
 ├── README.md                      # このファイル
 ├── SKILL.md                       # メインスキル定義（レビュー基準、プロセス）
 └── references/

@@ -1,0 +1,14 @@
+{
+  "name": "jobantenna",
+  "description": "ジョブアンテナ開発で利用しているプラグイン",
+  "version": "0.4.1",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  },
+  "agents": [
+    "./skills/laravel-command/agents/laravel-command-reviewer.md",
+    "./skills/laravel-mail/agents/laravel-mail-reviewer.md",
+    "./skills/phpunit-runner/agents/phpunit-test-runner.md"
+  ]
+}

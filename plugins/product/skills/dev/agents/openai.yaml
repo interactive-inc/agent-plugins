@@ -1,0 +1,4 @@
+interface:
+  display_name: "Develop Product"
+  short_description: "Develop, review, and diagnose product changes"
+  default_prompt: "Use $dev to develop, review, or diagnose this product request through the required verification and delivery."

@@ -17,6 +17,12 @@
       "description": "ジョブアンテナ開発で利用しているプラグイン",
       "version": "0.4.1",
       "source": "./plugins/jobantenna"
+    },
+    {
+      "name": "product",
+      "description": "製品開発、検証、文書成果物、点検・保守・環境整備を人間とAIで進めるワークフロー",
+      "version": "0.1.42",
+      "source": "./plugins/product"
     }
   ]
 }

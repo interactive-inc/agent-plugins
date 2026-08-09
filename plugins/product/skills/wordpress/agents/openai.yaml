@@ -1,0 +1,4 @@
+interface:
+  display_name: "Upgrade WordPress"
+  short_description: "Plan or apply a safe WordPress or PHP upgrade"
+  default_prompt: "Use $wordpress to plan this upgrade read-only and identify the required staging and rollback checks."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Choose Product Stack"
+  short_description: "Inspect stack choices and plan safe migrations"
+  default_prompt: "Use $stack to inspect this product stack or plan the requested framework migration."

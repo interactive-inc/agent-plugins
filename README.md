@@ -26,6 +26,9 @@ Interactive Inc. が提供する Claude Code 用のプラグイン集です。
 
 # jobantenna プラグインのインストール
 /plugin install jobantenna@interactive-claude-plugins
+
+# product プラグインのインストール
+/plugin install product@interactive-claude-plugins
 ```
 
 ## スキル一覧（クイックリファレンス）
@@ -41,6 +44,17 @@ Interactive Inc. が提供する Claude Code 用のプラグイン集です。
 | laravel-command | jobantenna | Laravel コマンド実装・レビュー | [📖](./plugins/jobantenna/skills/laravel-command/README.md) |
 | laravel-mail | jobantenna | Laravel メール実装・レビュー | [📖](./plugins/jobantenna/skills/laravel-mail/README.md) |
 | phpunit-runner | jobantenna | PHPUnit テスト実行 | [📖](./plugins/jobantenna/skills/phpunit-runner/README.md) |
+| dev | product | 製品開発とdelivery | [📖](./plugins/product/README.md) |
+| test | product | 変更差分・API・UI・アクセシビリティ検証 | [📖](./plugins/product/README.md) |
+| check | product | 読み取り専用の横断点検 | [📖](./plugins/product/README.md) |
+| maintain | product | 挙動不変の保守 | [📖](./plugins/product/README.md) |
+| env | product | 開発環境の点検・適用 | [📖](./plugins/product/README.md) |
+| stack | product | 技術選定と移行計画 | [📖](./plugins/product/README.md) |
+| docs | product | HTML・PDF・README生成と検品 | [📖](./plugins/product/README.md) |
+| wordpress | product | WordPress・PHP更新 | [📖](./plugins/product/README.md) |
+| agent-runtime | product | Claude Agent の役割別実行境界 | [📖](./plugins/product/README.md) |
+| patrol | product | localhost UI巡回とbug起票 | [📖](./plugins/product/README.md) |
+| security | product | localhostアプリの非破壊security検査 | [📖](./plugins/product/README.md) |
 
 ## 利用可能なプラグイン
 
@@ -136,6 +150,24 @@ JobAntenna プロジェクト固有の開発支援プラグインです。Larave
 - Docker 環境での PHPUnit テスト実行を自動化
 - テスト結果の解析とレポート生成
 - エラー詳細と実行サマリーを提供
+
+---
+
+### 3. product プラグイン
+
+製品開発、変更範囲に応じた検証、文書成果物、読み取り専用の点検、挙動不変の保守、開発環境整備を支援します。
+
+- `dev`: 要望・bug・Issue・PRを設計、実装、検証、deliveryまで進める
+- `test`: unit、API、a11y、visual、diff、performanceを検証する
+- `check`: 人間が明示した範囲を読み取り専用で点検する
+- `maintain`: 確認済みの対象へ挙動不変の手入れを行う
+- `env` / `stack`: 開発環境と技術選定を確認し、明示依頼時だけ変更する
+- `docs`: HTML、PDF、READMEを生成して検品する
+- `wordpress`: WordPress・PHP更新を計画・実施する
+- `agent-runtime`: Claude Agent の共通手順と役割差を適用する
+- `patrol`: 起動済みlocalhost UIを巡回し、実在bugを最大1件起票する
+- `security`: 許可されたlocalhostアプリを非破壊でsecurity検査する
+- 📖 [設計思想と利用方法](./plugins/product/README.md)
 
 ## ライセンス
 

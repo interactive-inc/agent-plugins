@@ -1,0 +1,6 @@
+interface:
+  display_name: "Check Product"
+  short_description: "Run human-requested product health checks"
+  default_prompt: "Use $check to run a read-only product health check and report confirmed findings."
+policy:
+  allow_implicit_invocation: false

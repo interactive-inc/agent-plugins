@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Product"
+  short_description: "Verify behavior, API, UI, accessibility, and performance"
+  default_prompt: "Use $test to select and run the focused verification required for this product change."

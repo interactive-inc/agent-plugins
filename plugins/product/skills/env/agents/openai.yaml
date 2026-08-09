@@ -1,0 +1,6 @@
+interface:
+  display_name: "Inspect Product Environment"
+  short_description: "Inspect or apply tooling and worktree setup"
+  default_prompt: "Use $env to inspect this repository development environment without changing it."
+policy:
+  allow_implicit_invocation: false

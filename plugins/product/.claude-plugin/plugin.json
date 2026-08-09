@@ -1,0 +1,9 @@
+{
+  "name": "product",
+  "description": "製品開発、検証、文書成果物、点検・保守・環境整備を人間とAIで進めるワークフロー",
+  "version": "0.1.42",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  }
+}

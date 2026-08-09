@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Product Docs"
+  short_description: "Create verified product documentation artifacts"
+  default_prompt: "Use $docs to create and verify this product documentation artifact."

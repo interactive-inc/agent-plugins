@@ -1,6 +1,6 @@
 ---
 name: dev
-description: "Route product requests from customer signals, ideas, backlogs, Issues, PR review, CI failures, and related PR chains through design, implementation, change-scoped verification, documentation, and delivery. Do not start broad inspection or maintenance automatically."
+description: "Use as the conversational entry for all ordinary product changes: features, bug fixes, specification changes, explicit refactoring, documentation synchronization, Issues, PR review, CI failures, and delivery. Select the required design references and focused tests internally. Never start periodic repository-wide examination automatically."
 argument-hint: "[next|review|ci|pr-chain|自然文|Issue番号]"
 user-invocable: true
 disable-model-invocation: false
@@ -8,7 +8,7 @@ disable-model-invocation: false
 
 > このスキルを更新するときは [CLAUDE.md](CLAUDE.md) の方針に従う。
 
-`product:dev`は製品開発の共通入口。依頼の整理、設計、実装、変更に必要な検証、記録、ユーザーが依頼したGitHub deliveryまでを一つの仕事として扱う。専門検証は`product:test`を使う。横断的な点検と挙動不変の保守は人間起動の独立Skillであり、開発中に自動実行しない。
+`product:dev`は会話を前提とした製品変更の共通入口。機能、bug、仕様、明示されたリファクタリング、文書同期、必要な検証、ユーザーが依頼したGitHub deliveryまでを一つの仕事として扱う。専門検証は`product:test`を使う。repository全体の定期検診は人間起動の`product:check`であり、開発中に自動実行しない。
 
 # 実行契約
 
@@ -39,6 +39,8 @@ Issue / PRの書式は [gh-templates.md](references/tools/gh-templates.md)、Git
 5. **Verify**: 変更範囲に必要なリポジトリ固有のformat / lint / typecheck / testと`product:test`能力を実行する。広範な品質監査、仕様trace、保守候補探索は追加しない
 6. **Record**: コードから読めない意思決定を`.docs/`へ残し、価値のある変更だけCHANGELOGへ記録する
 7. **Deliver**: 依頼範囲がcommit / push / PR / mergeを含む場合だけ、その地点まで進めて結果を確認する
+
+明示された挙動不変の整理・構造変更・文書同期は[maintenance.md](references/maintenance.md)に従う。開発中に重複、architecture劣化、不要testなどの全体探索を始めず、気づいた別件は報告して定期検診へ分ける。
 
 # 設計reference
 

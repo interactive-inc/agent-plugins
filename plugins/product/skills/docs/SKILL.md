@@ -8,7 +8,7 @@ disable-model-invocation: false
 
 > このスキルを更新するときは [product設計](../../README.md) に従う。
 
-`product:docs`は、製品の正本から人間向けの文書成果物を作成し、実表示または実行結果まで検証する入口。`.docs`自体の仕様管理は`product:dev`、文書の乖離検査は`product:check docs`、意味が一意な同期修正は`product:maintain docs`が担当する。
+`product:docs`は、製品の正本から人間向けの文書成果物を作成し、実表示または実行結果まで検証する専門能力。`.docs`自体の仕様管理と文書同期は`product:dev`、文書の乖離検査は`product:check docs`が担当する。
 
 # 振り分け
 
@@ -29,5 +29,5 @@ disable-model-invocation: false
 # 成果物の境界
 
 - 製品仕様や設計判断を変える必要がある場合は`product:dev`へ分ける
-- 古い文書の検出だけなら`product:check docs|readme`、既存文書の挙動不変な整理だけなら`product:maintain docs|readme`を使う
+- 古い文書の検出だけなら`product:check docs`、既存文書の修正なら`product:dev`を使う
 - CHANGELOGやリリース告知は、PR一覧から機械的に生成せず、`product:dev`のCHANGELOG判断と対象製品の公開手順に従う

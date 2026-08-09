@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check Product Security"
+  short_description: "Assess authorized localhost security boundaries"
+  default_prompt: "Use $security to assess this authorized localhost product and report evidence-backed security findings without destructive testing."

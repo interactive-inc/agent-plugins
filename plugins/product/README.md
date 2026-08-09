@@ -26,34 +26,30 @@ productプラグインはprimary checkoutに紐づくブランチを切り替え
 
 対象リポジトリの指示はプラグイン既定より優先する。特にtest runner、dev server、worktreeの配置・初期化、migration、screenshot、deploymentの規則をSkill側で上書きしない。ただしprimary checkoutのブランチを切り替えない境界は例外としない。対象リポジトリがIssue用linked worktreeを禁止している場合は、primary checkoutへ切り替えて続行せず、実装を止めて制約を報告する。
 
-### 製品開発の入口は `dev`
+### 人間が選ぶのは `bootstrap`、`dev`、`check`
 
-製品の要望、顧客の声、backlog、Issue、設計、実装、検証、文書更新、PR までの共通入口は `product:dev` に一本化する。
+製品・リポジトリの初期設計は`product:bootstrap`、会話しながら行うすべての変更は`product:dev`、開発から立ち止まって行う定期検診は`product:check`を入口にする。
 
-`dev/references/request.md` が、自然文を signal / backlog / Issue に分類し、着手可能な依頼を実装へ進める正本。Claude の `fable` はこのフローを利用し、Codex も同じ `product:dev` Skill を利用する。
+通常の機能、bug、仕様変更、明示されたリファクタリング、文書同期、Issue / PRはすべて`dev`が自然文から判断する。`dev/references/request.md` が依頼を signal / backlog / Issue / 直接変更へ分類する正本。Claude の `fable` と Codex は同じ`product:dev`を利用する。
 
 すべてを独立した Skill へ分割しない。モデルが通常判断できる工程を抽象的な Skill にすると入口が増え、どれを使うべきか曖昧になる。独立させるのは、具体的な手順、専門知識、再利用資産、または通常開発と異なる実行境界を持つ業務だけ。
 
 ### どれを使うか
 
-| やりたいこと                   | 入口                         | 既定動作                         |
-| ------------------------------ | ---------------------------- | -------------------------------- |
-| 要望、bug、Issue、PRを進める   | `product:dev`                | 依頼されたdelivery地点まで進める |
-| 変更差分に必要な検証を行う     | `product:test changed`       | 差分から必要なtestを選ぶ         |
-| 日常的な製品点検を人間が始める | `product:check`              | bounded read-only check          |
-| 全件監査を人間が始める         | `product:check full`         | full read-only audit             |
-| 挙動不変の手入れを人間が始める | `product:maintain ...`       | 指定した一系統だけ変更           |
-| 開発環境を人間が確認・適用する | `product:env [apply]`        | 引数なしは読み取り専用           |
-| 技術選定・移行計画を確認する   | `product:stack [migration]`  | 読み取り専用で差分とriskを報告   |
-| Agent の開発実行境界を適用する | `product:agent-runtime`      | 対応する役割referenceだけを読む  |
-| ローカル UI を巡回する         | `product:patrol`             | 実在bugを最大1件だけ起票          |
-| localhostをsecurity検査する    | `product:security`           | 非破壊の検査と報告                |
-| HTML資料・文書サイトを作る    | `product:docs html`          | 正本から生成して全ページを検品   |
-| HTMLをPDF化する                | `product:docs pdf`           | A4 PDFへ変換して全ページを検品   |
-| READMEを作成・更新する         | `product:docs readme`        | 実在する構成とcommandから作成     |
-| WordPress / PHPを更新する      | `product:wordpress ... plan` | 読み取り専用。変更は`apply`      |
+| やりたいこと                         | 入口                            | 既定動作                           |
+| ------------------------------------ | ------------------------------- | ---------------------------------- |
+| 製品・repositoryを立ち上げる         | `product:bootstrap [new|adopt]` | 最小architectureとbaselineを作る   |
+| 要望、bug、仕様、refactor、PRを進める | `product:dev`                   | 会話から依頼された地点まで進める   |
+| 製品全体を定期検診する               | `product:check`                 | 全categoryを読み取り専用で検査する |
+| 一領域だけ精密に検査する             | `product:check <category>`      | 指定categoryだけ検査する           |
+| 変更差分に必要な検証を行う           | `product:test changed`          | 差分から必要なtestを選ぶ           |
+| 開発環境を確認・適用する             | `product:env [apply]`           | 引数なしは読み取り専用             |
+| 技術選定・移行計画を確認する         | `product:stack [migration]`     | 読み取り専用で差分とriskを報告     |
+| localhostをsecurity検査する          | `product:security`              | 非破壊の検査と報告                  |
+| 文書成果物を作る                     | `product:docs ...`              | 正本から生成して検品                |
+| WordPress / PHPを更新する            | `product:wordpress ... plan`    | 読み取り専用。変更は`apply`        |
 
-開発依頼で迷ったら`product:dev`へ自然文で依頼する。`check`、`maintain`、`env`は人間が直接呼び出した場合だけ起動し、開発中やAutomationから自動実行しない。
+通常は`product:dev`へ自然文で依頼する。`test`、`docs`、`stack`、`env`、`security`は`bootstrap` / `dev` / `check`が必要時に使う専門能力であり、人間も精度を高めたいときに明示実行できる。`check`は人間が直接呼び出した場合だけ起動し、開発中やAutomationから自動実行しない。
 
 ### Agent と Skill を分ける
 
@@ -65,7 +61,7 @@ productプラグインはprimary checkoutに紐づくブランチを切り替え
 | Automation       | 業務をいつ起動するか                                  |
 | Task prompt      | 今回の目的、範囲、受け入れ条件                        |
 
-`fable`、`sonnet`、`opus`、`worker`、`loop`、`hacker` は Claude の動きに特化した薄い Agent として残す。モデル・権限・役割の入口だけを Agent に置き、反復する実行契約は `agent-runtime`、`patrol`、`security` に置く。
+`fable`、`sonnet`、`opus`、`worker`、`hacker` は Claude の動きに特化した薄い Agent として残す。モデル・権限・役割と失うと危険な境界は Agent に置き、反復する実行契約は`agent-runtime`と`security`に置く。
 
 Codex は Claude Agent を再現せず、同じ Skill に書かれた人間との契約を使う。
 
@@ -79,15 +75,15 @@ Codex は Claude Agent を再現せず、同じ Skill に書かれた人間と�
 
 ### 横断点検は人間が起動する
 
-仕様trace、docs drift、README、code health、環境baselineの点検は`product:check`に一本化する。既定は変更範囲または上限付き候補、`full`は全件、`trace`などの引数は部分実行を表す。すべて読み取り専用で、人間のdirect invocationを必須にする。
+仕様矛盾、architecture、意味的重複、test portfolio、docs drift、runtime、securityの定期検診は`product:check`に一本化する。引数なしは全categoryを対象全体へ実行し、引数は一categoryだけの精密検査を表す。すべて読み取り専用で、人間のdirect invocationを必須にする。
 
-`product:dev`は変更に必要なformat / lint / typecheck / testだけを実行する。`product:test`はその具体的な検証能力を所有し、`product:check`へ戻らない。点検で見つけた挙動不変の手入れは別の`product:maintain`、bug・仕様変更は別の`product:dev`として人間が開始する。
+`product:dev`は変更に必要なformat / lint / typecheck / testだけを実行する。開発中に全体の重複、依存劣化、不要testを探索しない。`product:check`のfindingを直す場合は、人間が対象を選び、別の`product:dev`作業として開始する。
 
-### 点検と保守は別の業務
+### 変更と定期検診を混ぜない
 
-保守は挙動を変えない改善で、機能開発より広い範囲へ触れやすい。通常開発中に見つけても自動着手せず、人間が`product:maintain`を直接実行した場合だけ一系統を変更する。
+明示されたリファクタリングや挙動不変の整理は`product:dev`が変更作業として扱う。ただし通常開発中に全体の改善候補を探したり、見つけた別件へ自動着手したりしない。
 
-`product:check`は検出と報告まで、`product:maintain`は確認済みfindingの修正までに分ける。コードや文書を書き換えるときは対象範囲を確保し、readme / docs / codeの一系統だけを実行する。
+`product:check`は検出と報告まで、`product:dev`は選択された変更の完了までを担当する。この境界により、検診中の大量修正と開発中の無関係な全体監査を防ぐ。
 
 ### 同時実行は範囲で制御する
 
@@ -106,29 +102,28 @@ worktree はファイルを隔離するが、複数セッションが同じ設�
 ## 現在の構成
 
 ```text
+立ち上げ: product:bootstrap ──→ stack / env / docs / test
+
 Claude: fable / sonnet / opus ─┐
-                               ├─ product:dev ──→ product:test
+                               ├─ product:dev ──→ test / docs
 Codex ─────────────────────────┘
 
 Claude Agent ──→ product:agent-runtime ──→ product:dev
-loop ──────────→ product:patrol
 hacker ────────→ product:security
 
-人間起動の点検: product:check ──→ product:test / product:env
-人間起動の保守: product:maintain ──→ product:check
+人間起動の定期検診: product:check ──→ specs / architecture / duplication / tests / docs / runtime / security
 開発環境: product:env ──→ product:stack
 専門成果物・製品作業: product:docs / product:wordpress
-Claude 固有の実装・巡回・検査: worker / loop / hacker
+Claude 固有の実装・検査: worker / hacker
 ```
 
+- `skills/bootstrap/`: 新規・既存repositoryの初期architectureと開発baseline
 - `skills/dev/`: 製品開発の共通入口、設計規約、`.docs/`、Issue / PR運用
 - `skills/test/`: 開発から必要時に呼ぶ具体的な検証能力
 - `skills/check/`: 人間が起動する読み取り専用の横断点検
-- `skills/maintain/`: 人間が起動する挙動不変の独立した手入れ
 - `skills/env/`: 人間が確認・適用する開発環境
 - `skills/stack/`: envが参照する技術stackと導入toolの選択
 - `skills/agent-runtime/`: Claude Agent の役割別実行境界。一般的な開発手順はdevへ委ねる
-- `skills/patrol/`: loop Agent のlocalhost UI巡回とbug起票
 - `skills/security/`: hacker Agent のlocalhostセキュリティ検査
 - `skills/docs/`: HTML / PDF / READMEなど、人間向け文書成果物の生成と検品。`.docs`自体の仕様管理はdevが担う
 - `skills/wordpress/`: WordPress / PHP更新に閉じた専門業務

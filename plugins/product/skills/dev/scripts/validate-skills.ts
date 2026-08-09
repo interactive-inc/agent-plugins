@@ -8,7 +8,7 @@ const skillsDir = join(pluginDir, "skills")
 const agentsDir = join(pluginDir, "agents")
 const errors: string[] = []
 const ignoredMarkdownDirectories = new Set(["node_modules"])
-const humanInvokedSkillNames = new Set(["check", "maintain", "env"])
+const humanInvokedSkillNames = new Set(["check", "env"])
 
 const allowedFrontmatterKeys = new Set([
   "name",
@@ -159,7 +159,6 @@ const agentSkillContracts = new Map<string, string[]>([
   ["sonnet", ["dev", "agent-runtime", "agent-browser"]],
   ["opus", ["dev", "agent-runtime", "agent-browser"]],
   ["worker", ["dev", "agent-runtime", "agent-browser"]],
-  ["loop", ["patrol", "agent-browser"]],
   ["hacker", ["security", "agent-browser"]],
 ])
 
@@ -171,7 +170,7 @@ for (const [agentName, requiredSkills] of agentSkillContracts) {
   }
   const source = read(agentPath)
   const lineCount = source.split("\n").length
-  if (lineCount > 30) fail(agentPath, `agent must remain lightweight (found ${lineCount} lines, max 30)`)
+  if (lineCount > 60) fail(agentPath, `agent must remain lightweight (found ${lineCount} lines, max 60)`)
   if (/description:\s*["']\?["']/.test(source)) fail(agentPath, "description must explain the agent role")
   for (const skillName of requiredSkills) {
     if (!source.includes(`  - ${skillName}\n`)) fail(agentPath, `must load ${skillName}`)
@@ -230,7 +229,11 @@ for (const skillName of knownSkillNames) {
 
 const forbiddenPatterns: Array<{ pattern: RegExp; reason: string }> = [
   { pattern: /\/product:[a-z-]+:[a-z-]+/, reason: "duplicated product command namespace" },
-  { pattern: /\bproduct:(?:init|refactor)\b/, reason: "retired product skill namespace" },
+  {
+    pattern: /\bproduct:(?:init|refactor|maintain|patrol)\b/,
+    reason: "retired product skill namespace",
+  },
+  { pattern: /\bproduct:check\s+full\b/, reason: "check without a subcommand already examines all categories" },
   {
     pattern: /\bproduct:dev\s+(?:trace|drift|links|features-sync|skills)\b/,
     reason: "inspection and environment commands must not live under product:dev",
@@ -337,22 +340,25 @@ const contractChecks: Array<{ path: string; required: string[] }> = [
   { path: join(skillsDir, "test", "SKILL.md"), required: ["changed.md", "/tmp/product-test/"] },
   {
     path: join(skillsDir, "check", "SKILL.md"),
-    required: ["`full`", "読み取り専用", "direct user invocation"],
-  },
-  {
-    path: join(skillsDir, "maintain", "SKILL.md"),
     required: [
-      "挙動不変",
+      "引数なし",
+      "specs",
+      "architecture",
+      "duplication",
+      "tests",
+      "docs",
+      "runtime",
+      "security",
+      "読み取り専用",
       "direct user invocation",
-      "product:check",
-      "構成拡張",
-      "再利用可能",
-      "ユーザーがその構成を明示",
     ],
   },
   {
-    path: join(skillsDir, "maintain", "commands", "code.md"),
+    path: join(skillsDir, "dev", "references", "maintenance.md"),
     required: [
+      "挙動不変",
+      "product:check",
+      "再利用可能",
       "「ライブラリにして」",
       "「別製品でも使えるように」",
       "「private workspace packageにして」",

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bootstrap Product"
+  short_description: "Establish a product architecture and repository baseline"
+  default_prompt: "Use $bootstrap to establish the minimum product, architecture, repository, environment, test, and documentation baseline for this request."

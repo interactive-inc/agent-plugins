@@ -1,6 +1,6 @@
 # readme — READMEを実態から作成・更新する
 
-`/product:docs readme [scope]`は、人間向けの入口READMEを現在のリポジトリ構成から作成または更新する。読み取り専用の乖離検査だけなら`product:check readme`、既存READMEの刈り込みだけなら`product:maintain readme`を使う。
+`/product:docs readme [scope]`は、人間向けの入口READMEを現在のリポジトリ構成から作成または更新する。読み取り専用の乖離検査だけなら`product:check docs`、既存READMEの修正なら`product:dev`を使う。
 
 ## 手順
 

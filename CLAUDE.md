@@ -125,16 +125,15 @@ JobAntenna プロジェクト固有の開発支援プラグイン。Laravel ア�
 
 **含まれるスキル:**
 
+- **bootstrap**: 新規・既存repositoryの初期architectureと開発baseline
 - **dev**: 要望・bug・Issue・PRを設計、実装、検証、deliveryまで進める
 - **test**: unit、API、a11y、visual、diff、performance検証
 - **check**: 人間が起動する読み取り専用の横断点検
-- **maintain**: 人間が指定した一系統の挙動不変な保守
 - **env**: 開発環境の読み取り専用点検と明示的な適用
 - **stack**: 技術選定とpackage・framework移行計画
 - **docs**: HTML、PDF、READMEの生成と検品
 - **wordpress**: WordPress・PHP更新
 - **agent-runtime**: Claude Agent の役割別実行境界
-- **patrol**: localhost UI の巡回とbug起票
 - **security**: localhostアプリの非破壊security検査
 
 詳細な設計思想は `plugins/product/README.md` を正本とします。

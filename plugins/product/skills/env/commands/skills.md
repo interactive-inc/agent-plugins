@@ -18,12 +18,13 @@
 
 ## 追加
 
-対象リポジトリの指示と利用中agentを確認し、判定できた候補を`vpx skills add`で追加する。`--agent`と`--skill`を必ず明示し、対象外Skillをまとめて入れない。
+対象リポジトリの指示と利用中agentを確認し、判定できた候補を`vpx skills add`で追加する。`--agent`と`--skill`を必ず明示し、対象外Skillをまとめて入れない。`skill_agent` はClaude Codeなら `claude-code`、Codexなら `codex` とする。
 
 ```bash
-vpx skills add millionco/react-doctor --agent claude-code --skill react-doctor -y
-vpx skills add shadcn/ui --agent claude-code --skill shadcn -y
-vpx skills add cloudflare/skills --agent claude-code --skill wrangler workers-best-practices cloudflare -y
+skill_agent=codex
+vpx skills add millionco/react-doctor --agent "$skill_agent" --skill react-doctor -y
+vpx skills add shadcn/ui --agent "$skill_agent" --skill shadcn -y
+vpx skills add cloudflare/skills --agent "$skill_agent" --skill wrangler workers-best-practices cloudflare -y
 ```
 
 `--skill` を付けずに実行しない。`--list` オプションは使わない。ドキュメント上は「インストールせず一覧表示するだけ」だが、エージェント検出下では実際にはパッケージ内の全 skill をインストールしてしまう（2026-07-20 実機確認）。skill 名が変わってコマンドがエラーを返したら、実行を止めて何が起きたかをオーナーに報告する。

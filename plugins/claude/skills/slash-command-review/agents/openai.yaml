@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Claude Command"
+  short_description: "Review a Claude Code slash command"
+  default_prompt: "Use $slash-command-review to review this Claude Code slash command for quality and security."

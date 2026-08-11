@@ -1,13 +1,13 @@
 ---
-name: jobantenna-phpunit-runner
-description: Execute PHPUnit tests in JobAntenna's Docker environment (Laradock). Use when the user requests to run PHPUnit tests, execute specific test files or filters, or verify test results in the JobAntenna project. This skill launches a specialized agent to handle time-consuming test execution efficiently without blocking the main conversation. 「PHPUnitテスト実行」「UserTestを実行」「テストを走らせて」「ApplicationTestの確認」などのリクエスト時に使用。
+name: phpunit-runner
+description: Execute PHPUnit tests in JobAntenna's Docker environment (Laradock). Use when the user requests specific test files or filters, all PHPUnit tests, or verification of test results. Claude Code may delegate to the bundled test runner agent; other Agent Plugins clients execute the same workflow directly. 「PHPUnitテスト実行」「UserTestを実行」「テストを走らせて」「ApplicationTestの確認」などのリクエスト時に使用。
 ---
 
 # JobAntenna PHPUnit Test Runner
 
 ## Overview
 
-Execute PHPUnit tests within JobAntenna's Laradock-based Docker environment. This skill provides a specialized workflow for running tests asynchronously through a dedicated test runner agent, optimized for handling time-consuming test execution without blocking the main conversation.
+Execute PHPUnit tests within JobAntenna's Laradock-based Docker environment. The workflow is client-neutral: use the bundled `phpunit-test-runner` Agent when the client supports Claude plugin Agents, otherwise execute and monitor the same commands directly.
 
 ## When to Use This Skill
 
@@ -28,18 +28,15 @@ Determine what tests to run based on user request:
 - **Specific file**: `tests/Unit/Models/ApplicationTest.php`
 - **All tests**: Run without filter
 
-### 2. Launch Test Runner Agent
+### 2. Execute or Delegate
 
-Use the Task tool to launch the `phpunit-test-runner` agent (defined in `agents/phpunit-test-runner.md`) with the test specification:
+Read [docker-environment.md](references/docker-environment.md), resolve the repository and Laradock locations from the current checkout, then run the requested scope.
 
-```
-Task tool with:
-- subagent_type: "jobantenna-phpunit-runner:phpunit-test-runner"
-- description: "Run PHPUnit tests: [test-name]"
-- prompt: "Execute PHPUnit tests with the following specification: [filter or file path]"
-```
+- Claude Code: the bundled `phpunit-test-runner` Agent may execute and monitor the test
+- Codex and other Agent Plugins clients: execute and monitor the test directly
+- Do not require a client-specific delegation tool or hard-coded Agent identifier
 
-The agent will:
+The selected executor will:
 1. Build the appropriate Docker command
 2. Execute tests in the workspace container
 3. Monitor execution progress
@@ -54,7 +51,7 @@ Once the agent completes, summarize the test results to the user:
 
 ## Docker Environment Details
 
-The JobAntenna project uses Laradock for Docker containerization. Key details are documented in `references/docker-environment.md` for the test runner agent to reference.
+The JobAntenna project uses Laradock for Docker containerization. Resolve current paths using `references/docker-environment.md`; never depend on a personal absolute path.
 
 ### Quick Reference
 
@@ -85,10 +82,10 @@ docker-compose exec workspace bash -c "./vendor/bin/phpunit [options]"
 
 **User**: "Run the UserTest"
 
-**Assistant**:
+**Agent**:
 1. Identify scope: `--filter=UserTest`
-2. Launch agent: Task tool with phpunit-test-runner, prompt "Execute PHPUnit tests with filter: UserTest"
-3. Wait for agent completion
+2. Resolve the current Laradock location
+3. Execute directly or delegate when the client supports the bundled Agent
 4. Report: "Executed 43 tests from UserTest. All tests passed successfully."
 
 ## Resources

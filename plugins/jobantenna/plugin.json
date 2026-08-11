@@ -1,0 +1,18 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "jobantenna",
+  "version": "0.5.0",
+  "description": "Laravelのconsole command、mail、PHPUnit実行を支援する開発プラグイン",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  },
+  "homepage": "https://github.com/interactive-inc/agent-plugins/tree/main/plugins/jobantenna",
+  "repository": "https://github.com/interactive-inc/agent-plugins",
+  "keywords": [
+    "laravel",
+    "phpunit",
+    "mail",
+    "console-command"
+  ]
+}

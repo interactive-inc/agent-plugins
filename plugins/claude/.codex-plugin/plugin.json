@@ -1,0 +1,19 @@
+{
+  "name": "claude",
+  "version": "1.2.0",
+  "description": "Claude CodeのSkill、Agent、hook、command、MCP、marketplaceをレビューする開発支援プラグイン",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Claude Development",
+    "shortDescription": "Claude Codeの拡張実装をレビューします。",
+    "longDescription": "Claude CodeのSkill、Agent、hook、slash command、MCP設定、plugin marketplaceをCodexからレビューできる開発支援プラグインです。",
+    "developerName": "Interactive Inc.",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Claude Codeの拡張実装を、該当するreview skillを使って検証してください。"
+  }
+}

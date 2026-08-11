@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Claude Marketplace"
+  short_description: "Validate a Claude plugin marketplace"
+  default_prompt: "Use $marketplace-review to validate this Claude Code plugin marketplace and its referenced paths."

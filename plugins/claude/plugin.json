@@ -1,0 +1,18 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "claude",
+  "version": "1.2.0",
+  "description": "Claude CodeのSkill、Agent、hook、command、MCP、marketplaceをレビューする開発支援プラグイン",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  },
+  "homepage": "https://github.com/interactive-inc/agent-plugins/tree/main/plugins/claude",
+  "repository": "https://github.com/interactive-inc/agent-plugins",
+  "keywords": [
+    "claude-code",
+    "plugin-development",
+    "skills",
+    "review"
+  ]
+}

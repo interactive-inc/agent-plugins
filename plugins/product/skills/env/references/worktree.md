@@ -1,6 +1,6 @@
 # linked worktree の初期化契約
 
-リポジトリルートの `Makefile` に `.PHONY` な `worktree` targetを置き、IDE、Claude、Codexのどれがlinked worktreeを作っても同じ初期化を実行できるようにする。
+リポジトリルートの `Makefile` に `.PHONY` な `worktree` targetを置き、IDEやAI agentのどれがlinked worktreeを作っても同じ初期化を実行できるようにする。
 
 ```make
 .PHONY: worktree
@@ -20,4 +20,4 @@ targetは次を満たす。
 
 `product:env`の引数なしでは、Makefileとtargetの有無、`.PHONY`、上記の禁止処理、初期化に必要な手順の不足を読み取り専用で報告する。`product:env apply`では、確認できたリポジトリ固有の初期化だけをtargetへ追加・修正し、既存targetの独自処理を理由なく置き換えない。
 
-Issueフローが自分でlinked worktreeを作成した場合は、その直後に新しいworktree内で`make worktree`を1回実行する。IDEなどが作成した既存linked worktreeからセッションを開始した場合は、作成者が初期化済みである前提とし、Claude / Codexは`make worktree`を再実行しない。
+Issueフローが自分でlinked worktreeを作成した場合は、その直後に新しいworktree内で`make worktree`を1回実行する。IDEなどが作成した既存linked worktreeからセッションを開始した場合は、作成者が初期化済みである前提とし、AI agentは`make worktree`を再実行しない。

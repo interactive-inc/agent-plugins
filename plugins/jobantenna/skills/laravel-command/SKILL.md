@@ -172,7 +172,7 @@ This section clarifies the skill's default behavior when you don't provide speci
 
 If user instructions conflict with these defaults:
 - User's specific requirements always take priority
-- If unclear, ask for clarification using the AskUserQuestion tool
+- If unclear, ask the user for the missing information with the current client's normal question mechanism
 - Document deviations from defaults in code comments
 
 ## Core Patterns

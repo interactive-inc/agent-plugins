@@ -1,9 +1,6 @@
 ---
 name: check
 description: "Run a human-requested, read-only periodic product examination. With no subcommand, inspect specifications, architecture, duplication, tests, documentation, local runtime, and security across the repository. Use a subcommand to inspect one category with higher precision. Never invoke during development."
-argument-hint: "[specs|architecture|duplication|tests|docs|runtime|security] [scope]"
-user-invocable: true
-disable-model-invocation: true
 ---
 
 > このスキルを更新するときは [product設計](../../README.md) に従う。

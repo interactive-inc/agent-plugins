@@ -1,0 +1,44 @@
+{
+  "name": "inta-agent-plugins",
+  "interface": {
+    "displayName": "Inta Agent Plugins"
+  },
+  "plugins": [
+    {
+      "name": "product",
+      "source": {
+        "source": "local",
+        "path": "./plugins/product"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "claude",
+      "source": {
+        "source": "local",
+        "path": "./plugins/claude"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "jobantenna",
+      "source": {
+        "source": "local",
+        "path": "./plugins/jobantenna"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

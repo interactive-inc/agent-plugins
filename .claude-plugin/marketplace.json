@@ -1,27 +1,27 @@
 {
-  "name": "interactive-claude-plugins",
+  "name": "inta-agent-plugins",
   "owner": {
     "name": "Interactive Inc.",
     "email": "info@inta.co.jp"
   },
-  "description": "Interactive Inc. が提供する Claude Code 用プラグイン集",
+  "description": "Agent Plugins v1、Claude Code、Codexに対応するエージェントプラグイン集",
   "plugins": [
     {
       "name": "claude",
       "description": "claude開発に利用しているプラグイン",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "source": "./plugins/claude"
     },
     {
       "name": "jobantenna",
       "description": "ジョブアンテナ開発で利用しているプラグイン",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "source": "./plugins/jobantenna"
     },
     {
       "name": "product",
-      "description": "製品開発、検証、文書成果物、点検・保守・環境整備を人間とAIで進めるワークフロー",
-      "version": "0.1.43",
+      "description": "製品の立ち上げ、会話型開発、専門検証、定期検診を人間とAIで進めるワークフロー",
+      "version": "0.2.0",
       "source": "./plugins/product"
     }
   ]

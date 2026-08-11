@@ -22,21 +22,21 @@ TanStack Start (React) + TanStack Query + Hono + Drizzle.
 - [Storybook + MSW](tanstack/storybook-msw.md): コンポーネント開発の標準。ハンドラを story とテストで共有
 - [Storybook 量産の執筆規律](tanstack/storybook-authoring.md): フィクスチャの業務精度、型の詰まりの分岐、smoke ゲートとの整合
 
-## Claude Tools
+## Agent tools
 
 横断ツールは [stack スキル](../SKILL.md) を参照。
 
 ### shadcn/ui
 
-`components.json` 利用時。`npx skills add shadcn/ui`。
+`components.json` 利用時。`vpx skills add shadcn/ui --agent <client-id> --skill shadcn -y`。
 
 ### react-best-practices
 
-`npx skills add vercel-labs/agent-skills --skill react-best-practices`。
+`vpx skills add vercel-labs/agent-skills --agent <client-id> --skill react-best-practices -y`。
 
 ### next-best-practices
 
-Next.js 利用時。`npx skills add vercel-labs/next-skills --skill next-best-practices`。Optional: `--skill next-upgrade`、`--skill next-cache-components`。
+Next.js 利用時。`vpx skills add vercel-labs/next-skills --agent <client-id> --skill next-best-practices -y`。Optional: `--skill next-upgrade`、`--skill next-cache-components`。
 
 ### stitch-skills
 

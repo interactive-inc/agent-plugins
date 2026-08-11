@@ -1,180 +1,82 @@
-# Claude Code プラグインマーケットプレース
+# Agent Plugins
 
-Interactive Inc. が提供する Claude Code 用のプラグイン集です。
+Interactive Inc. が公開する、製品開発向けのエージェントプラグインマーケットプレースです。
 
-## インストール方法
+マーケットプレース名は `inta-agent-plugins` です。このREADMEでは `product` を案内します。スキルは [Agent Skills](https://agentskills.io/) を共通正本とし、次の3形式を同じパッケージで提供します。
 
-### 前提条件
+- [Agent Plugins v1](https://agent-plugins.org/): `plugins/product/plugin.json`
+- [Claude Code plugins](https://code.claude.com/docs/en/plugins-reference): `plugins/product/.claude-plugin/plugin.json`
+- [OpenAI plugins](https://developers.openai.com/plugins/build/plugins): `plugins/product/.codex-plugin/plugin.json`
 
-- Claude Code がインストールされていること
+## インストール
 
-### マーケットプレースの追加
+### Claude Code
 
-`/plugins` コマンドからマーケットプレースを追加:
+Claude Code の `/plugin` からマーケットプレースとプラグインを追加します。
 
-```bash
-/plugin marketplace add interactive-inc/claude-plugins
+```text
+/plugin marketplace add interactive-inc/agent-plugins
+/plugin install product@inta-agent-plugins
 ```
 
-### プラグインのインストール
+### Codex
 
-マーケットプレース追加後、以下のコマンドでプラグインをインストールできます：
+Codex CLI からGitHubマーケットプレースとプラグインを追加します。
 
 ```bash
-# claude プラグインのインストール
-/plugin install claude@interactive-claude-plugins
-
-# jobantenna プラグインのインストール
-/plugin install jobantenna@interactive-claude-plugins
-
-# product プラグインのインストール
-/plugin install product@interactive-claude-plugins
+codex plugin marketplace add interactive-inc/agent-plugins
+codex plugin add product@inta-agent-plugins
 ```
 
-## スキル一覧（クイックリファレンス）
+以前の `product@interactive-claude-plugins` を使っていた場合も、新しいマーケットプレースを追加して `product@inta-agent-plugins` をインストールしてください。
 
-| スキル名 | プラグイン | 用途 | ドキュメント |
-|---------|-----------|------|------------|
-| skill-review | claude | Claude Code スキルのレビュー | [📖](./plugins/claude/skills/skill-review/README.md) |
-| subagent-review | claude | サブエージェントのレビュー | [📖](./plugins/claude/skills/subagent-review/README.md) |
-| hooks-review | claude | フック設定のレビュー・構成 | [📖](./plugins/claude/skills/hooks-review/README.md) |
-| marketplace-review | claude | マーケットプレース設定の検証 | [📖](./plugins/claude/skills/marketplace-review/README.md) |
-| mcp-review | claude | MCP サーバー設定のレビュー | [📖](./plugins/claude/skills/mcp-review/README.md) |
-| slash-command-review | claude | スラッシュコマンドのレビュー | [📖](./plugins/claude/skills/slash-command-review/README.md) |
-| laravel-command | jobantenna | Laravel コマンド実装・レビュー | [📖](./plugins/jobantenna/skills/laravel-command/README.md) |
-| laravel-mail | jobantenna | Laravel メール実装・レビュー | [📖](./plugins/jobantenna/skills/laravel-mail/README.md) |
-| phpunit-runner | jobantenna | PHPUnit テスト実行 | [📖](./plugins/jobantenna/skills/phpunit-runner/README.md) |
-| bootstrap | product | 初期architectureと開発baseline | [📖](./plugins/product/README.md) |
-| dev | product | 製品開発とdelivery | [📖](./plugins/product/README.md) |
-| test | product | 変更差分・API・UI・アクセシビリティ検証 | [📖](./plugins/product/README.md) |
-| check | product | 読み取り専用の横断点検 | [📖](./plugins/product/README.md) |
-| env | product | 開発環境の点検・適用 | [📖](./plugins/product/README.md) |
-| stack | product | 技術選定と移行計画 | [📖](./plugins/product/README.md) |
-| docs | product | HTML・PDF・README生成と検品 | [📖](./plugins/product/README.md) |
-| wordpress | product | WordPress・PHP更新 | [📖](./plugins/product/README.md) |
-| agent-runtime | product | Claude Agent の役割別実行境界 | [📖](./plugins/product/README.md) |
-| security | product | localhostアプリの非破壊security検査 | [📖](./plugins/product/README.md) |
+### Agent Plugins対応クライアント
 
-## 利用可能なプラグイン
+リポジトリ内の `plugins/product` がAgent Plugin本体です。対応クライアントからこのディレクトリまたはGitリポジトリを指定してください。利用できるインストール方法はクライアントごとに異なります。
 
-### 1. claude プラグイン
+## Product plugin
 
-Claude Code スキルとサブエージェント開発を支援するプラグインです。
+人間が選ぶ主な入口は3つです。
 
-#### 含まれるスキル
+| スキル | 用途 |
+| --- | --- |
+| `product:bootstrap` | 新規・既存リポジトリの初期設計と開発baseline |
+| `product:dev` | 会話を前提にした機能開発、修正、仕様変更、delivery |
+| `product:check` | 人間が起動する読み取り専用の定期検診 |
 
-**skill-review**
-- Claude Code スキルをベストプラクティスに照らして包括的にレビュー
-- 6つの観点（Description 品質、Progressive Disclosure、コンテンツ品質、ワークフロー、テンプレート・例、技術的詳細）から評価
-- A-F 評価とスコアを算出し、優先度付き改善提案を提供
-- 📖 [詳細ドキュメント](./plugins/claude/skills/skill-review/README.md)
+`test`、`docs`、`env`、`stack`、`security`、`wordpress` は、通常は `bootstrap` / `dev` / `check` が必要に応じて使う専門スキルです。精度を高めたい場合は人間から明示的にも呼び出せます。
 
-**subagent-review**
-- Claude Code サブエージェント実装をレビュー
-- 5つの観点（単一責任原則、システムプロンプト品質、ツールアクセス制限、バージョン管理統合、適切な基盤）から評価
-- セキュリティ、フォーカス、効果性を確保するための具体的な改善提案
-- 📖 [詳細ドキュメント](./plugins/claude/skills/subagent-review/README.md)
+Claude Codeでは `agents/` の軽量エージェントも利用できます。Codexと他のAgent Plugins対応クライアントは、同じ `skills/` に書かれた開発契約を直接利用します。
 
-**hooks-review**
-- Claude Code フック設定をレビュー・構成し、ワークフロー自動化を支援
-- セキュリティ脆弱性、パフォーマンス問題、ベストプラクティス違反を検出
-- 9種類のフックイベント（PreToolUse、PostToolUse、UserPromptSubmit など）をサポート
-- 優先度付き推奨事項と具体的な修正例を提供
-- 📖 [詳細ドキュメント](./plugins/claude/skills/hooks-review/README.md)
+詳しい設計思想は [Product plugin README](./plugins/product/README.md) を参照してください。
 
-**marketplace-review**
-- `.claude-plugin/marketplace.json` の構造と参照パスを検証
-- プラグイン、スキル、エージェントの定義を自動チェック
-- Python スクリプトによる包括的な検証とエラーレポート
-- マーケットプレース公開前の品質保証
-- 📖 [詳細ドキュメント](./plugins/claude/skills/marketplace-review/README.md)
+## 構造
 
-**mcp-review**
-- MCP サーバー設定（.mcp.json）をベストプラクティスに照らして検証
-- 7つの観点（セキュリティ、スコープ管理、トランスポートタイプなど）から評価
-- ハードコードされた秘密情報、不適切な環境変数使用を検出
-- stdio/HTTP/SSE の適切なトランスポート選択をガイド
-- 📖 [詳細ドキュメント](./plugins/claude/skills/mcp-review/README.md)
+```text
+.
+├── .agents/plugins/marketplace.json      # Codex marketplace
+├── .claude-plugin/marketplace.json       # Claude Code marketplace
+└── plugins/product/
+    ├── plugin.json                       # Agent Plugins v1
+    ├── .codex-plugin/plugin.json          # OpenAI / Codex
+    ├── .claude-plugin/plugin.json         # Claude Code
+    ├── skills/                            # Agent Skills共通正本
+    └── agents/                            # Claude Code固有の軽量エージェント
+```
 
-**slash-command-review**
-- スラッシュコマンド実装をベストプラクティスに照らしてレビュー
-- 6つの観点（メタデータ、引数処理、動的機能、セキュリティ、スコープ、スキル境界）から評価
-- A-F 評価とスコアリング、優先度付き改善提案
-- コマンドインジェクション、パストラバーサルなどのセキュリティリスクを検出
-- 📖 [詳細ドキュメント](./plugins/claude/skills/slash-command-review/README.md)
+## 開発と検証
 
----
+変更後は、共通スキルと各クライアント形式をそれぞれ検証します。
 
-### 2. jobantenna プラグイン
+```bash
+bun plugins/product/skills/dev/scripts/validate-skills.ts
+claude plugin validate .
+for plugin_dir in plugins/*; do claude plugin validate "$plugin_dir"; done
+for plugin_dir in plugins/*; do
+  python3 /path/to/plugin-creator/scripts/validate_plugin.py "$plugin_dir"
+done
+```
 
-JobAntenna プロジェクト固有の開発支援プラグインです。Laravel アプリケーション開発を効率化します。
+このリポジトリへ社内情報、社内システム、非公開API、社内専用CLI、秘密情報を追加しないでください。公開境界の詳細は [CLAUDE.md](./CLAUDE.md) にあります。
 
-#### 含まれるスキル
-
-**laravel-command**
-- Laravel Artisan コマンドを実証済みパターンと Laravel 9+ ベストプラクティスに従って実装・レビュー
-- 7つのコマンドテンプレート（Basic、ServiceIntegration、BatchProcessing、Scheduled、LongRunning、Isolatable）
-- 8つのコアパターン（カスタムベースクラス、サービス統合、大規模データ処理、Dry-Run、エラーハンドリングなど）
-- 10の観点からの包括的なコマンドレビュー機能
-- 📖 [詳細ドキュメント](./plugins/jobantenna/skills/laravel-command/README.md)
-
-**laravel-mail**
-- Laravel メール機能（Mailable、Notification、Twig テンプレート、テスト）を JobAntenna の確立されたパターンに従って実装
-- 二層アーキテクチャ（Notification + Mailable）による明確な責任分離
-- 8つの Sanitize Traits による安全なデータ変換
-- カスタム MailFake による期待値ファイル比較テスト
-- 10の観点からのメール実装レビュー機能
-- 📖 [詳細ドキュメント](./plugins/jobantenna/skills/laravel-mail/README.md)
-
-**phpunit-runner**
-- JobAntenna の Laradock Docker 環境で PHPUnit テストを非同期実行
-- 専用エージェントによる時間のかかるテスト実行
-- 特定のクラス、ファイル、またはすべてのテストを柔軟に選択可能
-- メイン会話をブロックしないバックグラウンド実行
-- 📖 [詳細ドキュメント](./plugins/jobantenna/skills/phpunit-runner/README.md)
-
-#### 含まれるエージェント
-
-**laravel-command-reviewer**
-- Laravel Artisan コマンド実装を10の観点から評価
-- 実証済みパターンとベストプラクティスへの準拠をチェック
-- 優先度付き改善提案とコード例を提供
-
-**laravel-mail-reviewer**
-- Laravel メール実装（Mailable、Notification、テンプレート、テスト）を10の観点から評価
-- JobAntenna の確立されたパターンへの準拠をチェック
-- Sanitize Traits の適切な使用を検証
-
-**phpunit-test-runner**
-- Docker 環境での PHPUnit テスト実行を自動化
-- テスト結果の解析とレポート生成
-- エラー詳細と実行サマリーを提供
-
----
-
-### 3. product プラグイン
-
-製品・repositoryの立ち上げ、会話を前提とした変更、変更範囲の検証、人間起動の定期検診を支援します。
-
-- `bootstrap`: 初期architecture、stack、環境、test、文書baselineを作る
-- `dev`: 要望・bug・Issue・PRを設計、実装、検証、deliveryまで進める
-- `test`: unit、API、a11y、visual、diff、performanceを検証する
-- `check`: 人間が明示した範囲を読み取り専用で点検する
-- `env` / `stack`: 開発環境と技術選定を確認し、明示依頼時だけ変更する
-- `docs`: HTML、PDF、READMEを生成して検品する
-- `wordpress`: WordPress・PHP更新を計画・実施する
-- `agent-runtime`: Claude Agent の共通手順と役割差を適用する
-- `security`: 許可されたlocalhostアプリを非破壊でsecurity検査する
-- 📖 [設計思想と利用方法](./plugins/product/README.md)
-
-## ライセンス
-
-このプラグインマーケットプレースは Interactive Inc. によって管理されています。
-
-## サポート
-
-問題や質問がある場合は、プロジェクトのドキュメントを参照するか、開発チームにお問い合わせください。
-
----
-
-**Interactive Inc.** - Claude Code プラグインマーケットプレース
+第三者由来の素材とライセンスは [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) を参照してください。

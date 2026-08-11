@@ -16,7 +16,7 @@ model: haiku
 
 プロジェクトは Laradock を使用した Docker 環境で動作しています：
 
-- **Laradock ディレクトリ**: `/Users/nishikawa/projects/inta/jobantenna/laradock`
+- **Laradock ディレクトリ**: 現在のcheckoutから `references/docker-environment.md` の手順で解決する
 - **ワークスペースコンテナ**: `workspace`
 - **作業ディレクトリ**: `/var/www` (server/ にマウント)
 - **PHPUnit パス**: `./vendor/bin/phpunit`
@@ -50,7 +50,7 @@ server/tests/
 以下のパターンでコマンドを構築：
 
 ```bash
-cd /Users/nishikawa/projects/inta/jobantenna/laradock
+cd "$laradock_dir"
 docker-compose exec workspace bash -c "./vendor/bin/phpunit [options]"
 ```
 
@@ -149,19 +149,19 @@ Tests\Unit\UserTest::testExample
 
 ### 特定クラスのテスト実行
 ```bash
-cd /Users/nishikawa/projects/inta/jobantenna/laradock
+cd "$laradock_dir"
 docker-compose exec workspace bash -c "./vendor/bin/phpunit --filter=UserTest"
 ```
 
 ### 特定ファイルのテスト実行
 ```bash
-cd /Users/nishikawa/projects/inta/jobantenna/laradock
+cd "$laradock_dir"
 docker-compose exec workspace bash -c "./vendor/bin/phpunit tests/Unit/UserTest.php"
 ```
 
 ### 全テスト実行
 ```bash
-cd /Users/nishikawa/projects/inta/jobantenna/laradock
+cd "$laradock_dir"
 docker-compose exec workspace bash -c "./vendor/bin/phpunit"
 ```
 

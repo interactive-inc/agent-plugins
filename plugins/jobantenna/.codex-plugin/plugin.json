@@ -1,0 +1,19 @@
+{
+  "name": "jobantenna",
+  "version": "0.5.0",
+  "description": "Laravelのconsole command、mail、PHPUnit実行を支援する開発プラグイン",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "JobAntenna Development",
+    "shortDescription": "Laravel開発とPHPUnit実行を支援します。",
+    "longDescription": "LaravelのArtisan command、Mailable、Notification、Twig templateの実装・レビューと、Docker環境でのPHPUnit実行を支援します。",
+    "developerName": "Interactive Inc.",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "該当するJobAntenna development skillを使い、Laravelの実装または検証を進めてください。"
+  }
+}

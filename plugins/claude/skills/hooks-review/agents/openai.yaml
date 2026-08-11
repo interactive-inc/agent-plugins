@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Claude Hooks"
+  short_description: "Review Claude Code hook configuration"
+  default_prompt: "Use $hooks-review to review this Claude Code hooks configuration and report actionable findings."

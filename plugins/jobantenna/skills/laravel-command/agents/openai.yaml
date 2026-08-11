@@ -1,0 +1,4 @@
+interface:
+  display_name: "Develop Laravel Command"
+  short_description: "Implement or review an Artisan command"
+  default_prompt: "Use $laravel-command to implement or review this Laravel Artisan command."

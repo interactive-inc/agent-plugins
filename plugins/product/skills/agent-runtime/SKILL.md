@@ -1,8 +1,7 @@
 ---
 name: agent-runtime
-description: "Apply the shared runtime contract for product development agents. Use when fable, sonnet, opus, or worker starts a development task and needs its role-specific delegation, Git, browser, validation, and reporting boundaries."
-user-invocable: false
-disable-model-invocation: false
+description: "Apply the Claude Code-specific runtime contract for product development agents. Use only when fable, sonnet, opus, or worker starts a development task and needs its role-specific delegation, Git, browser, validation, and reporting boundaries."
+compatibility: "Designed for the product plugin's Claude Code agents; other clients do not need this skill for ordinary development."
 ---
 
 Product Agent 共通の実行契約。一般的な開発手順は [product:dev](../dev/SKILL.md) に委ね、この Skill は Agent 間の役割差だけを持つ。

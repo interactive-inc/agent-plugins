@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Claude Agent"
+  short_description: "Review a Claude Code subagent"
+  default_prompt: "Use $subagent-review to review this Claude Code subagent definition and its permissions."

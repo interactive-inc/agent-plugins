@@ -1,9 +1,6 @@
 ---
 name: test
 description: "Select and run focused product verification. Use `changed` for the current diff, `unit` for behavior, `api` for contract compatibility, `a11y` for WCAG, `visual` or `diff` for rendered UI, and `perf` for measured web performance regressions."
-argument-hint: "[changed|unit|api|a11y|visual|diff|perf]"
-user-invocable: true
-disable-model-invocation: false
 ---
 
 > このスキルを更新するときは [product設計](../../README.md) に従う。

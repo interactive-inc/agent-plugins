@@ -2,6 +2,18 @@
 
 製品開発を人間と AI で継続運用するためのプラグイン。Claude や Codex が元から持つ開発能力を置き換えず、人間との合意、組織固有の制約、成果物の置き場所、完了条件を共有する。
 
+## 対応形式
+
+`skills/` はAgent Skills準拠の共通正本であり、Agent Plugins v1、Claude Code、OpenAI / Codexから同じ内容を利用する。配布形式の差は3つの薄いmanifestへ閉じ込める。
+
+| 形式 | Manifest | 固有要素 |
+| --- | --- | --- |
+| Agent Plugins v1 | `plugin.json` | 可搬な `skills/` |
+| Claude Code | `.claude-plugin/plugin.json` | `agents/` の軽量Agent |
+| OpenAI / Codex | `.codex-plugin/plugin.json` | 各Skillの `agents/openai.yaml` |
+
+共通SkillへClaude固有のfrontmatterを混ぜず、クライアント固有要素を別クライアントの実行条件にしない。
+
 ## 設計思想
 
 ### 統一するのは人間との契約

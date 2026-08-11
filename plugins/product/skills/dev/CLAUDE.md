@@ -16,7 +16,7 @@ product は開発のベストプラクティス全体を扱う。常時展開さ
 - references/docs/ — .docs/ の構造とフォーマット。中程度。成果物の形式を変えるときに更新
 - references/request.md — 依頼の振り分けと実装フロー。中程度。運用の型を変えるときに更新
 - references/tools/ — GitHub / Sentry / CI などツールの手順。短命。ツール都合で気軽に足し、使わなくなったら気軽に消す
-- commands/ — 製品開発入口に属する限定command。横断点検はcheck、挙動不変の手入れはmaintainへ置く
+- commands/ — 製品開発入口に属する限定command。横断点検はcheck、明示された挙動不変の手入れはdevで扱う
 
 短命なものがコアを浸食しないよう、追加時はまずどのディレクトリに属するか（＝何が理由で変わるものか）を決める。迷ったら寿命の短い側に置く。
 
@@ -56,5 +56,5 @@ Tactical DDD（Aggregate / Entity / VO 実装）は Code Design に置く。
 
 - 製品候補の提案はdevの`next`
 - 仕様、docs、README、code、環境の点検は人間起動のcheck
-- 点検結果からの挙動不変な修正は人間起動のmaintain
+- 点検結果から人間が選んだ挙動不変の修正は、別のdev作業として開始する
 - 開発環境の適用とSkill追加は人間起動のenv

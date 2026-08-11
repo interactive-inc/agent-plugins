@@ -10,18 +10,18 @@ Laravel Artisan コマンドの実装とレビューを本番環境で実証済�
 
 ### 前提条件
 
-Claude Code CLI がインストールされている必要があります。
+Claude CodeまたはCodexがインストールされている必要があります。
 
 ### マーケットプレースの追加
 
 ```bash
-/plugin marketplace add interactive-inc/claude-plugins
+/plugin marketplace add interactive-inc/agent-plugins
 ```
 
 ### プラグインのインストール
 
 ```bash
-/plugin install jobantenna@interactive-claude-plugins
+/plugin install jobantenna@inta-agent-plugins
 ```
 
 ## 主な機能

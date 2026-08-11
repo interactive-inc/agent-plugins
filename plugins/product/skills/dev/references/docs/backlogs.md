@@ -46,14 +46,14 @@ reference-id: {外部参照ID}
 
 ---
 
-ここから下は人間ゾーン（オプショナル）。人間が自由に書き、Claude は読み取りのみで書き換えない。
+ここから下は人間ゾーン（オプショナル）。人間が自由に書き、AI は読み取りのみで書き換えない。
 ```
 
 脚注に日付と根拠をまとめる。本文は結論だけ。
 
 ## ゾーン分離
 
-Claude が再生成する領域を先に、人間が自由に書く領域（オプショナル）を後に置き、`---` で分ける。詳細は [human-claude-zone.md](human-claude-zone.md) を参照。
+AI が再生成する領域を先に、人間が自由に書く領域（オプショナル）を後に置き、`---` で分ける。詳細は [human-agent-zone.md](human-agent-zone.md) を参照。
 
 ## index.md
 
@@ -121,4 +121,4 @@ slug.md は編集しない。index.md のみ上書きする。
 - 対応案は複数出す。1案に絞らない(絞るのはdecisions/の役割)
 - 判断が「開発する」になったらdecisions/にADRを作成して実装に進む
 - 判断が「見送り」でも削除しない。理由を残す
-- 人間ゾーンと Claude ゾーンの取り扱いは [human-claude-zone.md](human-claude-zone.md) を参照
+- 人間ゾーンと AI ゾーンの取り扱いは [human-agent-zone.md](human-agent-zone.md) を参照

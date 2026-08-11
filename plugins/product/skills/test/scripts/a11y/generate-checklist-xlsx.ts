@@ -134,16 +134,16 @@ interface InteractiveTestOutput {
   results: InteractiveTestResult[]
 }
 
-// --- Claude 分析オーバーライド JSON 型定義 ---
+// --- Agent 分析オーバーライド JSON 型定義 ---
 
-interface ClaudeOverride {
+interface AgentOverride {
   criterion: string
   status: "pass" | "fail" | "warning" | "not-applicable"
   details: string
 }
 
-interface ClaudeOverridesResult {
-  overrides: ClaudeOverride[]
+interface AgentOverridesResult {
+  overrides: AgentOverride[]
 }
 
 // --- マニフェスト JSON 型定義 ---
@@ -670,7 +670,7 @@ function getDisplayLabel(status: ResultStatus): string {
 
 interface CriterionResult {
   status: ResultStatus
-  source: string // "自動判定", "自動判定(Visual)", "自動判定(Interactive)", "自動判定(Claude)", "要目視確認"
+  source: string // "自動判定", "自動判定(Visual)", "自動判定(Interactive)", "自動判定(Agent)", "要目視確認"
   notes: string
 }
 
@@ -713,25 +713,25 @@ function mergeResults(
   axeData: AxeResult,
   visualData?: VisualTestOutput,
   interactiveData?: InteractiveTestOutput,
-  claudeOverrides?: ClaudeOverridesResult,
+  agentOverrides?: AgentOverridesResult,
 ): CriterionResult {
   // 1. axe-core の評価をベースとする
   let result = evaluateCriterion(criterion, axeData)
 
-  // 2. Claude 分析オーバーライドを適用（axe-core より優先）
-  if (claudeOverrides) {
-    const override = claudeOverrides.overrides.find((o) => o.criterion === criterion.id)
+  // 2. Agent 分析オーバーライドを適用（axe-core より優先）
+  if (agentOverrides) {
+    const override = agentOverrides.overrides.find((o) => o.criterion === criterion.id)
     if (override && override.status !== "warning") {
       result = {
         status:
           override.status === "pass" || override.status === "not-applicable" ? "適合" : "不適合",
-        source: "自動判定(Claude)",
+        source: "自動判定(Agent)",
         notes: override.details || result.notes,
       }
     }
   }
 
-  // 3. Visual テスト結果を適用（Claude より優先）
+  // 3. Visual テスト結果を適用（Agent より優先）
   if (visualData) {
     const check = visualData.checks.find((c) => c.criterion === criterion.id)
     if (check && check.result !== "warning") {
@@ -786,7 +786,7 @@ function buildMergedResult(
   axeData: AxeResult,
   visualData?: VisualTestOutput,
   interactiveData?: InteractiveTestOutput,
-  claudeOverrides?: ClaudeOverridesResult,
+  agentOverrides?: AgentOverridesResult,
 ): MergedResult {
   const items: MergedResultItem[] = []
   let pass = 0,
@@ -795,7 +795,7 @@ function buildMergedResult(
 
   for (let i = 0; i < WCAG_CRITERIA.length; i++) {
     const criterion = WCAG_CRITERIA[i]
-    const result = mergeResults(criterion, axeData, visualData, interactiveData, claudeOverrides)
+    const result = mergeResults(criterion, axeData, visualData, interactiveData, agentOverrides)
     const displayLabel = getDisplayLabel(result.status)
 
     if (displayLabel === "確認OK") pass++
@@ -953,7 +953,7 @@ function generateDetailSheet(
   axeData: AxeResult,
   visualData?: VisualTestOutput,
   interactiveData?: InteractiveTestOutput,
-  claudeOverrides?: ClaudeOverridesResult,
+  agentOverrides?: AgentOverridesResult,
 ): UrlSummary {
   const sheet = workbook.addWorksheet(sheetName)
 
@@ -961,7 +961,7 @@ function generateDetailSheet(
   const tools: string[] = ["axe-core + Playwright（自動判定）"]
   if (visualData) tools.push("Playwright Visual テスト（自動判定(Visual)）")
   if (interactiveData) tools.push("Playwright Interactive テスト（自動判定(Interactive)）")
-  if (claudeOverrides) tools.push("Claude HTML分析（自動判定(Claude)）")
+  if (agentOverrides) tools.push("Agent HTML分析（自動判定(Agent)）")
 
   // メタ情報
   const metaRows = [
@@ -982,7 +982,7 @@ function generateDetailSheet(
     "  自動判定 = axe-core による自動テスト結果",
     "  自動判定(Visual) = Playwright による視覚的チェック結果",
     "  自動判定(Interactive) = Playwright によるインタラクティブ検証結果",
-    "  自動判定(Claude) = Claude がHTMLソースを分析して判定した結果",
+    "  自動判定(Agent) = Agent がHTMLソースを分析して判定した結果",
     "  要目視確認 = ブラウザ操作が必要なため、人による目視確認が必要",
   ]
   for (const text of legendRows) {
@@ -1029,7 +1029,7 @@ function generateDetailSheet(
 
   for (let i = 0; i < WCAG_CRITERIA.length; i++) {
     const criterion = WCAG_CRITERIA[i]
-    const result = mergeResults(criterion, axeData, visualData, interactiveData, claudeOverrides)
+    const result = mergeResults(criterion, axeData, visualData, interactiveData, agentOverrides)
 
     const displayLabel = getDisplayLabel(result.status)
     if (displayLabel === "確認OK") passCount++
@@ -1249,9 +1249,9 @@ async function generateMultiUrlExcel(manifest: Manifest, outputPath: string): Pr
       entry.interactiveJson && existsSync(entry.interactiveJson)
         ? loadJson<InteractiveTestOutput>(entry.interactiveJson)
         : undefined
-    const claudeOverrides =
+    const agentOverrides =
       entry.overridesJson && existsSync(entry.overridesJson)
-        ? loadJson<ClaudeOverridesResult>(entry.overridesJson)
+        ? loadJson<AgentOverridesResult>(entry.overridesJson)
         : undefined
 
     const summary = generateDetailSheet(
@@ -1262,7 +1262,7 @@ async function generateMultiUrlExcel(manifest: Manifest, outputPath: string): Pr
       axeData,
       visualData,
       interactiveData,
-      claudeOverrides,
+      agentOverrides,
     )
     summary.label = entry.label
     summaries.push(summary)
@@ -1274,7 +1274,7 @@ async function generateMultiUrlExcel(manifest: Manifest, outputPath: string): Pr
       axeData,
       visualData,
       interactiveData,
-      claudeOverrides,
+      agentOverrides,
     )
     const mergedOutputPath = resolve(dirname(entry.axeJson), "merged-result.json")
     exportMergedResult(mergedResult, mergedOutputPath)
@@ -1304,7 +1304,7 @@ async function generateSingleUrlExcel(
   outputPath: string,
   visualData?: VisualTestOutput,
   interactiveData?: InteractiveTestOutput,
-  claudeOverrides?: ClaudeOverridesResult,
+  agentOverrides?: AgentOverridesResult,
 ): Promise<void> {
   const workbook = new ExcelJS.Workbook()
   const dateStr = formatDateStr(axeData.timestamp)
@@ -1317,7 +1317,7 @@ async function generateSingleUrlExcel(
     axeData,
     visualData,
     interactiveData,
-    claudeOverrides,
+    agentOverrides,
   )
 
   await workbook.xlsx.writeFile(outputPath)
@@ -1368,9 +1368,9 @@ if (args.manifestPath) {
       ? loadJson<InteractiveTestOutput>(args.interactiveJsonPath)
       : undefined
 
-  const claudeOverrides =
+  const agentOverrides =
     args.overridesJsonPath && existsSync(args.overridesJsonPath)
-      ? loadJson<ClaudeOverridesResult>(args.overridesJsonPath)
+      ? loadJson<AgentOverridesResult>(args.overridesJsonPath)
       : undefined
 
   generateSingleUrlExcel(
@@ -1378,7 +1378,7 @@ if (args.manifestPath) {
     args.outputPath,
     visualData,
     interactiveData,
-    claudeOverrides,
+    agentOverrides,
   ).catch((err) => {
     console.error("Error:", err.message)
     process.exit(1)

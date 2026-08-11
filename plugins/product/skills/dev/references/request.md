@@ -82,9 +82,9 @@ Vision alignmentと主要tradeoffを確認する。ユーザーが実装方針�
 
 ### Record
 
-signal なら signals 規約に従って記録する。`.docs/index.md` を先に読んでビジョンと整合チェックする。類似テーマがあれば該当 slug.md の Claude ゾーンに追記、無ければ新規 slug.md を作成する。ビジョン外なら `## 課題` セクションにその旨を明記する。`index.md` は触らない（再生成手順は [signals.md](docs/signals.md) に記載）。
+signal なら signals 規約に従って記録する。`.docs/index.md` を先に読んでビジョンと整合チェックする。類似テーマがあれば該当 slug.md の AI ゾーンに追記、無ければ新規 slug.md を作成する。ビジョン外なら `## 課題` セクションにその旨を明記する。`index.md` は触らない（再生成手順は [signals.md](docs/signals.md) に記載）。
 
-backlog なら backlogs 規約に従って記録する。`.docs/index.md` と `.docs/backlogs/index.md` を先に読む。入力が signals/ slug ならその内容を背景としてリンクする。既存 backlogs/ slug を指定された場合は `---` ゾーン分離を解析し、Claude ゾーン（`---` より上）のみ書き換える。新規作成時は `---` を置かない（人間ゾーンは人間が必要時に末尾へ足す）。`index.md` は触らない。
+backlog なら backlogs 規約に従って記録する。`.docs/index.md` と `.docs/backlogs/index.md` を先に読む。入力が signals/ slug ならその内容を背景としてリンクする。既存 backlogs/ slug を指定された場合は `---` ゾーン分離を解析し、AI ゾーン（`---` より上）のみ書き換える。新規作成時は `---` を置かない（人間ゾーンは人間が必要時に末尾へ足す）。`index.md` は触らない。
 
 issueなら[gh-templates.md](tools/gh-templates.md)を読み、Bug / Feature / Task判定とTemplateに従って`gh issue create`する。重複は`gh issue list`で先に確認する。実装も依頼済みなら「Workflow: 既存Issueの続き」にそのまま合流する。
 

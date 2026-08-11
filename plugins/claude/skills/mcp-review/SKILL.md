@@ -1,7 +1,7 @@
 ---
 name: mcp-review
 description: Validate and review MCP (Model Context Protocol) server configurations in .mcp.json files against best practices. Evaluate security, scope management, environment variable usage, transport types, and common pitfalls. Provide actionable recommendations for configuration improvements. Use when users request "MCP configuration review," "validate .mcp.json," "check MCP setup," "MCP best practices," or mention MCP server configuration, security review, or troubleshooting MCP issues.
-allowed-tools: [Read, Glob, Grep, TodoWrite]
+allowed-tools: "Read Glob Grep"
 ---
 
 ## Table of Contents

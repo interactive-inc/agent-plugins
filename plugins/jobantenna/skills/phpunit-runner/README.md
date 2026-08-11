@@ -4,25 +4,32 @@ JobAntenna の Laradock ベース Docker 環境で PHPUnit テストを実行す
 
 ## 概要
 
-このスキルは、JobAntenna プロジェクトの Laradock Docker 環境内で PHPUnit テストを非同期実行するための特化したワークフローを提供します。時間のかかるテスト実行を専用のテストランナーエージェントを通じて処理し、メイン会話をブロックしないように最適化されています。
+このスキルは、JobAntenna プロジェクトの Laradock Docker 環境内で PHPUnit テストを実行する特化ワークフローを提供します。Claude Codeでは同梱Agentへ委譲でき、Codexなど他のAgent Plugins clientでは同じ手順を直接実行します。
 
 ## インストール
 
 ### 前提条件
 
-- Claude Code CLI がインストールされている
+- Claude CodeまたはCodexがインストールされている
 - JobAntenna プロジェクト環境（Laradock）が稼働している
 
 ### マーケットプレースの追加
 
 ```bash
-/plugin marketplace add interactive-inc/claude-plugins
+/plugin marketplace add interactive-inc/agent-plugins
 ```
 
 ### プラグインのインストール
 
 ```bash
-/plugin install jobantenna@interactive-claude-plugins
+/plugin install jobantenna@inta-agent-plugins
+```
+
+Codexでは次を実行します。
+
+```bash
+codex plugin marketplace add interactive-inc/agent-plugins
+codex plugin add jobantenna@inta-agent-plugins
 ```
 
 ## 主な機能
@@ -48,7 +55,7 @@ JobAntenna の Laradock ベース Docker 環境で PHPUnit テストを実行す
 
 ```
 ユーザー: "UserTest を実行してください"
-→ スキルが起動し、phpunit-test-runner エージェントを使用してテストを実行
+→ スキルが起動し、利用中clientに応じて直接実行またはphpunit-test-runner Agentへ委譲
 ```
 
 ## ファイル構成
@@ -73,18 +80,15 @@ plugins/jobantenna/skills/phpunit-runner/
 - **特定のファイル**: `tests/Unit/Models/ApplicationTest.php`
 - **すべてのテスト**: フィルタなしで実行
 
-### 2. テストランナーエージェントの起動
+### 2. 実行または委譲
 
-Task ツールを使用して `phpunit-test-runner` エージェント（`agents/phpunit-test-runner.md` で定義）をテスト仕様とともに起動：
+`references/docker-environment.md` に従って現在のcheckoutからLaradockを解決し、指定scopeを実行します。
 
-```
-Task tool:
-- subagent_type: "jobantenna:phpunit-runner:phpunit-test-runner"
-- description: "Run PHPUnit tests: [test-name]"
-- prompt: "Execute PHPUnit tests with the following specification: [filter or file path]"
-```
+- Claude Codeでは `phpunit-test-runner` Agentへ委譲してよい
+- Codexなど他clientでは同じcommandを直接実行・監視する
+- client固有のTask toolやAgent識別子を必須にしない
 
-エージェントは以下を実行：
+実行主体は以下を行います：
 1. 適切な Docker コマンドの構築
 2. workspace コンテナでのテスト実行
 3. 実行進捗の監視
@@ -134,8 +138,8 @@ docker-compose exec workspace bash -c "./vendor/bin/phpunit [options]"
 
 **処理フロー**:
 1. スコープ特定: `--filter=UserTest`
-2. エージェント起動: Task ツールで phpunit-test-runner、プロンプト "Execute PHPUnit tests with filter: UserTest"
-3. エージェント完了待機
+2. 現在のLaradock場所を解決
+3. 直接実行、または対応clientではAgentへ委譲
 4. レポート: "UserTest から 43 個のテストを実行しました。すべてのテストが正常に合格しました。"
 
 ### 例2: 特定のファイルのテスト実行
@@ -144,7 +148,7 @@ docker-compose exec workspace bash -c "./vendor/bin/phpunit [options]"
 
 **処理フロー**:
 1. スコープ特定: `tests/Unit/Models/ApplicationTest.php`
-2. エージェント起動: ファイルパスを指定
+2. ファイルパスを指定して直接実行または委譲
 3. 結果レポート: "ApplicationTest から 28 個のテストを実行しました。26 個が合格、2 個が失敗しました。"
 
 ### 例3: すべてのテストの実行
@@ -153,7 +157,7 @@ docker-compose exec workspace bash -c "./vendor/bin/phpunit [options]"
 
 **処理フロー**:
 1. スコープ特定: フィルタなし、すべてのテスト
-2. エージェント起動: フィルタオプションなし
+2. フィルタオプションなしで直接実行または委譲
 3. 結果レポート: "合計 1,234 個のテストを実行しました。1,230 個が合格、4 個が失敗しました。"
 
 ## トラブルシューティング

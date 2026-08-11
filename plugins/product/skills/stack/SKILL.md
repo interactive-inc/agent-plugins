@@ -1,9 +1,6 @@
 ---
 name: stack
 description: "Choose or migrate a product stack and its cross-cutting development tools. Use for Hono, TanStack, Next.js, test tooling, local browser tooling, Sentry, MCP-to-CLI decisions, or a package/framework migration guide. Inspect and recommend by default; install only with explicit approval."
-argument-hint: "[migration] [package current target]"
-user-invocable: true
-disable-model-invocation: false
 ---
 
 # Stack selection

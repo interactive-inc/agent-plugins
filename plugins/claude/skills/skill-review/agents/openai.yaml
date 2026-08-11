@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Claude Skill"
+  short_description: "Review a Claude Code skill"
+  default_prompt: "Use $skill-review to review this Claude Code skill and provide prioritized improvements."

@@ -1,8 +1,6 @@
 ---
 name: security
 description: "Perform an authorized security assessment of a localhost development application using code inspection and bounded runtime tests. Use for hacker-agent reconnaissance, attack planning, verification, and evidence-backed reporting; never target production or external hosts."
-user-invocable: true
-disable-model-invocation: false
 ---
 
 許可された localhost 開発環境だけを対象に、設計に基づくセキュリティ検査を行う専門能力。`product:dev`の変更範囲検証、`product:check security`の読み取り専用検診、人間の明示実行から利用できる。外部 host、本番、DoS、破壊的変更、秘密情報の記録は禁止する。

@@ -2,7 +2,7 @@
 
 GitHub Issue と Pull Request を書き込む時のテンプレートと運用ルールをまとめたスキル。Issue / PR の本文を作る前に必ず参照する。
 
-Issue は Claude が後で読み返したときに意思決定の経緯と実装方針を再現できる状態に保つ。PR は実装結果を記録する場所で、計画は書かない。
+Issue は AI が後で読み返したときに意思決定の経緯と実装方針を再現できる状態に保つ。PR は実装結果を記録する場所で、計画は書かない。
 
 ## リポジトリとユーザーの取得
 
@@ -69,7 +69,7 @@ assigneeIds は GraphQL で配列を渡せないため、作成後に `gh issue 
 
 ## .github 雛形ファイルの優先順位
 
-`.github/ISSUE_TEMPLATE.md` と `.github/PULL_REQUEST_TEMPLATE.md` は GitHub UI が自動適用する雛形ファイル。Claude が本文を組み立てる時の優先順位は次の通り。
+`.github/ISSUE_TEMPLATE.md` と `.github/PULL_REQUEST_TEMPLATE.md` は GitHub UI が自動適用する雛形ファイル。AI が本文を組み立てる時の優先順位は次の通り。
 
 雛形ファイルがあればそれを優先する。下記の Template セクションはあくまでフォールバック。雛形が無い・壊れている・このスキルの方針と整合しない場合のみ、このスキルの Template に従って本文を組み立てる。
 
@@ -101,7 +101,7 @@ PR を作成する前に `.github/PULL_REQUEST_TEMPLATE.md` をチェックす�
 
 必須セクションの後に、任意セクションを自由に追加してよい。
 
-Claude が残したい情報（調査メモ、検討した代替案、試行錯誤の記録など）は何でも書いてよい。
+AI が残したい情報（調査メモ、検討した代替案、試行錯誤の記録など）は何でも書いてよい。
 
 プロパティ形式（「リスク評価:」のような Key: Value）は使わない。自然な文章で書く。
 
@@ -233,7 +233,7 @@ GitHub Sub-issues 機能を使う場合は body の参照と併用してよい�
 
 ## Assignment
 
-GitHub Issue のアサインを管理する。話しかけた人（`gh api user` の login）を Issue に付け、他の人間 / Claude とのアサイン衝突を避ける。
+GitHub Issue のアサインを管理する。話しかけた人（`gh api user` の login）を Issue に付け、他の人間 / AI とのアサイン衝突を避ける。
 
 操作
 
@@ -265,7 +265,7 @@ Assign の判定フロー
 
 close 済み Issue にアサインしない。
 
-同一 Issue を複数の Claude セッションで取り合うのを避けるため、`assign` 実行後にもう一度 `gh issue view` で実際にアサインされたか確認する。失敗していれば再試行せず、ユーザーに状況を報告する。
+同一 Issue を複数の AI セッションで取り合うのを避けるため、`assign` 実行後にもう一度 `gh issue view` で実際にアサインされたか確認する。失敗していれば再試行せず、ユーザーに状況を報告する。
 
 ## ブランチ命名
 

@@ -1,9 +1,6 @@
 ---
 name: env
 description: "Inspect or explicitly apply the product repository development environment baseline: linked-worktree initialization, vite-plus, formatting and lint tooling, staged hooks, Bun and Playwright separation, ignore rules, browser-test setup, and useful Skills. Use only when a human directly requests environment inspection or setup."
-argument-hint: "[apply|skills]"
-user-invocable: true
-disable-model-invocation: true
 ---
 
 > このスキルを更新するときは [product設計](../../README.md) に従う。

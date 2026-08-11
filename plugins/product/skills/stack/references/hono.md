@@ -88,13 +88,13 @@ api/
 - [Drizzle Schema](hono/drizzle-schema.md)
 - [Lib](hono/lib-structure.md)
 
-## Claude Tools
+## Agent tools
 
 横断ツールは [stack スキル](../SKILL.md) を参照。
 
 ### hono-skill
 
-`npx skills add yusukebe/hono-skill`。Plugin: `/plugin marketplace add yusukebe/hono-skill` → `/plugin install hono-skill@hono`。
+`vpx skills add yusukebe/hono-skill --agent <client-id> --skill hono-skill -y`。`client-id` は利用中agentの識別子へ置き換える。
 
 ### sentry-for-ai
 

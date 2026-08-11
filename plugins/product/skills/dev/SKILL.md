@@ -1,9 +1,6 @@
 ---
 name: dev
 description: "Use as the conversational entry for all ordinary product changes: features, bug fixes, specification changes, explicit refactoring, documentation synchronization, Issues, PR review, CI failures, and delivery. Select the required design references and focused tests internally. Never start periodic repository-wide examination automatically."
-argument-hint: "[next|review|ci|pr-chain|自然文|Issue番号]"
-user-invocable: true
-disable-model-invocation: false
 ---
 
 > このスキルを更新するときは [CLAUDE.md](CLAUDE.md) の方針に従う。
@@ -65,7 +62,7 @@ Issue / PRの書式は [gh-templates.md](references/tools/gh-templates.md)、Git
 - 構造と権限: [architecture](references/docs/architecture.md)、[domain](references/docs/domain.md)、[roles](references/docs/roles-and-permissions.md)、[API schema](references/docs/api-schema.md)
 - 利用者向け: [capabilities](references/docs/capabilities.md)、[manual](references/docs/manual.md)、[glossary](references/docs/glossary.md)
 
-signals / backlogsの人間ゾーンは [human-claude-zone.md](references/docs/human-claude-zone.md) に従う。ファイルを丸ごと再生成せず、矛盾した部分だけ更新する。
+signals / backlogsの人間ゾーンは [human-agent-zone.md](references/docs/human-agent-zone.md) に従う。ファイルを丸ごと再生成せず、矛盾した部分だけ更新する。
 
 # サブコマンド
 

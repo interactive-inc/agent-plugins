@@ -1,9 +1,6 @@
 ---
 name: wordpress
 description: "Plan and execute WordPress core, plugin, theme, or PHP runtime upgrades. Use for WordPress/PHP compatibility reviews, upgrade planning, implementation, staging verification, rollback planning, and GitHub delivery. Defaults to a read-only plan; use `apply` or an explicit implementation request for changes."
-argument-hint: "[upgrade|php-upgrade] [plan|apply]"
-user-invocable: true
-disable-model-invocation: false
 ---
 
 > このスキルを更新するときは [product設計](../../README.md) に従う。

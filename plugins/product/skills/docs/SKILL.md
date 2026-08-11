@@ -1,9 +1,6 @@
 ---
 name: docs
 description: "Create and verify product documentation artifacts. Use `html` for a customer-facing HTML document or multi-page documentation site, `pdf` to render an existing HTML artifact to A4 PDF, and `readme` to create or update a repository README from verified project facts."
-argument-hint: "[html|pdf|readme] [source or request]"
-user-invocable: true
-disable-model-invocation: false
 ---
 
 > このスキルを更新するときは [product設計](../../README.md) に従う。

@@ -22,7 +22,7 @@ docs/a11y-test/{yyyymmddhhmmss}_{ドメイン名}/
     │   ├── axe-result.json
     │   ├── visual-result.json
     │   ├── interactive-result.json
-    │   ├── claude-overrides.json
+    │   ├── agent-overrides.json
     │   └── screenshots/
     └── manifest.json
 ```
@@ -30,7 +30,7 @@ docs/a11y-test/{yyyymmddhhmmss}_{ドメイン名}/
 > **注意**: 旧形式のMarkdown中間ファイル（レポート①・レポート③）は生成しない。
 >
 > - `a11y-report-{ドメイン}-{日付}.md`（旧レポート①）→ 廃止
-> - `a11y-checklist-claude-{ドメイン}-{日付}.md`（旧レポート③）→ 廃止
+> - `a11y-checklist-agent-{ドメイン}-{日付}.md`（旧レポート③）→ 廃止
 > - 統合レポートとして `report/markdown/{ラベル}.md` に直接生成する
 
 ### 使い分け
@@ -106,7 +106,7 @@ docs/a11y-test/{yyyymmddhhmmss}_{ドメイン名}/
 | axe-core               | `自動判定`              |
 | Playwright Visual      | `自動判定(Visual)`      |
 | Playwright Interactive | `自動判定(Interactive)` |
-| Claude HTML分析        | `自動判定(Claude)`      |
+| Agent HTML分析        | `自動判定(Agent)`      |
 | 人手確認が必要         | `要目視確認`            |
 
 ---
@@ -170,7 +170,7 @@ report/a11y-checklist-{ドメイン}-{日付}.xlsx
 data/{ラベル}/axe-result.json
 data/{ラベル}/visual-result.json
 data/{ラベル}/interactive-result.json
-data/{ラベル}/claude-overrides.json
+data/{ラベル}/agent-overrides.json
 data/{ラベル}/screenshots/
 data/manifest.json
 ```

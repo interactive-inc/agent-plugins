@@ -1,9 +1,6 @@
 ---
 name: bootstrap
 description: "Bootstrap a new product repository or adopt an existing repository into the product workflow. Use for initial product framing, architecture, stack, workspace, development environment, test baseline, documentation baseline, and minimal scaffolding before ordinary feature development begins."
-argument-hint: "[new|adopt] [request or repository]"
-user-invocable: true
-disable-model-invocation: false
 ---
 
 `product:bootstrap`は製品・リポジトリの立ち上げ入口。初期の境界と開発可能なbaselineを作り、通常の機能開発は`product:dev`へ渡す。

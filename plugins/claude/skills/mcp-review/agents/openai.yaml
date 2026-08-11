@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Claude MCP"
+  short_description: "Review Claude Code MCP configuration"
+  default_prompt: "Use $mcp-review to review this Claude Code MCP configuration for correctness and security."

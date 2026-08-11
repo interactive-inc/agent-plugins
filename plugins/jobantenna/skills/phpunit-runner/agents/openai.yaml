@@ -1,0 +1,4 @@
+interface:
+  display_name: "Run JobAntenna PHPUnit"
+  short_description: "Run PHPUnit in the Docker environment"
+  default_prompt: "Use $phpunit-runner to run the requested PHPUnit scope and report the results."

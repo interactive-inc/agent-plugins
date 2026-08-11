@@ -13,9 +13,10 @@ const humanInvokedSkillNames = new Set(["check", "env"])
 const allowedFrontmatterKeys = new Set([
   "name",
   "description",
-  "argument-hint",
-  "user-invocable",
-  "disable-model-invocation",
+  "license",
+  "compatibility",
+  "metadata",
+  "allowed-tools",
 ])
 
 function fail(path: string, message: string): void {
@@ -117,22 +118,16 @@ for (const skillDir of skillDirs) {
   if (lineCount > 180)
     fail(skillPath, `SKILL.md must remain an index (found ${lineCount} lines, max 180)`)
 
-  if (frontmatter.get("user-invocable") === "true") {
+  if (skillName !== "agent-runtime") {
     const openaiPath = join(skillDir, "agents", "openai.yaml")
     if (!existsSync(openaiPath)) {
-      fail(skillPath, "user-invocable skill requires agents/openai.yaml")
+      fail(skillPath, "cross-client skill requires agents/openai.yaml")
     } else if (!read(openaiPath).includes(`$${skillName}`)) {
       fail(openaiPath, `default_prompt must mention $${skillName}`)
     }
   }
 
   if (humanInvokedSkillNames.has(skillName)) {
-    if (frontmatter.get("user-invocable") !== "true") {
-      fail(skillPath, "human-invoked skill must be user-invocable")
-    }
-    if (frontmatter.get("disable-model-invocation") !== "true") {
-      fail(skillPath, "human-invoked skill must disable model invocation")
-    }
     const openaiPath = join(skillDir, "agents", "openai.yaml")
     if (
       existsSync(openaiPath) &&

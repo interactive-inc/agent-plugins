@@ -1,0 +1,4 @@
+interface:
+  display_name: "Develop Laravel Mail"
+  short_description: "Implement or review Laravel mail"
+  default_prompt: "Use $laravel-mail to implement or review this Laravel mail functionality."

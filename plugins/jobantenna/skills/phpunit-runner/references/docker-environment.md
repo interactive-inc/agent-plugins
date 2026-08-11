@@ -4,8 +4,8 @@ This document provides detailed information about the JobAntenna project's Docke
 
 ## Project Structure
 
-```
-/Users/nishikawa/projects/inta/jobantenna/
+```text
+<project-root>/
 ├── src/                          # Main project directory
 │   ├── server/                   # Laravel application
 │   │   ├── tests/               # PHPUnit tests
@@ -26,8 +26,23 @@ This document provides detailed information about the JobAntenna project's Docke
 ### Laradock Details
 
 - **Location**: `../laradock` (relative to src/)
-- **Absolute path**: `/Users/nishikawa/projects/inta/jobantenna/laradock`
 - **Compose tool**: `mutagen-compose` (for performance on macOS)
+
+### Resolve the current checkout
+
+Do not use a personal absolute path. Resolve the repository root and accept either a bundled or adjacent Laradock checkout.
+
+```bash
+project_root="$(git rev-parse --show-toplevel)"
+if [ -f "$project_root/laradock/docker-compose.yml" ]; then
+  laradock_dir="$project_root/laradock"
+elif [ -f "$project_root/../laradock/docker-compose.yml" ]; then
+  laradock_dir="$project_root/../laradock"
+else
+  echo "Laradock docker-compose.yml was not found" >&2
+  exit 1
+fi
+```
 
 ### Workspace Container
 
@@ -49,7 +64,7 @@ This document provides detailed information about the JobAntenna project's Docke
 
 From **outside** containers (host machine):
 ```bash
-cd /Users/nishikawa/projects/inta/jobantenna/laradock
+cd "$laradock_dir"
 docker-compose exec workspace bash -c "./vendor/bin/phpunit [options]"
 ```
 
@@ -121,7 +136,7 @@ Available from `src/` directory:
 
 ### For Test Runner Agent
 
-1. **Always use absolute paths** when changing directories
+1. **Resolve an absolute path from the current checkout** before changing directories
 2. **Use docker-compose exec** rather than entering container interactively
 3. **Handle long-running tests** by using background execution and monitoring output
 4. **Parse test output** to extract:

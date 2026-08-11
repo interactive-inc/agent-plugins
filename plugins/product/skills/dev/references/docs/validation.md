@@ -40,7 +40,7 @@
 - signals/index.md が slug.md と一致しているか
 - backlogs/ の判断が「開発する」のものに対応する ADR が存在するか
 - backlogs/index.md が slug.md と一致しているか
-- 人間ゾーンと Claude ゾーンの `---` 境界が守られているか
+- 人間ゾーンと AI ゾーンの `---` 境界が守られているか
 
 ## 用語
 

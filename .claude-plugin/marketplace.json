@@ -19,10 +19,10 @@
       "source": "./plugins/jobantenna"
     },
     {
-      "name": "product",
+      "name": "inta",
       "description": "製品の立ち上げ、会話型開発、専門検証、定期検診を人間とAIで進めるワークフロー",
-      "version": "0.2.0",
-      "source": "./plugins/product"
+      "version": "0.3.0",
+      "source": "./plugins/inta"
     }
   ]
 }

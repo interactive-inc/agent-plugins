@@ -1,0 +1,19 @@
+{
+  "name": "inta",
+  "version": "0.3.0",
+  "description": "製品の立ち上げ、会話型開発、専門検証、定期検診を人間とAIで進めるワークフロー",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Inta",
+    "shortDescription": "製品開発を会話、検証、定期検診まで支援します。",
+    "longDescription": "製品やリポジトリの立ち上げ、会話を前提とした日常開発、変更に応じた専門検証、人間が起動する読み取り専用の定期検診を提供します。",
+    "developerName": "Interactive Inc.",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "inta:devを使い、このリポジトリの指示と会話に沿って変更を進めてください。"
+  }
+}

@@ -16,10 +16,10 @@
 
 ## 正本と互換層
 
-プラグイン本体は `plugins/<plugin-name>/` に置く。`product` の構造は次の通り。
+プラグイン本体は `plugins/<plugin-name>/` に置く。`inta` の構造は次の通り。
 
 ```text
-plugins/product/
+plugins/inta/
 ├── plugin.json                 # Agent Plugins v1 manifest
 ├── .codex-plugin/plugin.json   # OpenAI / Codex manifest
 ├── .claude-plugin/plugin.json  # Claude Code manifest
@@ -44,7 +44,7 @@ plugins/product/
 
 新しいプラグインを追加するときは、独立した `plugins/<plugin-name>/` を作り、必要な3manifestと両marketplace entryを追加する。
 
-## Product pluginの設計境界
+## Inta pluginの設計境界
 
 - `bootstrap`: 新規・既存リポジトリの初期設計と開発baseline
 - `dev`: 会話を前提にした通常の機能開発・修正・仕様変更・deliveryの統一入口
@@ -59,7 +59,7 @@ Agentはモデル・権限・委譲先・失うと危険な境界だけを持つ
 最低限、変更範囲に応じて次を実行する。
 
 ```bash
-bun plugins/product/skills/dev/scripts/validate-skills.ts
+bun plugins/inta/skills/dev/scripts/validate-skills.ts
 claude plugin validate .
 for plugin_dir in plugins/*; do claude plugin validate "$plugin_dir"; done
 for plugin_dir in plugins/*; do
@@ -68,4 +68,4 @@ done
 git diff --check
 ```
 
-加えて、`plugins/product/plugin.json` はAgent Plugins v1 schema、各 `SKILL.md` はAgent Skillsの公式validatorで検証する。公開前には社内依存・秘密情報・第三者ライセンスも再確認する。
+加えて、`plugins/inta/plugin.json` はAgent Plugins v1 schema、各 `SKILL.md` はAgent Skillsの公式validatorで検証する。公開前には社内依存・秘密情報・第三者ライセンスも再確認する。

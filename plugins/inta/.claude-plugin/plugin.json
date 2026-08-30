@@ -1,0 +1,9 @@
+{
+  "name": "inta",
+  "description": "製品の立ち上げ、会話型開発、専門検証、定期検診を人間とAIで進めるワークフロー",
+  "version": "0.3.0",
+  "author": {
+    "name": "Interactive Inc.",
+    "email": "info@inta.co.jp"
+  }
+}

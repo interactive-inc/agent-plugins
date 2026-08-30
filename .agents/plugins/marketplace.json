@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "product",
+      "name": "inta",
       "source": {
         "source": "local",
-        "path": "./plugins/product"
+        "path": "./plugins/inta"
       },
       "policy": {
         "installation": "AVAILABLE",

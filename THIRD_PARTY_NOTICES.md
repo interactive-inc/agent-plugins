@@ -2,7 +2,7 @@
 
 ## Web Content Accessibility Guidelines (WCAG) 2.2
 
-The accessibility skills and checklist materials in `plugins/product/skills/test/` include material copied from or derived from [Web Content Accessibility Guidelines (WCAG) 2.2](https://www.w3.org/TR/WCAG22/).
+The accessibility skills and checklist materials in `plugins/inta/skills/test/` include material copied from or derived from [Web Content Accessibility Guidelines (WCAG) 2.2](https://www.w3.org/TR/WCAG22/).
 
 Source copyright notice: Copyright © 2020-2024 World Wide Web Consortium.
 

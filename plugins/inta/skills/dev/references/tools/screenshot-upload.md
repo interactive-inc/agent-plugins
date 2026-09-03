@@ -7,6 +7,7 @@
 - 正規のdev serverとbrowser検証手順が分かっている
 - screenshotの撮影、保存、uploadがrepository規則で許可されている
 - upload先と公開範囲が依頼に含まれる
+- `gh --version`が2.99.0以上で、`gh pr create --help`に`--attach`が出る。古い場合はuploadせず文章証拠へ切り替え、gh更新は人間へ提案する
 
 どれかを満たさなければ外部uploadしない。
 
@@ -19,7 +20,23 @@
 
 ## Upload
 
-対象環境で承認済みのupload commandを使い、PR本文へ貼る。投稿直後にrender結果を確認する。利用できない場合は画像なしの文章証拠へ切り替え、別のhostingを勝手に使わない。
+`gh`の`--attach`で画像・動画を添付する。browser操作でuploadしない。対応commandは`pr create` / `pr edit` / `pr comment` / `issue create` / `issue edit` / `issue comment`。
+
+```bash
+# 作成時に添付。`#`以降はalt textになる
+gh pr create --title "..." --body-file body.md --attach '/tmp/pr-screenshots/<run>/after.png#After: 一覧画面'
+
+# 既存PRへ追加。複数はflagを繰り返す（1回50fileまで）
+gh pr edit <number> --attach ./before.png --attach ./after.png
+
+# commentへ添付
+gh pr comment <number> --attach ./walkthrough.mp4
+```
+
+- 本文にlocal pathを`![alt](/tmp/pr-screenshots/<run>/after.png)`の形で書いておくと、そのpathがupload後のURLへ置換される。書いていなければ本文末尾へ追加される
+- 差し替えoptionは無い。古い画像を消すには、新しい画像を`--attach`した後に`--body` / `--body-file`で本文を丸ごと書き換え、古い埋め込みURLを手動で外す
+- 投稿直後に`gh pr view --web`または`gh pr view --json body`でrender結果を確認する
+- `--attach`が使えない場合は画像なしの文章証拠へ切り替え、別のhostingを勝手に使わない
 
 ## Cleanup
 

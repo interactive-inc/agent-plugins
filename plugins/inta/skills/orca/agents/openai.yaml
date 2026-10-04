@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hand Off to Orca Worktrees"
+  short_description: "Create Orca worktrees and hand off Issues to per-worktree agents"
+  default_prompt: "Use $orca to create Orca-managed worktrees and hand off the given Issues to per-worktree agents, or fan out multiple Issues at once."

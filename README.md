@@ -36,15 +36,16 @@ codex plugin add inta@inta-agent-plugins
 
 ## Inta plugin
 
-人間が選ぶ主な入口は3つです。
+人間が選ぶ主な入口は次の4つです。
 
 | スキル | 用途 |
 | --- | --- |
 | `inta:bootstrap` | 新規・既存リポジトリの初期設計と開発baseline |
 | `inta:dev` | 会話を前提にした機能開発、修正、仕様変更、delivery |
-| `inta:check` | 人間が起動する読み取り専用の定期検診 |
+| `inta:check` | 人間が起動する読み取り専用の製品点検。引数なしは範囲を絞った日常点検、`full` は全件監査 |
+| `inta:maintain` | 点検結果から人間が選んだ、挙動を変えない一系統の手入れ |
 
-`test`、`docs`、`env`、`stack`、`security`、`wordpress` は、通常は `bootstrap` / `dev` / `check` が必要に応じて使う専門スキルです。精度を高めたい場合は人間から明示的にも呼び出せます。
+`test`、`env`、`stack`、`docs`、`design`、`security`、`wordpress`、`orca` は、通常は入口のスキルが必要に応じて使う専門スキルです。精度を高めたい場合は人間から明示的にも呼び出せます。
 
 Claude Codeでは `agents/` の軽量エージェントも利用できます。Codexと他のAgent Plugins対応クライアントは、同じ `skills/` に書かれた開発契約を直接利用します。
 

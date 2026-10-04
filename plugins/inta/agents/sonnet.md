@@ -1,7 +1,7 @@
 ---
 name: sonnet
 description: "Implement product changes in the current checkout and use advisor for material decisions."
-model: claude-sonnet-5
+model: sonnet
 effort: xhigh
 permissionMode: bypassPermissions
 skills:

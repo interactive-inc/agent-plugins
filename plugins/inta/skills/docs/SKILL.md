@@ -3,9 +3,9 @@ name: docs
 description: "Create and verify product documentation artifacts. Use `html` for a customer-facing HTML document or multi-page documentation site, `pdf` to render an existing HTML artifact to A4 PDF, and `readme` to create or update a repository README from verified project facts."
 ---
 
-> このスキルを更新するときは [product設計](../../README.md) に従う。
+`inta:docs`は、製品の正本から人間向けの文書成果物を作成し、実表示または実行結果まで検証する入口。`.docs`自体の仕様管理は`inta:dev`、文書の乖離検査は`inta:check docs`、意味が一意な同期修正は`inta:maintain docs`が担当する。
 
-`inta:docs`は、製品の正本から人間向けの文書成果物を作成し、実表示または実行結果まで検証する専門能力。`.docs`自体の仕様管理と文書同期は`inta:dev`、文書の乖離検査は`inta:check docs`が担当する。
+HTMLまたはPDFを作成・編集するときは、作業前に [共通デザインガイドライン](../design/DESIGN.md) を全文読む。READMEは対象リポジトリの既存書式を優先する。
 
 # 振り分け
 
@@ -26,5 +26,5 @@ description: "Create and verify product documentation artifacts. Use `html` for 
 # 成果物の境界
 
 - 製品仕様や設計判断を変える必要がある場合は`inta:dev`へ分ける
-- 古い文書の検出だけなら`inta:check docs`、既存文書の修正なら`inta:dev`を使う
+- 古い文書の検出だけなら`inta:check docs|readme`、既存文書の挙動不変な整理だけなら`inta:maintain docs|readme`を使う
 - CHANGELOGやリリース告知は、PR一覧から機械的に生成せず、`inta:dev`のCHANGELOG判断と対象製品の公開手順に従う

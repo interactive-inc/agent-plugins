@@ -1,7 +1,8 @@
 ---
 name: hacker
 description: "Assess an authorized localhost development application for security vulnerabilities."
-model: claude-opus-4-6
+model: opus
+effort: high
 permissionMode: bypassPermissions
 background: true
 isolation: worktree

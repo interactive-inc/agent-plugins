@@ -46,10 +46,10 @@ api/
 - Value Object class ⇒ `xxx.value.ts`（適用条件と非class moduleのsuffixはdevの[Value Object](../../dev/references/design/value-object.md)を参照）
 - Repository ⇒ `xxx.repository.ts`
 - Adapter ⇒ `xxx.adapter.ts`
-- Application use case ⇒ `動詞-名詞.ts`（`create-customer.ts`、`update-customer.ts`）
+- Application operation ⇒ `動詞-名詞.ts`（`create-customer.ts`、`update-customer.ts`）
 - Route ⇒ `resource.$param.ts`（`customers.$customer.ts`）
 
-### Application Use Case Prefix
+### Application Operation Prefix
 
 `create-` / `update-` / `delete-` / `fetch-` / `get-` / `approve-` / `reject-` / `publish-` / `cancel-`
 

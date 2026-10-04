@@ -1,11 +1,9 @@
 ---
 name: dev
-description: "Use as the conversational entry for all ordinary product changes: features, bug fixes, specification changes, explicit refactoring, documentation synchronization, Issues, PR review, CI failures, and delivery. Select the required design references and focused tests internally. Never start periodic repository-wide examination automatically."
+description: "Route product requests from customer signals, ideas, backlogs, Issues, PR review, CI failures, and related PR chains through design, implementation, change-scoped verification, documentation, and delivery. Do not start broad inspection or maintenance automatically."
 ---
 
-> このスキルを更新するときは [CLAUDE.md](CLAUDE.md) の方針に従う。
-
-`inta:dev`は会話を前提とした製品変更の共通入口。機能、bug、仕様、明示されたリファクタリング、文書同期、必要な検証、ユーザーが依頼したGitHub deliveryまでを一つの仕事として扱う。専門検証は`inta:test`を使う。repository全体の定期検診は人間起動の`inta:check`であり、開発中に自動実行しない。
+`inta:dev`は製品開発の共通入口。依頼の整理、設計、実装、変更に必要な検証、記録、ユーザーが依頼したGitHub deliveryまでを一つの仕事として扱う。専門検証は`inta:test`を使う。横断的な点検と挙動不変の保守は人間起動の独立Skillであり、開発中に自動実行しない。
 
 # 実行契約
 
@@ -25,19 +23,17 @@ description: "Use as the conversational entry for all ordinary product changes: 
 4. その他の自然文 → [request.md](references/request.md) でsignal / backlog / issue / 直接作業に分類
 5. 引数なし → signalとbacklogから次の候補を読み取り専用で提案
 
-Issue / PRの書式は [gh-templates.md](references/tools/gh-templates.md)、GitHub運用は [gh.md](references/tools/gh.md)、レビューは [review.md](references/tools/review.md)、CHANGELOG判断は [changelog.md](references/tools/changelog.md) を必要時だけ読む。
+Issue / PRの書式は [gh-templates.md](references/tools/gh-templates.md)、GitHub運用は [gh.md](references/tools/gh.md)、コミットメッセージは [git.md](references/tools/git.md)、レビューは [review.md](references/tools/review.md)、CHANGELOG判断は [changelog.md](references/tools/changelog.md) を必要時だけ読む。
 
 # 標準フロー
 
 1. **Intent**: 目的、利用者、完了条件、許可された外向き操作を一文で固定する
 2. **Inspect**: リポジトリ指示、状態、既存Issue / PR、関連仕様と実装を確認する。並行作業の変更を上書きしない
 3. **Design**: 外側の価値から内側の実装へ進む。下記のreferenceは変更に必要なものだけ読む
-4. **Implement**: 仕様とテストを同じ変更範囲で更新する。別件は混ぜない
+4. **Implement**: 仕様とテストを同じ変更範囲で更新する。別件は混ぜない。`.ts` / `.tsx`を書く前に[typescript.md](references/code/typescript.md)、Reactコンポーネントを書く前に[react.md](references/code/react.md)を必ず読む
 5. **Verify**: 変更範囲に必要なリポジトリ固有のformat / lint / typecheck / testと`inta:test`能力を実行する。広範な品質監査、仕様trace、保守候補探索は追加しない
 6. **Record**: コードから読めない意思決定を`.docs/`へ残し、価値のある変更だけCHANGELOGへ記録する
-7. **Deliver**: 依頼範囲がcommit / push / PR / mergeを含む場合だけ、その地点まで進めて結果を確認する
-
-明示された挙動不変の整理・構造変更・文書同期は[maintenance.md](references/maintenance.md)に従う。開発中に重複、architecture劣化、不要testなどの全体探索を始めず、気づいた別件は報告して定期検診へ分ける。
+7. **Deliver**: 依頼範囲がcommit / push / PR / mergeを含む場合だけ、その地点まで進めて結果を確認する。commitのメッセージ書式は[git.md](references/tools/git.md)に従う
 
 # 設計reference
 
@@ -47,8 +43,16 @@ Issue / PRの書式は [gh-templates.md](references/tools/gh-templates.md)、Git
 - Domain / Application: [Architecture](references/design/architecture.md)、[Value Object](references/design/value-object.md)、[Service Layer](references/design/service-layer.md)
 - Code: [Error handling](references/design/error-handling.md)、[React](references/design/react.md)、[Data fetching](references/design/data-fetching.md)
 - API / DB: [API](references/design/api.md)、[Database](references/design/database.md)
+- Performance: [Performance](references/design/performance.md)、本番の計測は [Cloudflare analytics](references/tools/cloudflare-analytics.md)
 - State / patterns: [FSM](references/design/fsm.md)、[Reducer](references/design/reducer.md)、[Phantom Type](references/design/phantom-type.md)、[Fluent API](references/design/fluent-api.md)
 - Specification / tests: [Testing](../test/references/testing.md)
+
+# コーディング規約reference
+
+`.ts` / `.tsx`を書く前に必ず読む。
+
+- [TypeScript](references/code/typescript.md)
+- [React](references/code/react.md)
 
 原則は、依存方向を Interface → Application → Domain → Infrastructure に保ち、単純CRUDを不必要に多層化せず、業務上の不変条件だけをDomainへ置くこと。Applicationは一つの利用者目的につき一つの具象ユースケースクラスとし、複数操作を一クラスへまとめない。詳細な判断はreferenceと対象リポジトリの既存設計から行う。
 

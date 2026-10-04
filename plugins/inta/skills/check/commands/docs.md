@@ -4,13 +4,14 @@
 
 ## Scope
 
-- 引数なし: README、agent向け指示、`.docs`、manifest、設定と実装の全対象
+- 引数なし / `changed`: default branchとの差分に関係する文書と実装。差分が無ければ安定した順序の先頭20件
 - `features` / `schema` / `roles`: 指定領域
+- `all`: `inta:check full`から明示された場合だけ全件
 - path / feature ID: 指定範囲と直接の参照元・参照先
 
 ## 手順
 
-1. 対象リポジトリの規約、README / agent向け指示、`.docs`構造、比較基点、既存checkerを確認する
+1. 対象リポジトリの規約、`.docs`構造、比較基点、既存checkerを確認する
 2. 文書から実装状態、機能、path、command、環境変数名、URL、role、table / columnなど検証可能な主張を抽出し、route、Application、authorization、schema、migration、config、live data接続と突合する
 3. route / page / ApplicationとFeature文書を突合し、code only、docs only、mismatch、duplicate、granularityを確認する
    - 独立して仕様と受け入れ条件を検品できる業務能力を1 Featureとし、単独のinput / button / label / 遷移 / 装飾をFeatureにしない

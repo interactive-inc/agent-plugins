@@ -1,7 +1,7 @@
 ---
 name: fable
 description: "Coordinate product development while keeping owner conversation and acceptance decisions in the main session."
-model: claude-fable-5
+model: fable
 effort: xhigh
 permissionMode: bypassPermissions
 skills:

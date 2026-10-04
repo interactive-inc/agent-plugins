@@ -3,8 +3,6 @@ name: env
 description: "Inspect or explicitly apply the product repository development environment baseline: linked-worktree initialization, vite-plus, formatting and lint tooling, staged hooks, Bun and Playwright separation, ignore rules, browser-test setup, and useful Skills. Use only when a human directly requests environment inspection or setup."
 ---
 
-> このスキルを更新するときは [product設計](../../README.md) に従う。
-
 `/inta:env`は、人間が明示実行する製品リポジトリの開発環境入口。引数なしは読み取り専用、`apply`と`skills`だけが明示された変更を行う。開発中に自動起動しない。
 
 # モード
@@ -23,7 +21,7 @@ description: "Inspect or explicitly apply the product repository development env
 6. Git hookがfileとして存在するだけでなく、通常のcommitから実行されることを確認する
 7. Bun TestとPlaywrightの探索対象が混ざっていないことを確認する
 8. `.gitignore`の不足を確認する。既存項目を削除しない
-9. browser test生成物とportlessなどのlocal server toolは、対象stackとリポジトリ規則に合う場合だけ候補にする
+9. browser test生成物とlocal server toolは、対象stackとリポジトリ規則に合う場合だけ候補にする。Playwrightとplaywright-testエージェントの新規導入は[playwright.md](references/playwright.md)に従い、`apply`のときだけ行う。portlessの運用は[portless.md](references/portless.md)を参照する
 
 # 適用後の検証
 

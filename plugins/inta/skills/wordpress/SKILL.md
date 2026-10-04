@@ -3,8 +3,6 @@ name: wordpress
 description: "Plan and execute WordPress core, plugin, theme, or PHP runtime upgrades. Use for WordPress/PHP compatibility reviews, upgrade planning, implementation, staging verification, rollback planning, and GitHub delivery. Defaults to a read-only plan; use `apply` or an explicit implementation request for changes."
 ---
 
-> このスキルを更新するときは [product設計](../../README.md) に従う。
-
 WordPress固有のupgrade判断と検証を提供する。Issue、worktree、PR、mergeなど共通のdeliveryは`inta:dev`のリポジトリ規約に従い、このSkill内へ別実装しない。
 
 # 振り分け

@@ -6,7 +6,7 @@
 
 - コンポーネント名は技術用語（Container, Wrapper）でなくビジネス名（ProductCard, PaymentForm）
 - children で composition する
-- shadcn/ui をベースにする。一から作らない
+- コーディング規約（Hooks禁止事項、shadcn/ui運用）は[code/react.md](../code/react.md)
 
 ## レンダリング戦略
 
@@ -18,7 +18,7 @@
 ## 状態管理
 
 - 単方向データフロー: Props は下へ、イベントは上へ
-- 状態はレンダー中に導出する。useEffect で同期しない
+- 状態はレンダー中に導出する。useEffect は禁止 ⇒ [code/react.md](../code/react.md)
 - データ取得は React Query のみ。queryOptions は使用側にインライン化し、queryKey は `$path()` から導出する ⇒ [data-fetching.md](data-fetching.md)
 - Context はグローバル変数と同等。基本使わない
 - Context を許可する用途: 多言語、認証状態、ユーザー情報のみ

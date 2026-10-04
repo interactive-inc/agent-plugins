@@ -982,7 +982,7 @@ function generateDetailSheet(
     "  自動判定 = axe-core による自動テスト結果",
     "  自動判定(Visual) = Playwright による視覚的チェック結果",
     "  自動判定(Interactive) = Playwright によるインタラクティブ検証結果",
-    "  自動判定(Agent) = Agent がHTMLソースを分析して判定した結果",
+    "  自動判定(Agent) = AI agent がHTMLソースを分析して判定した結果",
     "  要目視確認 = ブラウザ操作が必要なため、人による目視確認が必要",
   ]
   for (const text of legendRows) {

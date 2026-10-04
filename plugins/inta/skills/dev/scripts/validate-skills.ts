@@ -8,7 +8,7 @@ const skillsDir = join(pluginDir, "skills")
 const agentsDir = join(pluginDir, "agents")
 const errors: string[] = []
 const ignoredMarkdownDirectories = new Set(["node_modules"])
-const humanInvokedSkillNames = new Set(["check", "env"])
+const humanInvokedSkillNames = new Set(["check", "maintain", "env"])
 
 const allowedFrontmatterKeys = new Set([
   "name",
@@ -122,8 +122,11 @@ for (const skillDir of skillDirs) {
     const openaiPath = join(skillDir, "agents", "openai.yaml")
     if (!existsSync(openaiPath)) {
       fail(skillPath, "cross-client skill requires agents/openai.yaml")
-    } else if (!read(openaiPath).includes(`$${skillName}`)) {
-      fail(openaiPath, `default_prompt must mention $${skillName}`)
+    } else if (
+      !read(openaiPath).includes(`$${skillName}`) &&
+      !read(openaiPath).includes(`$inta:${skillName}`)
+    ) {
+      fail(openaiPath, `default_prompt must mention $${skillName} or $inta:${skillName}`)
     }
   }
 
@@ -224,11 +227,7 @@ for (const skillName of knownSkillNames) {
 
 const forbiddenPatterns: Array<{ pattern: RegExp; reason: string }> = [
   { pattern: /\/inta:[a-z-]+:[a-z-]+/, reason: "duplicated inta command namespace" },
-  {
-    pattern: /\binta:(?:init|refactor|maintain|patrol)\b/,
-    reason: "retired inta skill namespace",
-  },
-  { pattern: /\binta:check\s+full\b/, reason: "check without a subcommand already examines all categories" },
+  { pattern: /\binta:(?:init|refactor)\b/, reason: "retired inta skill namespace" },
   {
     pattern: /\binta:dev\s+(?:trace|drift|links|features-sync|skills)\b/,
     reason: "inspection and environment commands must not live under inta:dev",
@@ -240,9 +239,12 @@ const forbiddenPatterns: Array<{ pattern: RegExp; reason: string }> = [
   { pattern: /\bbudget\.total\b/, reason: "runtime-specific token budget in shared skill" },
   { pattern: /\bmeta\.name\b/, reason: "runtime-specific workflow metadata in shared skill" },
   {
-    pattern:
-      /入力から結果を返す一つの操作は関数を既定|関数を既定とし、依存や状態を共有|ユースケースは操作と対応させ、クラスとは同一視しない/,
-    reason: "retired Application operation model; use one concrete use-case class per user goal",
+    pattern: /(?:1 class = 1 use case|1クラス\s*=\s*1ユースケース|1 Service = 1 ユースケース)/,
+    reason: "a use case maps to an Application operation, not a class",
+  },
+  {
+    pattern: /Serviceクラスで実装|メソッド名は `execute` で統一/,
+    reason: "Application operations must not require a class or generic execute method",
   },
   {
     pattern: /main checkoutでブランチを切って|main checkoutのbranchと常駐serverを使う/,
@@ -273,7 +275,8 @@ const contractChecks: Array<{ path: string; required: string[] }> = [
       "Issue用linked worktree",
       "make worktree",
       "既存worktreeから開始した場合は再実行しない",
-      "一つの具象ユースケースクラス",
+      "自分で作った直後だけその中で`make worktree`",
+      "追加worktreeの作成と`make worktree`の再実行を禁止",
     ],
   },
   {
@@ -313,16 +316,7 @@ const contractChecks: Array<{ path: string; required: string[] }> = [
   },
   {
     path: join(skillsDir, "dev", "SKILL.md"),
-    required: ["inta:test", "開発中に自動実行しない", "一つの具象ユースケースクラス"],
-  },
-  {
-    path: join(skillsDir, "dev", "references", "design", "architecture.md"),
-    required: [
-      "1ユースケース = 1クラス",
-      "一つのクラスへ作成・更新・削除",
-      "Applicationクラスから別のApplicationクラス",
-      "ネストした三項演算子",
-    ],
+    required: ["inta:test", "開発中に自動実行しない"],
   },
   {
     path: join(skillsDir, "env", "SKILL.md"),
@@ -342,38 +336,22 @@ const contractChecks: Array<{ path: string; required: string[] }> = [
   { path: join(skillsDir, "test", "SKILL.md"), required: ["changed.md", "/tmp/product-test/"] },
   {
     path: join(skillsDir, "check", "SKILL.md"),
-    required: [
-      "引数なし",
-      "specs",
-      "architecture",
-      "duplication",
-      "tests",
-      "docs",
-      "runtime",
-      "security",
-      "読み取り専用",
-      "direct user invocation",
-    ],
+    required: ["`full`", "読み取り専用", "direct user invocation"],
   },
   {
-    path: join(skillsDir, "check", "commands", "architecture.md"),
-    required: [
-      "rule violation",
-      "複数の公開操作",
-      "Applicationクラスが別のApplicationクラス",
-      "ネストした三項演算子",
-    ],
-  },
-  {
-    path: join(skillsDir, "check", "commands", "specs.md"),
-    required: ["Applicationユースケースクラス", "一つのクラスが複数Feature", "ownerやFacade"],
-  },
-  {
-    path: join(skillsDir, "dev", "references", "maintenance.md"),
+    path: join(skillsDir, "maintain", "SKILL.md"),
     required: [
       "挙動不変",
+      "direct user invocation",
       "inta:check",
+      "構成拡張",
       "再利用可能",
+      "ユーザーがその構成を明示",
+    ],
+  },
+  {
+    path: join(skillsDir, "maintain", "commands", "code.md"),
+    required: [
       "「ライブラリにして」",
       "「別製品でも使えるように」",
       "「private workspace packageにして」",
@@ -382,30 +360,6 @@ const contractChecks: Array<{ path: string; required: string[] }> = [
       "lockfile",
       "全数照合",
       "CI / deploy",
-      "Applicationは一つの利用者目的",
-      "ApplicationのFacade",
-    ],
-  },
-  {
-    path: join(skillsDir, "stack", "references", "hono.md"),
-    required: ["1ユースケース = 1具象クラス", "Application Use Case Prefix", "write-", "approve-"],
-  },
-  {
-    path: join(skillsDir, "stack", "references", "hono", "application-service.md"),
-    required: [
-      "一つのユースケースを一つの具象クラス",
-      "公開操作",
-      "Write",
-      "Applicationクラスから別のApplicationクラス",
-      "ネストした三項演算子",
-    ],
-  },
-  {
-    path: join(skillsDir, "test", "references", "testing.md"),
-    required: [
-      "Applicationユースケースクラス",
-      "一つのクラスが複数Feature",
-      "一つの巨大なownerやFacade",
     ],
   },
   {

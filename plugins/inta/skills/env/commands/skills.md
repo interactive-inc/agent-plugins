@@ -21,7 +21,7 @@
 対象リポジトリの指示と利用中agentを確認し、判定できた候補を`vpx skills add`で追加する。`--agent`と`--skill`を必ず明示し、対象外Skillをまとめて入れない。`skill_agent` はClaude Codeなら `claude-code`、Codexなら `codex` とする。
 
 ```bash
-skill_agent=codex
+skill_agent=claude-code
 vpx skills add millionco/react-doctor --agent "$skill_agent" --skill react-doctor -y
 vpx skills add shadcn/ui --agent "$skill_agent" --skill shadcn -y
 vpx skills add cloudflare/skills --agent "$skill_agent" --skill wrangler workers-best-practices cloudflare -y

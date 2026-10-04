@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apply Inta Design"
+  short_description: "Apply or review the shared Inta visual design system"
+  default_prompt: "Use $inta:design to apply the shared Inta design system to this visual artifact."

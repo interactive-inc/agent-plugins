@@ -1,6 +1,6 @@
 # readme — READMEを実態から作成・更新する
 
-`/inta:docs readme [scope]`は、人間向けの入口READMEを現在のリポジトリ構成から作成または更新する。読み取り専用の乖離検査だけなら`inta:check docs`、既存READMEの修正なら`inta:dev`を使う。
+`/inta:docs readme [scope]`は、人間向けの入口READMEを現在のリポジトリ構成から作成または更新する。読み取り専用の乖離検査だけなら`inta:check readme`、既存READMEの刈り込みだけなら`inta:maintain readme`を使う。
 
 ## 手順
 

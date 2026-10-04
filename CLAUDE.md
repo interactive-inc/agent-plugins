@@ -48,9 +48,12 @@ plugins/inta/
 
 - `bootstrap`: 新規・既存リポジトリの初期設計と開発baseline
 - `dev`: 会話を前提にした通常の機能開発・修正・仕様変更・deliveryの統一入口
-- `check`: 人間が起動する読み取り専用の定期検診。開発中に自動起動しない
-- `test`、`docs`、`env`、`stack`、`security`、`wordpress`: 開発中に必要時だけ読む専門能力。人間から明示的にも呼び出せる
+- `check`: 人間が起動する読み取り専用の点検。開発中に自動起動しない
+- `maintain`: 人間が起動する挙動不変の手入れ。開発中に自動起動しない
+- `test`、`docs`、`design`、`env`、`stack`、`security`、`wordpress`、`orca`: 開発中に必要時だけ読む専門能力。人間から明示的にも呼び出せる
 - `agent-runtime`: Claude Code Agentだけの役割差。一般的な開発手順は `dev` に委ねる
+
+設計思想と依存方向の正本は `plugins/inta/README.md`。
 
 Agentはモデル・権限・委譲先・失うと危険な境界だけを持つ軽量な定義にする。反復する手順や専門知識はSkillへ置き、Agent本文は60行以内を維持する。
 

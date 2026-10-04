@@ -1,0 +1,5 @@
+# Playwright 実行時の生成物（ローカル専用）
+test-results/
+playwright-report/
+blob-report/
+.last-run.json

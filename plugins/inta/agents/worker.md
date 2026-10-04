@@ -1,7 +1,7 @@
 ---
 name: worker
 description: "Implement a caller-approved product change as a leaf worker without owning delivery or scope decisions."
-model: claude-opus-5[1m]
+model: opus
 effort: high
 permissionMode: bypassPermissions
 skills:

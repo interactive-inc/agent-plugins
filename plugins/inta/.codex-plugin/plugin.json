@@ -1,19 +1,31 @@
 {
   "name": "inta",
-  "version": "0.4.0",
-  "description": "製品の立ち上げ、会話型開発、専門検証、定期検診を人間とAIで進めるワークフロー",
+  "version": "0.6.1",
+  "description": "社外の開発者にも提供する製品開発・検証・開発文書・保守の支援",
   "author": {
     "name": "Interactive Inc.",
     "email": "info@inta.co.jp"
   },
   "skills": "./skills/",
+  "mcpServers": {
+    "playwright-test": {
+      "command": "npx",
+      "args": [
+        "playwright",
+        "run-test-mcp-server"
+      ]
+    }
+  },
   "interface": {
-    "displayName": "Inta",
-    "shortDescription": "製品開発を会話、検証、定期検診まで支援します。",
-    "longDescription": "製品やリポジトリの立ち上げ、会話を前提とした日常開発、変更に応じた専門検証、人間が起動する読み取り専用の定期検診を提供します。",
+    "displayName": "inta",
+    "shortDescription": "社外の開発者にも提供する製品開発・検証・開発文書・保守の支援",
+    "longDescription": "社外の開発者にも提供する製品開発・検証・開発文書・保守の支援",
     "developerName": "Interactive Inc.",
-    "category": "Productivity",
+    "category": "Developer Tools",
     "capabilities": [],
-    "defaultPrompt": "inta:devを使い、このリポジトリの指示と会話に沿って変更を進めてください。"
+    "defaultPrompt": [
+      "inta:devでこの開発の依頼を進めて",
+      "inta:docs readmeで製品の説明書を更新して"
+    ]
   }
 }

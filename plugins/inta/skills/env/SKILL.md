@@ -1,6 +1,9 @@
 ---
 name: env
-description: "Inspect or explicitly apply the product repository development environment baseline: linked-worktree initialization, vite-plus, formatting and lint tooling, staged hooks, Bun and Playwright separation, ignore rules, browser-test setup, and useful Skills. Use only when a human directly requests environment inspection or setup."
+description: "Inspect or explicitly apply a human-requested development environment setup."
+argument-hint: "[apply|skills]"
+user-invocable: true
+disable-model-invocation: true
 ---
 
 `/inta:env`は、人間が明示実行する製品リポジトリの開発環境入口。引数なしは読み取り専用、`apply`と`skills`だけが明示された変更を行う。開発中に自動起動しない。

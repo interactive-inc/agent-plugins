@@ -1,80 +1,43 @@
 ---
 name: dev
-description: "Route product requests from customer signals, ideas, backlogs, Issues, PR review, CI failures, and related PR chains through design, implementation, change-scoped verification, documentation, and delivery. Do not start broad inspection or maintenance automatically."
+description: "Develop products through ongoing dialogue, focused implementation, tests, and maintained project context."
+argument-hint: "[next|review|ci|pr-chain|自然文|Issue番号]"
+user-invocable: true
+disable-model-invocation: false
 ---
 
-`inta:dev`は製品開発の共通入口。依頼の整理、設計、実装、変更に必要な検証、記録、ユーザーが依頼したGitHub deliveryまでを一つの仕事として扱う。専門検証は`inta:test`を使う。横断的な点検と挙動不変の保守は人間起動の独立Skillであり、開発中に自動実行しない。
+# 継続的な開発
 
-# 実行契約
+対話を通じて、何を実現したいのか、なぜ今作るのかを理解する。目的・利用者・規模・期限・運用期間・失敗時の影響から、作り方と検証の厚さを調整する。既に分かっていることは聞き直さず、方針を変える問いを自分から提起する。
 
-- 最初に対象リポジトリの指示を読み、プラグイン既定より優先する
-- ユーザーが実装、push、PR、mergeまで明示した場合は、既に承認された工程ごとに再確認しない
-- 結果を変える選択が未決定、権限が不足、または対象外への拡張が必要な場合だけ確認する
-- 調査・レビュー・`check`・プレビューは読み取り専用。書き込みや外向き操作は依頼された範囲だけ行う
-- 完了はコード変更ではなく、必要な検証と成果物が揃った状態で判定する
+全体の目的を見て、必要な部分を実装・検証し、その結果から全体を見直す。この往復を続け、ずれ・新しい発見・よりよい選択肢を対話へ戻す。合意した範囲は自律的に進め、目的・優先順位・影響範囲が変わる判断は利用者と決める。
 
-# 振り分け
+## 共通の約束
 
-`/inta:dev {入力}` を次の順で解釈する。
+- まず対象製品の指示と実装・設定・試験を読む。並行作業の変更を保護する。
+- 現状を説明する文書が実装と食い違う場合は、動く実装・設定・試験で確かめる。古い説明に合わせるためだけに実装を変えない。明示された変更方針や業務要件は現状の説明と区別し、作業中に見つけた食い違いと採った判断を報告する。
+- 一つのファイルに複数の責務を詰め込まない。業務判断を画面・通信から分け、重要な正常系・失敗系を確かめながら実装する。不具合は可能なら再現する試験を先に作る。試験の具体的な方法は [inta:test](../test/SKILL.md)。
+- 対話と実装で得た理解を [文書規約](references/docs/index.md) と [記録・整理](references/docs/development-context.md) に従い `.docs/`・`AGENTS.md` に残す。関係する古い説明・重複・矛盾は同じ仕事の中で整理し、決定の経緯と人の記述を失わない。
+- 依頼済みの操作の承認は取り直さない。送信・公開・権限変更は依頼された範囲で行い、必要な検証と成果物がそろった地点まで進める。
 
-1. `next` / `review` / `ci` / `pr-chain` → [サブコマンド](#サブコマンド)
-2. 数字、`#N`、GitHub URL → [request.md](references/request.md) の既存Issue / PRフロー
-3. `signals/{slug}` → 既存signalの更新または昇格
-4. その他の自然文 → [request.md](references/request.md) でsignal / backlog / issue / 直接作業に分類
-5. 引数なし → signalとbacklogから次の候補を読み取り専用で提案
+## 短い呼び出し
 
-Issue / PRの書式は [gh-templates.md](references/tools/gh-templates.md)、GitHub運用は [gh.md](references/tools/gh.md)、コミットメッセージは [git.md](references/tools/git.md)、レビューは [review.md](references/tools/review.md)、CHANGELOG判断は [changelog.md](references/tools/changelog.md) を必要時だけ読む。
+| 入力 | 進め方 |
+| --- | --- |
+| 自然文・Issue / PR | [request](references/request.md) |
+| `next` | [次の候補](commands/next.md) |
+| `review` | [差分の確認](references/tools/review.md) |
+| `ci` | [自動検査の失敗](commands/ci.md) |
+| `pr-chain` | [関連する変更の整理](commands/pr-chain.md) |
 
-# 標準フロー
+引数なしでは、現状を読み次の候補を対話する。`check`・`maintain`・`env` は独立した人間起動の仕事で、開発中に自動実行しない。作業に伴う文書の整理や必要な試験は開発に含む。
 
-1. **Intent**: 目的、利用者、完了条件、許可された外向き操作を一文で固定する
-2. **Inspect**: リポジトリ指示、状態、既存Issue / PR、関連仕様と実装を確認する。並行作業の変更を上書きしない
-3. **Design**: 外側の価値から内側の実装へ進む。下記のreferenceは変更に必要なものだけ読む
-4. **Implement**: 仕様とテストを同じ変更範囲で更新する。別件は混ぜない。`.ts` / `.tsx`を書く前に[typescript.md](references/code/typescript.md)、Reactコンポーネントを書く前に[react.md](references/code/react.md)を必ず読む
-5. **Verify**: 変更範囲に必要なリポジトリ固有のformat / lint / typecheck / testと`inta:test`能力を実行する。広範な品質監査、仕様trace、保守候補探索は追加しない
-6. **Record**: コードから読めない意思決定を`.docs/`へ残し、価値のある変更だけCHANGELOGへ記録する
-7. **Deliver**: 依頼範囲がcommit / push / PR / mergeを含む場合だけ、その地点まで進めて結果を確認する。commitのメッセージ書式は[git.md](references/tools/git.md)に従う
+## 必要な規約だけ読む
 
-# 設計reference
-
-変更に関係するものだけ読む。
-
-- Product / UI: [UX 5 planes](references/design/ux-five-planes.md)、[Page routing](references/design/page-routing.md)
-- Domain / Application: [Architecture](references/design/architecture.md)、[Value Object](references/design/value-object.md)、[Service Layer](references/design/service-layer.md)
-- Code: [Error handling](references/design/error-handling.md)、[React](references/design/react.md)、[Data fetching](references/design/data-fetching.md)
-- API / DB: [API](references/design/api.md)、[Database](references/design/database.md)
-- Performance: [Performance](references/design/performance.md)、本番の計測は [Cloudflare analytics](references/tools/cloudflare-analytics.md)
-- State / patterns: [FSM](references/design/fsm.md)、[Reducer](references/design/reducer.md)、[Phantom Type](references/design/phantom-type.md)、[Fluent API](references/design/fluent-api.md)
-- Specification / tests: [Testing](../test/references/testing.md)
-
-# コーディング規約reference
-
-`.ts` / `.tsx`を書く前に必ず読む。
-
-- [TypeScript](references/code/typescript.md)
-- [React](references/code/react.md)
-
-原則は、依存方向を Interface → Application → Domain → Infrastructure に保ち、単純CRUDを不必要に多層化せず、業務上の不変条件だけをDomainへ置くこと。Applicationは一つの利用者目的につき一つの具象ユースケースクラスとし、複数操作を一クラスへまとめない。詳細な判断はreferenceと対象リポジトリの既存設計から行う。
-
-# `.docs` reference
-
-`.docs/`は対象製品リポジトリに置く。コードから読めない意図・声・判断を記録し、コードから生成できる一覧は実装を正として部分更新する。対象成果物のreferenceだけを読む。
-
-- 入口と文章規則: [index](references/docs/index.md)、[writing rules](references/docs/writing-rules.md)、[validation](references/docs/validation.md)
-- 仕様と導線: [features](references/docs/features.md)、[stories](references/docs/stories.md)、[pages](references/docs/pages.md)、[sitemap](references/docs/sitemap.md)
-- 製品判断: [signals](references/docs/signals.md)、[backlogs](references/docs/backlogs.md)、[decisions](references/docs/decisions.md)、[sources](references/docs/sources.md)
-- 構造と権限: [architecture](references/docs/architecture.md)、[domain](references/docs/domain.md)、[roles](references/docs/roles-and-permissions.md)、[API schema](references/docs/api-schema.md)
-- 利用者向け: [capabilities](references/docs/capabilities.md)、[manual](references/docs/manual.md)、[glossary](references/docs/glossary.md)
-
-signals / backlogsの人間ゾーンは [human-agent-zone.md](references/docs/human-agent-zone.md) に従う。ファイルを丸ごと再生成せず、矛盾した部分だけ更新する。
-
-# サブコマンド
-
-| command                  | 既定動作                         | 書き込みを許可する入力 |
-| ------------------------ | -------------------------------- | ---------------------- |
-| [next](commands/next.md) | bounded scanで次の製品候補を提案 | `--write`              |
-| `review [target]`        | [review.md](references/tools/review.md)でPR / 差分 / pathを読み取り専用レビュー | 明示されたreview投稿 |
-| [ci](commands/ci.md)     | 失敗runを特定して原因と再現方法を報告 | 明示された修正依頼 |
-| [pr-chain](commands/pr-chain.md) | 関連PRの依存・CI・競合と安全な順序を報告 | `merge`または明示されたmerge依頼 |
-
-モデルが自発的に呼び出してよいのは`next`、`review`、`ci`、`pr-chain`の読み取り専用の既定動作だけ。`--write`、review投稿、Issue作成、push、branch更新、mergeへ暗黙に権限を広げない。
+- 道具・開発基盤・標準配置：[inta:stack](../stack/SKILL.md)
+- 責務と依存方向：[設計](references/design/architecture.md)。業務の不変条件を定めるときは [Value Object](references/design/value-object.md)、[Service](references/design/service-layer.md)
+- 書き方：[TypeScript](references/code/typescript.md)、[React](references/code/react.md)
+- 製品・画面の判断：[UX](references/design/ux-five-planes.md)、[画面の導線](references/design/page-routing.md)
+- API・保存・性能：[API](references/design/api.md)、[DB](references/design/database.md)、[Performance](references/design/performance.md)、既存処理の改善は [inta:perf](../perf/SKILL.md)
+- 記録：[文書の入口](references/docs/index.md)、[文章](references/docs/writing-rules.md)、[整合確認](references/docs/validation.md)
+- 外部へ届けるとき：[GitHub](references/tools/gh.md)、[課題・変更提案の書式](references/tools/gh-templates.md)、[コミット](references/tools/git.md)、[変更履歴](references/tools/changelog.md)

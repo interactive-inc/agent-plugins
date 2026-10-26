@@ -1,90 +1,11 @@
 # TypeScript
 
-TypeScriptのコーディング規約。`.ts` / `.tsx`を書く前に必ず読む。
+- 1ファイル1責務。公開する主要な関数またはクラスを中心にし、ファイル名はその役割の小文字ケバブケースにそろえる。行数だけを減らすための分割はしない。
+- 関数が複数の判断・処理を担い始めたら分ける。業務判断は入出力から切り離し、単独で試験できる形にする。
+- 型は `type` を基本にし、外部入力はスキーマで検証する。`any` や型の強制変換で不明な状態を隠さない。
+- 参照は製品の別名設定を使い、未設定の別名を前提にしない。公開入口以外の不要な再公開を増やさない。
+- 変更する値と不変の値を区別し、定数・早期の戻り・明示的な条件分岐を基本にする。
+- 予想できる業務上の失敗は呼び出し側が区別できる値にする。HTTP等の境界の例外変換は、その基盤の方式に従う。
+- 処理の内容より、名前だけで分からない意図・制約を短く残す。現状の説明と変更方針を混同しない。
 
-## ファイル
-
-- 1ファイル1関数 or 1クラス。ファイル名 = 関数名/クラス名（小文字ケバブケース）
-- バレルファイル（`index.ts` で配下を re-export するだけのファイル）禁止。ライブラリの公開エントリのみ例外
-
-## import
-
-- `@/` 絶対パス、相対パス禁止
-- 動的 import 禁止（`await import(...)` / `import()` expression）。static `import` 文のみ
-- インライン型 import 禁止（`field: import("./foo").Bar` のような書き方）。ファイル冒頭で `import type { Bar } from "@/foo"` する
-
-```ts
-import type { EnemyId } from "@/world"
-
-type Props = {
-  summonEnemyId?: EnemyId
-}
-```
-
-## 型
-
-- type のみ、interface と enum 禁止
-- unknown のみ、any と as 禁止
-- `as unknown as T` は最終手段のみ。使いたくなったら手を止めて根本原因を調べる
-- 値がないことは null（空文字や optional でなく `string | null`）
-- Zod スキーマから `z.infer` で型を生成する
-
-## 命名
-
-- 省略しない。`data` / `result` / `items` など汎用名を避ける
-- 配列は複数形、Boolean は `is` / `has` / `can`
-- メソッド: `with*()` 変換、`to*()` 出力、`get*()` 取得
-- ファイル内に1つだけの Props / Deps 型は `Props` / `Deps` のまま。`ChannelServiceDeps` のようなプレフィックスは付けない
-- export して名前空間が衝突する場合のみ長い名前にする
-
-## 関数
-
-- 引数は3個まで、4個以上は `props: Props`
-- ロジック関数は20行以内、純粋関数を優先
-- JSX を返すコンポーネント関数は20行制限の対象外。肥大化したらサブコンポーネントに分割する
-
-## クラス
-
-- `constructor(private readonly props: Props)` + `Object.freeze(this)`
-- `with*()` で不変更新、配列は ReadonlyArray
-
-## 変数・制御フロー
-
-- const のみ、destructuring 禁止
-- for-of、early return、if を使う（switch 禁止。ただし Reducer の Action 分岐は exhaustive switch）
-- ユースケースの選択に三項演算子を使わない。複数条件は`if`で明示する
-
-## エラー
-
-- バックエンドは throw 禁止、`T | Error` を返し instanceof で判別
-
-## 空行
-
-- 処理と処理の間に1行の空行を入れる。インデント2段目まで適用、3段目以降は詰める
-
-```ts
-export function run() {
-  const x = 0
-
-  console.log(x)
-
-  if (x === 0) {
-    const y = 1
-    console.log(y)
-  }
-}
-```
-
-## コメント
-
-- 動作が予測しにくい場合のみ。@param, @return 禁止
-- 「集約ルート」「ユーティリティ」のような当たり前のラベルや自明な役割説明は書かない
-- クラスと関数のコメントは必ず JSDoc 形式（`/** ... */`）にする。`//` 行コメントだと IDE のホバーで表示されない
-- ApplicationクラスのJSDocは「顧客を作成する。」のように、対象と操作が分かる自然な日本語で書く。「Applicationの処理」「永続化する」など実装層だけを説明しない
-
-```ts
-/**
- * 証明書発行依頼。発行判定や計算は持たず記録のみ
- */
-export class CertificateRequest implements Props {}
-```
+製品固有の書式と既存の検査設定を優先し、書き方を統一するためだけの無関係な書き換えをしない。

@@ -1,83 +1,50 @@
 # Agent Plugins
 
-Interactive Inc. が公開する、製品開発向けのエージェントプラグインマーケットプレースです。
+Interactive Inc. が公開する開発支援の拡張機能です。配布元の名前は `inta-agent-plugins`。
 
-マーケットプレース名は `inta-agent-plugins` です。このREADMEでは `inta` を案内します。スキルは [Agent Skills](https://agentskills.io/) を共通正本とし、次の3形式を同じパッケージで提供します。
+## inta
 
-- [Agent Plugins v1](https://agent-plugins.org/): `plugins/inta/plugin.json`
-- [Claude Code plugins](https://code.claude.com/docs/en/plugins-reference): `plugins/inta/.claude-plugin/plugin.json`
-- [OpenAI plugins](https://developers.openai.com/plugins/build/plugins): `plugins/inta/.codex-plugin/plugin.json`
+社内外共通の製品開発の手順です。対話から目的と制約を理解し、全体と細部を往復しながら実装・試験・記録を進めます。共通の開発基盤は `vp` と `void`。特定企業の非公開システムや認証を前提にしません。
 
-## インストール
+| 呼び出し | 用途 |
+| --- | --- |
+| `inta:dev` | 対話を通じた継続開発 |
+| `inta:test` | 変更に必要な試験と検証 |
+| `inta:stack` | 技術基盤・配置・移行 |
+| `inta:perf` | 性能問題の検証と修正 |
+| `inta:docs` | 製品のHTML・PDF・README |
+| `inta:check` | 人が起動する読み取り専用の点検 |
+| `inta:maintain` | 人が起動する挙動不変の手入れ |
+| `inta:env` | 人が起動する環境の確認・適用 |
+| `inta:wordpress` | WordPress・PHPの更新 |
+| `inta:orca` | 明示された課題実装の引き渡し |
 
-### Claude Code
+詳しい用途と契約は [intaの説明](plugins/inta/README.md) を参照してください。
 
-Claude Code の `/plugin` からマーケットプレースとプラグインを追加します。
+## 導入
+
+Claude Code:
 
 ```text
 /plugin marketplace add interactive-inc/agent-plugins
 /plugin install inta@inta-agent-plugins
 ```
 
-### Codex
+Codex:
 
-Codex CLI からGitHubマーケットプレースとプラグインを追加します。
-
-```bash
+```sh
 codex plugin marketplace add interactive-inc/agent-plugins
 codex plugin add inta@inta-agent-plugins
 ```
 
-以前の `product@interactive-claude-plugins` または `product@inta-agent-plugins` を使っていた場合は、新しい `inta@inta-agent-plugins` をインストールしてください。
+`plugins/inta/plugin.json` は Agent Plugins形式、`.claude-plugin/plugin.json` と `.codex-plugin/plugin.json` は各クライアントの配布定義です。手順本体は一つで、呼び出し制御等のクライアント固有の設定は対応するクライアントで適用します。
 
-### Agent Plugins対応クライアント
+## 旧版からの変更
 
-リポジトリ内の `plugins/inta` がAgent Plugin本体です。対応クライアントからこのディレクトリまたはGitリポジトリを指定してください。利用できるインストール方法はクライアントごとに異なります。
+0.6.1では共通の正本へそろえ、旧 `bootstrap`・`agent-runtime`・`security`・`design` を廃止しました。開発は `dev`、基盤と初期構築の判断は `stack` を入口にします。既存の `.docs` や製品の指示は保持し、必要な規約だけを参照します。
 
-## Inta plugin
+別プラグインの `jobantenna` も登録されています。旧 `claude` は現在の配布仕様で予約名として拒否されるため一覧から外しました。両者の本体ファイルは今回変更していません。
 
-人間が選ぶ主な入口は次の4つです。
+## 保守
 
-| スキル | 用途 |
-| --- | --- |
-| `inta:bootstrap` | 新規・既存リポジトリの初期設計と開発baseline |
-| `inta:dev` | 会話を前提にした機能開発、修正、仕様変更、delivery |
-| `inta:check` | 人間が起動する読み取り専用の製品点検。引数なしは範囲を絞った日常点検、`full` は全件監査 |
-| `inta:maintain` | 点検結果から人間が選んだ、挙動を変えない一系統の手入れ |
-
-`test`、`env`、`stack`、`docs`、`design`、`security`、`wordpress`、`orca` は、通常は入口のスキルが必要に応じて使う専門スキルです。精度を高めたい場合は人間から明示的にも呼び出せます。
-
-Claude Codeでは `agents/` の軽量エージェントも利用できます。Codexと他のAgent Plugins対応クライアントは、同じ `skills/` に書かれた開発契約を直接利用します。
-
-詳しい設計思想は [Inta plugin README](./plugins/inta/README.md) を参照してください。
-
-## 構造
-
-```text
-.
-├── .agents/plugins/marketplace.json      # Codex marketplace
-├── .claude-plugin/marketplace.json       # Claude Code marketplace
-└── plugins/inta/
-    ├── plugin.json                       # Agent Plugins v1
-    ├── .codex-plugin/plugin.json          # OpenAI / Codex
-    ├── .claude-plugin/plugin.json         # Claude Code
-    ├── skills/                            # Agent Skills共通正本
-    └── agents/                            # Claude Code固有の軽量エージェント
-```
-
-## 開発と検証
-
-変更後は、共通スキルと各クライアント形式をそれぞれ検証します。
-
-```bash
-bun plugins/inta/skills/dev/scripts/validate-skills.ts
-claude plugin validate .
-for plugin_dir in plugins/*; do claude plugin validate "$plugin_dir"; done
-for plugin_dir in plugins/*; do
-  python3 /path/to/plugin-creator/scripts/validate_plugin.py "$plugin_dir"
-done
-```
-
-このリポジトリへ社内情報、社内システム、非公開API、社内専用CLI、秘密情報を追加しないでください。公開境界の詳細は [CLAUDE.md](./CLAUDE.md) にあります。
-
-第三者由来の素材とライセンスは [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) を参照してください。
+公開境界と検査は [CLAUDE.md](CLAUDE.md)、第三者資料の出典は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を参照してください。

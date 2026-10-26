@@ -1,6 +1,9 @@
 ---
 name: test
-description: "Select and run focused product verification. Use `changed` for the current diff, `unit` for behavior, `api` for contract compatibility, `a11y` for WCAG, `visual` or `diff` for rendered UI, and `perf` for measured web performance regressions."
+description: "Choose and run checks for changed behavior, APIs, accessibility, visuals, or performance."
+argument-hint: "[changed|unit|api|a11y|visual|diff|perf]"
+user-invocable: true
+disable-model-invocation: false
 ---
 
 開発時の専門検証入口。通常の機能開発では`inta:dev`の一部として使い、別の受け渡し工程を作らない。対象リポジトリの指示と標準コマンドを最優先する。

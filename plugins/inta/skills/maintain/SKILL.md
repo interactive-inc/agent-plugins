@@ -1,9 +1,14 @@
 ---
 name: maintain
-description: "Perform one human-requested, behavior-preserving product maintenance change. Use directly for scoped README, documentation, code, test, or structure cleanup after a check; never invoke automatically during feature or bug development."
+description: "Perform human-requested, scoped maintenance without changing product behavior."
+argument-hint: "[readme|docs|code] [scope]"
+user-invocable: true
+disable-model-invocation: true
 ---
 
 `/inta:maintain {入力}`は、人間が明示した一系統の挙動不変な手入れを行う。検査だけなら`inta:check`を使い、開発中に自動起動しない。
+
+通常開発に伴う関係文書・指示の整理は `inta:dev` に含む。この入口は独立して依頼された手入れを扱う。
 
 # 振り分け
 

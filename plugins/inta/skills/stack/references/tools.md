@@ -8,7 +8,7 @@ GitHub URL、Issue、PR、release操作には`gh`を優先する。GitHub MCPが
 
 ## Format / lint / test
 
-対象リポジトリがvite-plusを採用している場合は`vp`のformat / lint / test / buildを使う。新規導入やprettier / eslint / biomeからの移行は、呼び出し元が現在との差分と適用範囲を確定してから行う。既存リポジトリのrunnerを名前だけで置き換えない。
+道具の標準と依存の導入は [stack](../SKILL.md) に従う。ここでは用途に必要な追加道具だけを選ぶ。既存製品の方式を変更するときは移行の範囲を先に決める。
 
 ## Browser and E2E
 

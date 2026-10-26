@@ -49,13 +49,13 @@ export class CreateCustomer {
   }
 
   async execute(input: Input): Promise<{ customer: CustomerEntity } | ConflictError> {
-    const existingCustomer = await this.props.customerRepository.findOne({ email: input.email })
+    const existingCustomer = await this.props.customerRepository.findByEmail(input.email)
     if (existingCustomer !== null) {
       return new ConflictError("このメールアドレスは既に登録されています")
     }
 
     const customer = CustomerEntity.create({ name: input.name, email: input.email })
-    await this.props.customerRepository.write(customer)
+    await this.props.customerRepository.save(customer)
 
     return { customer }
   }
@@ -72,7 +72,7 @@ export const POST = factory.createHandlers(
   zValidator("json", zCreateCustomerBody),
   async (context) => {
     const useCase = new CreateCustomer({
-      customerRepository: new CustomerRepository(context.env.DB),
+      customerRepository: new CustomerRepository(context),
     })
     const result = await useCase.execute(context.req.valid("json"))
 

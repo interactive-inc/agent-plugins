@@ -1,5 +1,7 @@
 # Hono Backend
 
+Honoを直接採用済みの製品向け。新規製品の基盤は [stack](../SKILL.md) のVoid方針に従う。
+
 Layered (Interface → Application → Infrastructure → Domain). Lib は横断のみ。
 
 ## Layout

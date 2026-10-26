@@ -1,0 +1,4 @@
+interface:
+  display_name: "Improve Performance"
+  short_description: "Find and fix slow DB reads, round trips, payloads, and startup in existing code"
+  default_prompt: "Use $perf to find and fix the performance problems in this product scope without changing behavior."

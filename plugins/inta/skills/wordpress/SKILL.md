@@ -1,6 +1,9 @@
 ---
 name: wordpress
-description: "Plan and execute WordPress core, plugin, theme, or PHP runtime upgrades. Use for WordPress/PHP compatibility reviews, upgrade planning, implementation, staging verification, rollback planning, and GitHub delivery. Defaults to a read-only plan; use `apply` or an explicit implementation request for changes."
+description: "Plan or explicitly apply WordPress and PHP upgrades with verification and recovery planning."
+argument-hint: "[upgrade|php-upgrade] [plan|apply]"
+user-invocable: true
+disable-model-invocation: false
 ---
 
 WordPress固有のupgrade判断と検証を提供する。Issue、worktree、PR、mergeなど共通のdeliveryは`inta:dev`のリポジトリ規約に従い、このSkill内へ別実装しない。

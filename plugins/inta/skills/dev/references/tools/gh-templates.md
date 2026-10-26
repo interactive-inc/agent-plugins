@@ -16,7 +16,7 @@ ME=$(gh api user --jq .login)
 
 ## Issue Type
 
-Issue は GitHub Issue Type で 3 種類に分ける。Label は使わない。
+Issue は GitHub Issue Type で 3 種類に分ける。ラベルも使い、Type と併用する。Bug は `bug`、Feature は `enhancement`、Task は `task` を付ける。実装計画として Type が Task でも、不具合修正なら `bug` も付ける。リポジトリがラベルの対応を定義している場合はその規約を優先する。
 
 Bug は不具合の集約。計画に移せない大きい不具合、これから調査が必要な不具合など。実装計画は持たない。
 
@@ -36,7 +36,16 @@ Bug / Feature から派生して Task を切ることもあるが、Task は必�
 gh api "/orgs/$OWNER/issue-types" --jq '.[] | select(.is_enabled) | .name'
 ```
 
-Issue 作成時は `gh issue create --type Bug|Feature|Task` を必ず指定する。
+Issue 作成時は `gh issue create --type Bug|Feature|Task` を必ず指定する。既存 Issue の起票内容を更新・修正に着手するときも、Type が未設定なら現在の内容から設定する。選んだ名前は変数 `ISSUE_TYPE` に入れ、設定後に実際の Type を確認する。
+
+```bash
+gh issue edit "$ISSUE_NUM" --repo "$REPO" --type "$ISSUE_TYPE"
+gh api "/repos/$REPO/issues/$ISSUE_NUM" --jq '{number,type,labels,assignees}'
+```
+
+Type とラベルが対応していることを確認し、設定に失敗した項目は未設定として報告する。
+
+不具合の報告として起票する Issue はアサインせず、assignees を空のまま残す。対象は Bug と、見つけた不具合をそのまま Task として起票するもので、種別ではなく内容で判断する。報告だけなら `--assignee` を付けない。同じ依頼で実装にも着手する場合は、着手前に [Assignment](#assignment) に従って自分を追加する。
 
 ### `--type` フラグが使えない場合の GraphQL 代替
 
@@ -65,7 +74,52 @@ mutation($repoId:ID!, $title:String!, $body:String!, $typeId:ID!) {
 -q '.data.createIssue.issue.number')
 ```
 
-assigneeIds は GraphQL で配列を渡せないため、作成後に `gh issue edit $ISSUE_NUM --add-assignee @me` でアサインする。
+assigneeIds は GraphQL で配列を渡せないため、アサインする場合は作成後に `gh issue edit $ISSUE_NUM --add-assignee @me` で付ける。不具合の報告はアサインしない（上記）。
+
+## Issue のラベルと Priority / Effort
+
+Issue の起票・更新では、本文だけでなく Type、ラベル、Priority、Effort も設定し、再取得して確認する。既存 Issue の修正に着手するときも、未設定の項目を補う。Issue Type、ラベル、Priority、Effort は別の項目であり、本文の「P1」などをフィールド設定の代わりにしない。
+
+Type に対応する既存ラベルと、不具合修正の `bug` ラベルを使う。ラベルが無い場合はリポジトリの規約に従って作成し、追加する。既存の他のラベルは残す。
+
+```bash
+gh label list --repo "$REPO" --limit 100 --json name,description
+gh issue edit "$ISSUE_NUM" --repo "$REPO" --add-label bug
+```
+
+Priority は利用者への影響と緊急度、Effort は調査・実装・関連テスト・動作確認を含む相対的な作業量で見積もる。根拠を本文へ短く残す。Priority を Effort の大小から決めない。既存の値は判断材料にし、再見積もりが必要な場合だけ理由を添えて変更する。
+
+- Priority: Urgent は進行中の広範な業務停止・データ損失等で即時対応が必要、High は主要業務・請求・認可等への重大な影響、Medium は限定的な影響や回避策がある不具合、Low は軽微な表示・操作上の問題。
+- Effort: Low は既存処理を使う局所修正、Medium は複数箇所の変更やデータフローの検証、High は設計変更・移行・複数領域の調整が必要なもの。いずれも検証まで含める。
+
+組織の Issue フィールドを使い、現在のフィールド ID と選択肢を取得する。ID や選択肢名をハードコードしない。組織で別の尺度が定義されていればその定義を優先する。
+
+```bash
+gh api "/orgs/$OWNER/issue-fields" --jq '.[] | {id,name,data_type,options}'
+gh api "/repos/$REPO/issues/$ISSUE_NUM/issue-field-values"
+```
+
+取得した Priority / Effort の ID と、実在する選択肢名で JSON ファイルを作り、`gh api --method POST --input` で送る。例の ID は取得した値に置き換える。
+
+```json
+{
+  "issue_field_values": [
+    { "field_id": 123, "value": "Medium" },
+    { "field_id": 456, "value": "Low" }
+  ]
+}
+```
+
+```bash
+gh api --method POST "/repos/$REPO/issues/$ISSUE_NUM/issue-field-values" --input /tmp/issue-field-values.json
+gh api "/repos/$REPO/issues/$ISSUE_NUM/issue-field-values" \
+  --jq '.[] | {issue_field_name,value,single_select_option}'
+gh issue view "$ISSUE_NUM" --repo "$REPO" --json number,labels,assignees
+```
+
+POST は指定したフィールドだけを追加・更新する。PUT は他の既存フィールドも置換するため使わない。返却された選択肢名とラベルが見積もりどおりか確認してから設定完了とする。Priority / Effort は組織の Issue フィールドなので、Project の参照権限が無いことを理由に未設定にしない。
+
+取得・更新が権限不足で失敗した、組織フィールドが無い、選択肢が対応しない場合は、その事実と未設定の項目を報告する。組織フィールドの新設や権限変更はこの手順の範囲に含めない。公式 API: [フィールド定義](https://docs.github.com/en/rest/orgs/issue-fields)、[Issue の値の更新](https://docs.github.com/en/rest/issues/issue-field-values)。
 
 ## .github 雛形ファイルの優先順位
 
@@ -102,6 +156,8 @@ PR を作成する前に `.github/PULL_REQUEST_TEMPLATE.md` をチェックす�
 必須セクションの後に、任意セクションを自由に追加してよい。
 
 AI が残したい情報（調査メモ、検討した代替案、試行錯誤の記録など）は何でも書いてよい。
+
+外部の課題管理に参照元がある場合は、本文の Source に識別子とリンクを記録する。
 
 プロパティ形式（「リスク評価:」のような Key: Value）は使わない。自然な文章で書く。
 
@@ -209,7 +265,7 @@ Implementation Notes、Breaking Changes、Screenshots。
 
 タイトル規則は type:Task のみ適用する。Bug / Feature にはプレフィックスを付けない。
 
-Task、Bug、Feature は `{要約}` のみでプレフィックスなし。外部トラッカーの識別子はタイトルではなく本文の `## Source` に記録する。
+Task、Bug、Feature は `{要約}` のみでプレフィックスなし。外部の課題番号は本文の Source に記録する。
 
 Source の識別（Sentry 由来か Voice 由来か等）はタイトルではなく本文の `## Source` で行う。
 
@@ -233,7 +289,7 @@ GitHub Sub-issues 機能を使う場合は body の参照と併用してよい�
 
 ## Assignment
 
-GitHub Issue のアサインを管理する。話しかけた人（`gh api user` の login）を Issue に付け、他の人間 / AI とのアサイン衝突を避ける。
+GitHub Issue のアサインを管理する。実装に着手する前に、現在の認証ユーザー（`gh api user` の login）を自分として Issue に追加する。親 Bug / Feature から派生 Task を実装する場合は、実際に取り組む Task に追加する。報告・読み取り専用の調査だけでは追加しない。既存の担当者を削除・置換しない。
 
 操作
 
@@ -241,23 +297,23 @@ GitHub Issue のアサインを管理する。話しかけた人（`gh api user`
 
 `unassigned` は誰にもアサインされていない open Issue の一覧（`gh issue list --search "no:assignee" --state open`）。
 
-`assign {N}` は Issue N を自分にアサイン。
+`assign {N}` は Issue N を自分にアサイン（下記の判定後に `gh issue edit N --repo "$REPO" --add-assignee "@me"` を実行）。
 
 `release {N}` は Issue N の自分のアサインを外す（`gh issue edit N --remove-assignee "@me"`）。
 
 Assign の判定フロー
 
-各 Issue 番号 N について `gh issue view N --json number,title,state,assignees,issueType` を取って判定する。
+各 Issue 番号 N について `gh api "/repos/$REPO/issues/$ISSUE_NUM" --jq '{number,title,state,assignees,type}'` を取って判定する。自分の login は `gh api user --jq .login` で確認する。
 
-`state == "CLOSED"` はスキップ（close 済みにアサインしない）。
+`state == "closed"` はスキップ（close 済みにアサインしない）。
 
 `assignees` に自分が含まれる場合は already assigned。スキップ。
 
 `assignees`に他人がいる場合は共同assignしてよいかユーザーに確認する。承認された場合だけ`gh issue edit N --add-assignee @me`を実行する。
 
-`assignees`が空かつ`issueType.name == "Feature"`の場合は要望集約用なので通常はassignしない。担当開始を依頼されている場合だけ確認する。
+`assignees`が空かつ`type.name == "Feature"`の場合は要望集約用なので通常はassignしない。明示的にその Issue 自体へ着手する依頼なら自分を追加する。
 
-`assignees` が空かつ `issueType.name in ("Bug", "Task", null)` の場合はそのままアサイン。
+`assignees` が空かつ `type.name in ("Bug", "Task", null)` の場合はそのままアサイン。
 
 衝突回避
 

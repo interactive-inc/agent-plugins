@@ -1,11 +1,14 @@
 ---
 name: docs
-description: "Create and verify product documentation artifacts. Use `html` for a customer-facing HTML document or multi-page documentation site, `pdf` to render an existing HTML artifact to A4 PDF, and `readme` to create or update a repository README from verified project facts."
+description: "Create and verify product HTML, PDF, or README documentation from project sources."
+argument-hint: "[html|pdf|readme] [source or request]"
+user-invocable: true
+disable-model-invocation: false
 ---
 
 `inta:docs`は、製品の正本から人間向けの文書成果物を作成し、実表示または実行結果まで検証する入口。`.docs`自体の仕様管理は`inta:dev`、文書の乖離検査は`inta:check docs`、意味が一意な同期修正は`inta:maintain docs`が担当する。
 
-HTMLまたはPDFを作成・編集するときは、作業前に [共通デザインガイドライン](../design/DESIGN.md) を全文読む。READMEは対象リポジトリの既存書式を優先する。
+HTML・PDF・READMEの書式は、対象リポジトリの既存の文書と依頼者の指定を優先する。指定がなければ同梱のひな形を使い、特定企業の見た目や標章を追加しない。
 
 # 振り分け
 

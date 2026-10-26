@@ -1,6 +1,6 @@
 # Data Fetching
 
-クライアント（React Query + Hono RPC）のデータ取得設計。
+React Query + Hono RPC を採用済みの製品向けのデータ取得設計。新規のVoid製品では導入版の公式資料の取得・更新方式を使い、この方式を追加する前提にしない。
 
 ## 原則
 

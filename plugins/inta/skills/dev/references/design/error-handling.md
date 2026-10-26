@@ -2,7 +2,7 @@
 
 ## バックエンド: Result 型パターン
 
-throw しない。戻り値を `T | Error` にして、呼び出し側が `instanceof` で判別する。
+Application / Domain で予想できる業務エラーは throw せず、戻り値を `T | Error` にして、呼び出し側が `instanceof` で判別する。
 
 ```ts
 export class PaymentFailedError extends Error {
@@ -46,7 +46,7 @@ if (result instanceof PaymentFailedError) {
 
 ## ルール
 
-- バックエンドでは throw しない。`T | Error` で返す
+- Application / Domain の業務エラーは `T | Error` で返す。HTTP境界での例外変換は採用基盤の方式に従う
 - カスタムエラークラスを定義して `instanceof` で判別する
 - try-catch のネストを避ける。外部ライブラリの呼び出しだけ try-catch で包む
 - Effect ライブラリは使わない。標準の Error を使う

@@ -1,5 +1,7 @@
 # TanStack App
 
+TanStackを採用済みの製品向け。新規製品の基盤は [stack](../SKILL.md) のVoid方針に従う。
+
 TanStack Start (React) + TanStack Query + Hono + Drizzle.
 
 ## Patterns

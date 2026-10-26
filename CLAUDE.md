@@ -1,74 +1,41 @@
-# CLAUDE.md
+# 公開リポジトリの保守
 
-このリポジトリは、Agent Plugins v1、Claude Code、OpenAI / Codexから利用できる公開プラグインマーケットプレースです。
+このリポジトリは `interactive-inc/agent-plugins`。公開する内容は、非公開の社内資源がなくても理解・利用できるものに限る。
 
-## オープンソースとしての公開境界
+## 公開境界
 
-すべてのプラグイン、スキル、エージェント、スクリプト、設定、文書、例示は、非公開の社内資源がなくても理解・実行できる内容にする。
+- 社内情報、顧客情報、非公開の案件・仕様・識別子・URL・リポジトリ・文書を入れない。
+- 社内専用CLI、API、認証、ネットワーク、個人のパス、秘密値を前提にしない。
+- 製品名を伏せていても、実在の本番計測値・作業履歴・配置情報・認証構成は公開しない。例示は架空と明示し、実際の値を架空と呼び替えない。
+- 第三者の出典・著作権表示を保ち、公開範囲を確認する。
 
-- 社内情報、顧客情報、非公開のプロジェクト名・仕様・Issue・識別子・データ・URL・リポジトリ・文書を書かない
-- 社内システム、社内API、社内MCPサーバー、社内SaaS、社内ネットワーク、社内認証を前提にしない
-- 社内専用CLI、そのコマンド、設定、環境変数、認証方法、個人のローカルパスを書かない
-- 社内実装を元にする場合は公開可能性を確認し、汎用的または架空の名前・データへ置き換える
-- 秘密情報、個人情報、非公開データを例やfixtureへ含めない
-- 第三者のコードや文書を使う場合は、公開に必要なライセンス、著作権表示、出典を確認する
-- 社内資源が必要な機能はこのリポジトリへ追加せず、社内リポジトリ側に保持する
+## 共通の正本
 
-## 正本と互換層
-
-プラグイン本体は `plugins/<plugin-name>/` に置く。`inta` の構造は次の通り。
+`plugins/inta` は共通配布物そのもの。公開先だけの書き換え・追加・除外で別版を作らず、正本で確認した内容へ完全一致させる。別プラグインの変更を混ぜない。
 
 ```text
 plugins/inta/
-├── plugin.json                 # Agent Plugins v1 manifest
-├── .codex-plugin/plugin.json   # OpenAI / Codex manifest
-├── .claude-plugin/plugin.json  # Claude Code manifest
-├── skills/                     # Agent Skills準拠の共通正本
-└── agents/                     # Claude Code固有の軽量エージェント
+  plugin.json                 Agent Plugins定義
+  .claude-plugin/plugin.json  Claude Code定義
+  .codex-plugin/plugin.json   Codex定義
+  README.md                   利用案内
+  skills/                     共有する手順
+  agents/                     Claude Codeの担当別の定義
 ```
 
-- `skills/` を業務フローの唯一の正本とし、クライアント別に内容を複製しない
-- 共通 `SKILL.md` のfrontmatterはAgent Skills仕様のフィールドだけを使う
-- Claude Code固有のAgentは `agents/`、Codex固有の表示・起動設定は各Skillの `agents/openai.yaml` に閉じ込める
-- スクリプトは、そのスクリプトを所有するSkillの `scripts/` に置く。リポジトリ直下へ共通script置き場を作らない
-- Agent Plugins v1で可搬なのは主に `skills/` と `mcp.json`。クライアント固有要素は可搬部分の依存条件にしない
+スキルは `name`・`description` と本文を共有する。呼び出し制御等の追加項目は必要なクライアントの機能として保持し、他のクライアントに同じ制御が適用されると断定しない。担当の具体値は各定義を正本とし、共通の手順を複製しない。
 
-## マーケットプレース
+収録機能と依存関係は [intaのREADME](plugins/inta/README.md)。旧 `bootstrap`・`security`・`agent-runtime`・`design` を復活させない。
 
-- マーケットプレース名: `inta-agent-plugins`
-- Claude Code: `.claude-plugin/marketplace.json`
-- Codex: `.agents/plugins/marketplace.json`
-- 各marketplaceのsource: `./plugins/<plugin-name>`
-- プラグイン名、version、description、sourceは各manifest間で同期する
-- GitHubリポジトリ: `interactive-inc/agent-plugins`
+## 登録と検査
 
-新しいプラグインを追加するときは、独立した `plugins/<plugin-name>/` を作り、必要な3manifestと両marketplace entryを追加する。
+ルートの `.claude-plugin/marketplace.json` と `.agents/plugins/marketplace.json` の名前・参照先を実体へそろえる。各配布定義の名前・版・説明は共通のものにそろえ、Codex版のキャッシュ識別子以外の相違を作らない。
 
-## Inta pluginの設計境界
-
-- `bootstrap`: 新規・既存リポジトリの初期設計と開発baseline
-- `dev`: 会話を前提にした通常の機能開発・修正・仕様変更・deliveryの統一入口
-- `check`: 人間が起動する読み取り専用の点検。開発中に自動起動しない
-- `maintain`: 人間が起動する挙動不変の手入れ。開発中に自動起動しない
-- `test`、`docs`、`design`、`env`、`stack`、`security`、`wordpress`、`orca`: 開発中に必要時だけ読む専門能力。人間から明示的にも呼び出せる
-- `agent-runtime`: Claude Code Agentだけの役割差。一般的な開発手順は `dev` に委ねる
-
-設計思想と依存方向の正本は `plugins/inta/README.md`。
-
-Agentはモデル・権限・委譲先・失うと危険な境界だけを持つ軽量な定義にする。反復する手順や専門知識はSkillへ置き、Agent本文は60行以内を維持する。
-
-## 変更時の検証
-
-最低限、変更範囲に応じて次を実行する。
-
-```bash
-bun plugins/inta/skills/dev/scripts/validate-skills.ts
-claude plugin validate .
-for plugin_dir in plugins/*; do claude plugin validate "$plugin_dir"; done
-for plugin_dir in plugins/*; do
-  python3 /path/to/plugin-creator/scripts/validate_plugin.py "$plugin_dir"
-done
+```sh
+claude plugin validate plugins/inta
+claude plugin validate plugins/inta/skills
+claude plugin validate plugins/inta/agents
 git diff --check
 ```
 
-加えて、`plugins/inta/plugin.json` はAgent Plugins v1 schema、各 `SKILL.md` はAgent Skillsの公式validatorで検証する。公開前には社内依存・秘密情報・第三者ライセンスも再確認する。
+`plugin.json` は指定された公式JSON Schema、手順と参照は実ファイルで確認する。ファイルの一致は実動作の証明と区別する。今回変更していない別プラグインの既存の検査結果を、inta更新の成功と混同しない。

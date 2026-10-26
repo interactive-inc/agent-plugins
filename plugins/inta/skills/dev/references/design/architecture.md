@@ -1,6 +1,6 @@
 # レイヤードアーキテクチャ
 
-Interface → Application → Domain → Infrastructure。依存は一方向で逆転させない。小規模では層を分けない。段階的に導入する。
+Interface → Application → Infrastructure → Domain。依存は一方向で逆転させない。小規模では層を分けない。段階的に導入する。
 
 ## 層の構成
 
@@ -46,7 +46,7 @@ Entity はフラットに保つ。他の Entity を入れ子にしない。関�
 
 ## Infrastructure 層
 
-Repository は集約ルートごとに作成（具体クラス、interface なし）。メソッドは `findOne`, `findMany`, `write`, `delete` の四種に限定。複雑な検索メソッドは作らない。検索条件は `where` 引数で表現する。
+Repository は集約ルートごとに作成する。取得は `findById` / `findBy*` / `findAll` / `findAllBy*`、保存は `save`、削除は `delete`、必要な場合の追加・更新は `upsert` / `upsertBy*` にそろえる。業務上の一連の操作はRepositoryへ詰め込まない。
 
 外部 API は Adapter で包む（具体クラス、interface なし）。
 

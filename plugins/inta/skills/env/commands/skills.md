@@ -27,7 +27,7 @@ vpx skills add shadcn/ui --agent "$skill_agent" --skill shadcn -y
 vpx skills add cloudflare/skills --agent "$skill_agent" --skill wrangler workers-best-practices cloudflare -y
 ```
 
-`--skill` を付けずに実行しない。`--list` オプションは使わない。ドキュメント上は「インストールせず一覧表示するだけ」だが、エージェント検出下では実際にはパッケージ内の全 skill をインストールしてしまう（2026-07-20 実機確認）。skill 名が変わってコマンドがエラーを返したら、実行を止めて何が起きたかをオーナーに報告する。
+`--skill` を付けずに実行しない。`--list` オプションは使わない。ドキュメント上は「インストールせず一覧表示するだけ」だが、エージェント検出下では実際にはパッケージ内の全 skill をインストールしてしまう。skill 名が変わってコマンドがエラーを返したら、実行を止めて何が起きたかをオーナーに報告する。
 
 追加後、`vpx skills list` で反映を確認する。
 

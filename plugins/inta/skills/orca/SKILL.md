@@ -1,6 +1,9 @@
 ---
 name: orca
-description: "Create Orca-managed worktrees and hand off GitHub Issues to per-worktree TUI agents. Use for a single-Issue handoff by number, and `fanout` to expand multiple Issues into parallel worktrees at once."
+description: "Hand off explicitly requested GitHub Issue work to Orca-managed workspaces."
+argument-hint: "[fanout] [#issue ...]"
+user-invocable: true
+disable-model-invocation: false
 ---
 
 Orca管理のworktreeを作り、Issueの実装をworktree内のagentへfull handoffする入口。委託後は作成したworktreeと推奨マージ順を報告して終了し、監視・ポーリングはしない。進捗追跡・DAG・ask/replyが必要な依頼はこのスキルの対象外（orchestration系の運用を使う）。

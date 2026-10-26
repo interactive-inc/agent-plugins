@@ -19,4 +19,4 @@
 - 影響しないと確認した項目と未確認範囲
 - package / generated file / config / dataへの想定差分
 
-固定の`bun add`やtest commandを例からコピーせず、対象リポジトリのpackage managerと標準quality gateを使う。
+依存の導入・追加は `inta:stack` の `vp install` 方針と製品のロックファイルに従い、移行対象以外の管理方式を変えない。試験は製品の標準実行定義を使う。

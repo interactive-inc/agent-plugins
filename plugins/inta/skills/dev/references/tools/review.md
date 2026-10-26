@@ -207,7 +207,7 @@ PR をレビューするときは `gh pr view <PR番号 or URL>` と `gh pr diff
 
 - テストしにくい依存関係になってない？
 - 循環依存してない？
-- 依存方向は Interface → Application → Domain → Infrastructure の一方向を守れている？
+- 責務と依存方向は [設計規約](../design/architecture.md) に沿い、Domainが外部の仕組みに依存していないか？
 
 可読性。
 

@@ -1,6 +1,9 @@
 ---
 name: check
-description: "Run human-requested, read-only product health checks. Use directly for bounded daily checks, `full` audits, or scoped specification, documentation, code, README, and environment inspection. Never invoke automatically during development."
+description: "Perform human-requested read-only product, code, and documentation checks."
+argument-hint: "[full|trace|docs|code|readme|env] [scope]"
+user-invocable: true
+disable-model-invocation: true
 ---
 
 `/inta:check {入力}`は、人間が明示実行する読み取り専用の製品点検入口。開発中や定期Automationから自動起動せず、修正、Issue起票、report保存、設定変更へ進まない。

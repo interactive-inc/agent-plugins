@@ -1,52 +1,10 @@
-# React コーディング規約
+# React
 
-Reactコンポーネントの実装作法。設計判断（構造・状態管理の選択）は[design/react.md](../design/react.md)を参照し、こちらは実装時の禁止事項と作法を扱う。
+- 1画面・1部品に複数の責務を詰め込まない。表示、状態の遷移、業務判断、通信の境界を分ける。
+- 型付きの `Props` と名前付き関数を基本にする。既存の部品と状態管理を使い、同じ機能を作り直さない。
+- 読み込み・空・失敗・成功の状態と、重要な操作の完了を試験する。
+- 副作用は外部との同期が必要な箇所に限定する。不要な状態・副作用・性能調整を足さない。
+- サーバー描画時は時刻・乱数・ブラウザ専用の値による初回描画の差を避ける。
+- 部品集や見た目は製品の指定に従う。生成コードの型エラーを検査除外で隠さず、原因と対応を確認する。
 
-## コンポーネント
-
-- `type Props` を定義、`export function` を使う
-- `props: Props` で受け取る（destructuring しない）
-- コンポーネントの説明コメントをつける
-
-## Hooks
-
-- useEffect 禁止
-- useCallback 禁止
-- useMemo は1000件以上の計算でのみ許可（理由コメント必須）
-
-## TailwindCSS
-
-- `pb-` でなく `space-` / `gap-` を使う
-
-## ハイドレーション（SSR時）
-
-- `new Date()` / `Math.random()` をレンダー中に使わない
-- `window` / `document` を条件分岐で使わない
-- `suppressHydrationWarning` 禁止
-
-## エラー
-
-- mutation は onError、関数は try-catch + instanceof Error
-
-## shadcn/ui
-
-- shadcn/ui をベースにする。一から作らない
-- 型エラー（未使用 import 等）が出ても手で直さず、shadcn の更新を待つか tsconfig 側で exclude
-- コンポーネント追加は shadcn CLI（MCP / `vp dlx shadcn@latest add ...`）経由のみ
-
-### Card
-
-CardHeader と CardContent を使わずに Card を直接使う場合、デフォルトの padding と gap で不要な余白ができる。`p-0 gap-0` をつける。
-
-```tsx
-// CardHeader + CardContent を使う場合はそのまま
-<Card>
-  <CardHeader>...</CardHeader>
-  <CardContent>...</CardContent>
-</Card>
-
-// 直接使う場合は p-0 gap-0
-<Card className="p-0 gap-0">
-  <div className="p-4">...</div>
-</Card>
-```
+Void製品では [stack](../../../stack/SKILL.md) が案内する導入版の公式資料を先に確認する。

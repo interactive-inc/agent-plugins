@@ -1,328 +1,36 @@
-# GitHub Issue / PR テンプレートと運用ルール
+# GitHub Issue / PR
 
-GitHub Issue と Pull Request を書き込む時のテンプレートと運用ルールをまとめたスキル。Issue / PR の本文を作る前に必ず参照する。
+Issue・PR を作成・更新するときに読む。本文の詳しさは変更の規模に合わせ、分類と確認は省略しない。
 
-Issue は AI が後で読み返したときに意思決定の経緯と実装方針を再現できる状態に保つ。PR は実装結果を記録する場所で、計画は書かない。
+## 必須の管理項目
 
-## リポジトリとユーザーの取得
+- **Issue・PR ともにラベルを必ず付ける。** リポジトリの既存の分類を使い、種別と該当する領域ラベルを付ける。対応する規約がなければ、不具合は `bug`、機能追加は `enhancement`、その他の作業は `task` を基準にする。必要なラベルが無い場合はリポジトリの規約に従い、分類体系を勝手に増やさない。既存の適切なラベルは残す。
+- Issue は **Issue Type・Priority・Effort** も設定する。Type とラベルは別の項目。Bug は不具合、Feature は要望、Task は実装・調査などの作業とし、リポジトリの定義を優先する。
+- Priority は影響と緊急度、Effort は調査・実装・検証を含む作業量から判断する。既存の尺度を使い、見積もりの根拠を短く残す。
+- 作成・更新後は再取得し、Issue の Type・ラベル・Priority・Effort、PR のラベルを確認する。未設定・権限不足・機能未提供は項目と理由を報告し、設定済みと扱わない。属性操作の詳細が必要な場合は [gh-fields.md](gh-fields.md)。
 
-リポジトリ名・組織名・ログイン名はハードコードしない。必要になった都度、次のコマンドで動的に取得する。
+## Issue
 
-```bash
-REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
-OWNER=${REPO%%/*}
-ME=$(gh api user --jq .login)
-```
+目的・背景・完了条件を残し、後で読んでも判断を引き継げるようにする。不具合なら再現条件・期待する挙動・実際の挙動、実装するものなら方針・検証方法を書く。未確認事項は区別する。
 
-## Issue Type
+大きな課題は必要に応じて Task に分け、親子を相互に辿れるようにする。小さな変更に別の計画用 Issue を強制しない。実装中の発見や合意で計画が変わったら、関連する記録も更新する。
 
-Issue は GitHub Issue Type で 3 種類に分ける。ラベルも使い、Type と併用する。Bug は `bug`、Feature は `enhancement`、Task は `task` を付ける。実装計画として Type が Task でも、不具合修正なら `bug` も付ける。リポジトリがラベルの対応を定義している場合はその規約を優先する。
+## PR
 
-Bug は不具合の集約。計画に移せない大きい不具合、これから調査が必要な不具合など。実装計画は持たない。
+何がどう変わるかと理由、関連 Issue、実際の検証結果を書く。解決する Issue には `closes #N` を使い、参照だけの Issue と区別する。Issue のない変更に架空の関連付けを作らない。
 
-Feature は要望の集約。計画に移せない大きい要望、実装方針がまだ固まらない要望など。実装計画は持たない。
+試験・ビルド・操作確認は実施結果と未確認を分けて記録する。利用者への影響・制約・移行があれば添える。実装結果の理解に必要な説明へ絞り、Issue の計画を複製しない。
 
-Task は実装計画。技術計画と Tasks リストを書く。Bug / Feature とは独立して作ってよい。
+## 書式
 
-選び方
+対象リポジトリの指示と `.github/` の既存テンプレートを優先する。雛形がなければ上の情報を簡潔にまとめ、見出しや順序は内容に合わせる。Issue・PR 作成の副作用としてテンプレートを追加・改変しない。
 
-実装計画として書ける粒度なら Task。大きい・計画に落とせない・まだ調査段階の不具合は Bug。同じ性質の要望は Feature。
-
-Bug / Feature から派生して Task を切ることもあるが、Task は必ずしも親を持たない。直接 Task だけを作って実装に進んでよい。
-
-組織で 3 種類が enabled か最初に確認する。
-
-```bash
-gh api "/orgs/$OWNER/issue-types" --jq '.[] | select(.is_enabled) | .name'
-```
-
-Issue 作成時は `gh issue create --type Bug|Feature|Task` を必ず指定する。既存 Issue の起票内容を更新・修正に着手するときも、Type が未設定なら現在の内容から設定する。選んだ名前は変数 `ISSUE_TYPE` に入れ、設定後に実際の Type を確認する。
-
-```bash
-gh issue edit "$ISSUE_NUM" --repo "$REPO" --type "$ISSUE_TYPE"
-gh api "/repos/$REPO/issues/$ISSUE_NUM" --jq '{number,type,labels,assignees}'
-```
-
-Type とラベルが対応していることを確認し、設定に失敗した項目は未設定として報告する。
-
-不具合の報告として起票する Issue はアサインせず、assignees を空のまま残す。対象は Bug と、見つけた不具合をそのまま Task として起票するもので、種別ではなく内容で判断する。報告だけなら `--assignee` を付けない。同じ依頼で実装にも着手する場合は、着手前に [Assignment](#assignment) に従って自分を追加する。
-
-### `--type` フラグが使えない場合の GraphQL 代替
-
-gh のバージョンによって `--type` フラグが未対応の場合がある。その場合は GraphQL で代替する。
-
-まずリポジトリ ID と Issue Type ID を取得する。
-
-```bash
-REPO_ID=$(gh api graphql -f query='{ repository(owner:"'"$OWNER"'",name:"'"${REPO##*/}"'"){id} }' -q '.data.repository.id')
-gh api graphql -f query='{ repository(owner:"'"$OWNER"'",name:"'"${REPO##*/}"'"){ issueTypes(first:10){ nodes { id name } } } }' -q '.data.repository.issueTypes.nodes[] | [.id, .name] | @tsv'
-```
-
-Issue を作成する。
-
-```bash
-ISSUE_NUM=$(gh api graphql -f query='
-mutation($repoId:ID!, $title:String!, $body:String!, $typeId:ID!) {
-  createIssue(input:{repositoryId:$repoId, title:$title, body:$body, issueTypeId:$typeId}) {
-    issue { number url }
-  }
-}' \
--f repoId="$REPO_ID" \
--f typeId="$TYPE_ID" \
--f title="タイトル" \
--f body="本文" \
--q '.data.createIssue.issue.number')
-```
-
-assigneeIds は GraphQL で配列を渡せないため、アサインする場合は作成後に `gh issue edit $ISSUE_NUM --add-assignee @me` で付ける。不具合の報告はアサインしない（上記）。
-
-## Issue のラベルと Priority / Effort
-
-Issue の起票・更新では、本文だけでなく Type、ラベル、Priority、Effort も設定し、再取得して確認する。既存 Issue の修正に着手するときも、未設定の項目を補う。Issue Type、ラベル、Priority、Effort は別の項目であり、本文の「P1」などをフィールド設定の代わりにしない。
-
-Type に対応する既存ラベルと、不具合修正の `bug` ラベルを使う。ラベルが無い場合はリポジトリの規約に従って作成し、追加する。既存の他のラベルは残す。
-
-```bash
-gh label list --repo "$REPO" --limit 100 --json name,description
-gh issue edit "$ISSUE_NUM" --repo "$REPO" --add-label bug
-```
-
-Priority は利用者への影響と緊急度、Effort は調査・実装・関連テスト・動作確認を含む相対的な作業量で見積もる。根拠を本文へ短く残す。Priority を Effort の大小から決めない。既存の値は判断材料にし、再見積もりが必要な場合だけ理由を添えて変更する。
-
-- Priority: Urgent は進行中の広範な業務停止・データ損失等で即時対応が必要、High は主要業務・請求・認可等への重大な影響、Medium は限定的な影響や回避策がある不具合、Low は軽微な表示・操作上の問題。
-- Effort: Low は既存処理を使う局所修正、Medium は複数箇所の変更やデータフローの検証、High は設計変更・移行・複数領域の調整が必要なもの。いずれも検証まで含める。
-
-組織の Issue フィールドを使い、現在のフィールド ID と選択肢を取得する。ID や選択肢名をハードコードしない。組織で別の尺度が定義されていればその定義を優先する。
-
-```bash
-gh api "/orgs/$OWNER/issue-fields" --jq '.[] | {id,name,data_type,options}'
-gh api "/repos/$REPO/issues/$ISSUE_NUM/issue-field-values"
-```
-
-取得した Priority / Effort の ID と、実在する選択肢名で JSON ファイルを作り、`gh api --method POST --input` で送る。例の ID は取得した値に置き換える。
-
-```json
-{
-  "issue_field_values": [
-    { "field_id": 123, "value": "Medium" },
-    { "field_id": 456, "value": "Low" }
-  ]
-}
-```
-
-```bash
-gh api --method POST "/repos/$REPO/issues/$ISSUE_NUM/issue-field-values" --input /tmp/issue-field-values.json
-gh api "/repos/$REPO/issues/$ISSUE_NUM/issue-field-values" \
-  --jq '.[] | {issue_field_name,value,single_select_option}'
-gh issue view "$ISSUE_NUM" --repo "$REPO" --json number,labels,assignees
-```
-
-POST は指定したフィールドだけを追加・更新する。PUT は他の既存フィールドも置換するため使わない。返却された選択肢名とラベルが見積もりどおりか確認してから設定完了とする。Priority / Effort は組織の Issue フィールドなので、Project の参照権限が無いことを理由に未設定にしない。
-
-取得・更新が権限不足で失敗した、組織フィールドが無い、選択肢が対応しない場合は、その事実と未設定の項目を報告する。組織フィールドの新設や権限変更はこの手順の範囲に含めない。公式 API: [フィールド定義](https://docs.github.com/en/rest/orgs/issue-fields)、[Issue の値の更新](https://docs.github.com/en/rest/issues/issue-field-values)。
-
-## .github 雛形ファイルの優先順位
-
-`.github/ISSUE_TEMPLATE.md` と `.github/PULL_REQUEST_TEMPLATE.md` は GitHub UI が自動適用する雛形ファイル。AI が本文を組み立てる時の優先順位は次の通り。
-
-雛形ファイルがあればそれを優先する。下記の Template セクションはあくまでフォールバック。雛形が無い・壊れている・このスキルの方針と整合しない場合のみ、このスキルの Template に従って本文を組み立てる。
-
-必須セクション・順序・Title 規則・Assignment ルールはこのスキルが常に正本。雛形ファイルがこのスキルの方針と矛盾する場合は雛形を優先せず、ユーザーに矛盾を報告する。
-
-### Issue 雛形の取り扱い
-
-Issue を作成する前に `.github/` をチェックし、次のように分岐する。
-
-`.github/ISSUE_TEMPLATE.md` が存在する場合は、そのファイルを読み込んで埋める。
-
-`.github/ISSUE_TEMPLATE.md`も`.github/ISSUE_TEMPLATE/`も存在しない場合は、下記Issue Templateを今回のbody構築にだけ使う。Issue起票の副作用としてrepositoryへtemplate fileを追加しない。
-
-`.github/ISSUE_TEMPLATE/`が存在する場合は、依頼に合う既存templateを読む。Issue作成の途中でtemplate構成を整理・統一しない。
-
-### PR 雛形の取り扱い
-
-PR を作成する前に `.github/PULL_REQUEST_TEMPLATE.md` をチェックする。
-
-存在する場合はそのファイルを読み込んで埋める。
-
-存在しない場合は、下記PR Templateを今回のbody構築にだけ使う。PR作成の副作用としてrepositoryへtemplate fileを追加しない。既存fileは勝手に上書きしない。
-
-## 共通ルール
-
-冒頭の概要は人間向け。技術用語を避け、何を・なぜ変えるかを自然な文章で書く。見出しは付けない。
-
-必須セクションは固定。順序を変えない。
-
-必須セクションの後に、任意セクションを自由に追加してよい。
-
-AI が残したい情報（調査メモ、検討した代替案、試行錯誤の記録など）は何でも書いてよい。
-
-外部の課題管理に参照元がある場合は、本文の Source に識別子とリンクを記録する。
-
-プロパティ形式（「リスク評価:」のような Key: Value）は使わない。自然な文章で書く。
-
-## Issue Template (type:Task)
-
-実装計画を書く。技術詳細を書いてよい。
-
-Task は 2 通りの作り方がある。直接 Task を作る場合は既に計画が書ける小さい単位。Bug / Feature から派生して作る場合は大きい不具合 / 要望を 1 個以上の Task に分解した結果。
-
-派生で作る場合は親 Bug / Feature 番号を `Parent: #N` で書く。Bug / Feature を実装に進めるときは必ず 1 個以上の Task を派生させる。Bug / Feature 自体には実装計画を書かない。
-
-```
-[人間向けの概要。何を・なぜ変更するのか。背景と目的を自然な文章で書く]
-
-Parent: #{親 Bug / Feature 番号}    ← 派生で作るときだけ書く
-
-## Technical Challenges
-
-[影響するファイル・API・データ構造・実装上の懸念など技術的な事実を列挙する]
-
-## Plan
-
-[実装方針とその理由。なぜこのアプローチを選んだか、どのような手順で進めるか、考慮したトレードオフを自然な文章で説明する。箇条書きだけでなく、思考の流れを追えるレベルの詳細さが必要]
-
-### Tasks
-
-- [ ] タスク1
-- [ ] タスク2
-```
-
-必須セクション
-
-冒頭の概要（見出しなし）、Technical Challenges、Plan（Tasks サブセクションを含む）。派生 Task の場合は冒頭の概要直後に `Parent: #N` を入れる。
-
-任意セクションの例
-
-Notes、Research、Alternatives Considered、Debug Log、Dependencies、Migration。
-
-## Issue Template (type:Bug / type:Feature)
-
-不具合 / 要望の集約。非開発者（経営者・企画担当者）が読む。技術用語・ファイル名・コードは書かない。
-
-Bug / Feature 自体には実装計画を書かない。実装に進むときは派生 Task を 1 個以上作って、そこに技術計画を書く。1 つの Bug / Feature が複数の Task に分解されることが普通。
-
-```
-[人間向けの概要。何が起きていて何を直したいか / 何を実現したいか。誰のために、何が変わるか、なぜ必要か]
-
-## Source
-
-- External tracker: [{参照ID}]({URL})
-- Sentry: [{SHORT_ID}](Sentry permalink)
-- Voice: [[signals/{slug}]]
-- Direct: {誰} / {YYYY-MM-DD}
-
-## Scope
-
-- やること: {何が変わる / 直る}
-- やらないこと: {スコープ外を明示}
-- 影響範囲: {誰のどの体験}
-
-## Tasks
-
-派生 type:Task の一覧。実装に着手するときに 1 つ以上必ず追加する。
-
-- [ ] #{番号} 派生 Task タイトル
-- [ ] #{番号} 派生 Task タイトル
-```
-
-Source は該当する行のみ残す。複数 source を持ってよい。
-
-Tasks の派生 Task が close されたら対応行を `[x]` に更新する。すべての派生 Task が close されたら Bug / Feature 自体も close する。
-
-必須セクション
-
-冒頭の概要（見出しなし、人間向け）、Source、Scope、Tasks（実装着手前は空でよい。着手時に派生 Task を追加する）。
-
-任意セクションの例
-
-Notes、Decisions、Open questions。
-
-## PR Template
-
-PR は実装結果を記録する場所。計画は Issue 側に書く。PR には書かない。
-
-```
-closes #<Issue番号>
-
-[人間向けの概要。何が変わるか、何が良くなるかを自然な文章で書く。リスクや影響があれば触れる]
-
-## Verification
-
-- [ ] 対象機能の動作確認
-- [ ] 既存機能への影響確認
-```
-
-必須セクション
-
-closes 行（Issue リンク）、冒頭の概要（見出しなし）、Verification（実際にブラウザ操作や API 呼び出しで確認した内容。test / build などの技術的チェックは含めない）。
-
-任意セクションの例
-
-Implementation Notes、Breaking Changes、Screenshots。
-
-## Title 規則
-
-タイトル規則は type:Task のみ適用する。Bug / Feature にはプレフィックスを付けない。
-
-Task、Bug、Feature は `{要約}` のみでプレフィックスなし。外部の課題番号は本文の Source に記録する。
-
-Source の識別（Sentry 由来か Voice 由来か等）はタイトルではなく本文の `## Source` で行う。
-
-## Bug / Feature と Task の連携
-
-Bug / Feature を実装に進めるときは、必ず 1 つ以上の Task に分解して派生させる。1 つの Bug / Feature が複数 Task に分かれることが普通（フェーズ分け、レイヤー分け、ワークスペース分け等）。
-
-派生 Task の作り方
-
-派生 Task の body 冒頭（概要直後）に `Parent: #{親 Bug/Feature 番号}` を書く。
-
-親 Bug / Feature の `## Tasks` に派生 Task 番号を追記する（`- [ ] #N タイトル`）。
-
-派生 Task が close されたら、親の `## Tasks` の対応行を `[x]` に更新する。
-
-親 Bug / Feature の `## Tasks` がすべて `[x]` になったら、親自体を close する。
-
-直接 Task を作る場合（Bug / Feature を経由しない）は `Parent` 行を書かない。これは即計画できる小さい単位用で、Bug / Feature を立てる手間を省けるとき限定。
-
-GitHub Sub-issues 機能を使う場合は body の参照と併用してよい（両方を維持）。
+タイトルは何を解決・変更するかが分かる要約にする。外部の根拠があるときは本文へ出典リンクを残す。
 
 ## Assignment
 
-GitHub Issue のアサインを管理する。実装に着手する前に、現在の認証ユーザー（`gh api user` の login）を自分として Issue に追加する。親 Bug / Feature から派生 Task を実装する場合は、実際に取り組む Task に追加する。報告・読み取り専用の調査だけでは追加しない。既存の担当者を削除・置換しない。
-
-操作
-
-`mine` は自分にアサインされた open Issue の一覧（`gh issue list --assignee "@me" --state open`）。
-
-`unassigned` は誰にもアサインされていない open Issue の一覧（`gh issue list --search "no:assignee" --state open`）。
-
-`assign {N}` は Issue N を自分にアサイン（下記の判定後に `gh issue edit N --repo "$REPO" --add-assignee "@me"` を実行）。
-
-`release {N}` は Issue N の自分のアサインを外す（`gh issue edit N --remove-assignee "@me"`）。
-
-Assign の判定フロー
-
-各 Issue 番号 N について `gh api "/repos/$REPO/issues/$ISSUE_NUM" --jq '{number,title,state,assignees,type}'` を取って判定する。自分の login は `gh api user --jq .login` で確認する。
-
-`state == "closed"` はスキップ（close 済みにアサインしない）。
-
-`assignees` に自分が含まれる場合は already assigned。スキップ。
-
-`assignees`に他人がいる場合は共同assignしてよいかユーザーに確認する。承認された場合だけ`gh issue edit N --add-assignee @me`を実行する。
-
-`assignees`が空かつ`type.name == "Feature"`の場合は要望集約用なので通常はassignしない。明示的にその Issue 自体へ着手する依頼なら自分を追加する。
-
-`assignees` が空かつ `type.name in ("Bug", "Task", null)` の場合はそのままアサイン。
-
-衝突回避
-
-他人がアサイン中の Issue に無断で自分を追加しない（確認必須）。
-
-close 済み Issue にアサインしない。
-
-同一 Issue を複数の AI セッションで取り合うのを避けるため、`assign` 実行後にもう一度 `gh issue view` で実際にアサインされたか確認する。失敗していれば再試行せず、ユーザーに状況を報告する。
+報告・読み取り専用の調査では担当を付けず、実装に着手する前に認証ユーザーを追加する。既存担当者を削除・置換せず、他人が担当中なら共同担当の合意を確認する。close 済みには追加しない。設定後は再取得し、失敗時は状況を報告する。
 
 ## ブランチ命名
 
-Issue を実装するブランチは `{issue番号}-{自然な英文}` の形式にする。例: `42-fix-pagination-offset`。
+対象リポジトリの規約を優先する。規約がなければ Issue の実装は `{issue番号}-{自然な英文}`（例: `42-fix-pagination-offset`）。

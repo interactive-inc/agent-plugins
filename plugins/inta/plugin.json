@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "inta",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "社外の開発者にも提供する製品開発・検証・開発文書・保守の支援",
   "author": {
     "name": "Interactive Inc.",

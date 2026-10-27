@@ -54,4 +54,4 @@ Repository は集約ルートごとに作成する。取得は `findById` / `fin
 
 Infrastructure（技術エラー） → Application（アプリエラーに変換） → Interface（ユーザー向けレスポンスに変換）
 
-すべて `T | Error` で返す。throw しない。
+予想可能な失敗は `T | Error` で返す。予想不能な障害と HTTP 境界の例外変換は製品の共通方針に従う。

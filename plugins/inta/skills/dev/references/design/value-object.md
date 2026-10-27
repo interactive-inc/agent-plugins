@@ -1,63 +1,8 @@
 # Value Object
 
-プリミティブ値: Zod でバリデーション、getter で判定ロジック。
+値で識別され、不変条件や業務上の振る舞いを持つ値を class で表す。単純な入力検証だけなら既存のスキーマで足りる。規約に合わせるためだけの class は作らない。
 
-```ts
-const emailSchema = z.string().email()
-
-export class Email {
-  constructor(private readonly value: string) {
-    emailSchema.parse(value)
-    Object.freeze(this)
-  }
-
-  get isCompanyEmail(): boolean {
-    return this.value.endsWith("@example.co.jp")
-  }
-
-  get domain(): string {
-    return this.value.split("@")[1]
-  }
-
-  equals(other: Email): boolean {
-    return this.value === other.value
-  }
-
-  toString(): string {
-    return this.value
-  }
-}
-```
-
-オブジェクト値: `with*()` で不変更新、計算結果は getter。
-
-```ts
-const personNameSchema = z.object({
-  first: z.string().min(1),
-  last: z.string().min(1),
-})
-
-type Props = z.infer<typeof personNameSchema>
-
-export class PersonName {
-  constructor(private readonly props: Props) {
-    personNameSchema.parse(props)
-    Object.freeze(this)
-  }
-
-  get fullName(): string {
-    return `${this.props.last} ${this.props.first}`
-  }
-
-  withFirst(first: string): PersonName {
-    return new PersonName({ ...this.props, first })
-  }
-
-  equals(other: PersonName): boolean {
-    return this.props.first === other.props.first && this.props.last === other.props.last
-  }
-}
-```
+構築時に検証し、値の変更は `with*()` などで新しい値を返す。判定は getter、等価性は `equals()` で値を比較する。`Object.freeze(this)` は保持するオブジェクトの内部まで凍結しないため、可変参照を外へ渡さない。
 
 ## ファイル命名
 
@@ -75,11 +20,3 @@ class ではない module は `*.value.ts` にせず、責務に合う suffix �
 | 表示・文字列 formatter | `*.formatter.ts` | `money.formatter.ts` |
 
 規約を満たすためだけのダミー class や、関数・定数を static member に移しただけの static-only class で非class moduleを包まない。値オブジェクト class にする不変条件や振る舞いがなければ、exportとファイル名を実際の責務に合わせる。
-
-ルール:
-
-- コンストラクタで Object.freeze
-- Zod でバリデーション + 型推論
-- プリミティブ値は getter、複数値は `with*()` で更新
-- 判定ロジックは getter (`isXxx`, `hasXxx`)
-- 等価比較は `equals()` で値比較

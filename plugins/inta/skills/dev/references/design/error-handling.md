@@ -39,7 +39,7 @@ if (result instanceof PaymentFailedError) {
 
 ## フロントエンド: ErrorBoundary
 
-クエリのエラーは throw して ErrorBoundary で受け、セクション単位で表示する。境界の粒度と構造は [react.md](react.md) の「データ取得と境界」に従う。
+クエリのエラーは throw して ErrorBoundary で受け、セクション単位で表示する。境界の粒度と構造は [React の設計](react.md)に従う。
 
 - 取得失敗時に null や空表示で黙る silent fallback を作らない。境界を置いて失敗と再試行を見せる
 - mutation は throw せず onError で扱う

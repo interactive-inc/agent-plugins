@@ -6,26 +6,15 @@ user-invocable: true
 disable-model-invocation: false
 ---
 
-WordPress固有のupgrade判断と検証を提供する。Issue、worktree、PR、mergeなど共通のdeliveryは`inta:dev`のリポジトリ規約に従い、このSkill内へ別実装しない。
+# WordPress・PHP の更新
 
-# 振り分け
+既存製品の WordPress core / plugin / theme と PHP runtime の互換性を調べ、安全に更新する。
 
-```text
-/inta:wordpress upgrade [plan|apply]
-/inta:wordpress php-upgrade [plan|apply]
-```
+- `upgrade [plan|apply]`：WordPress の更新。
+- `php-upgrade [plan|apply]`：PHP runtime と依存の更新。
 
-- `upgrade` → [upgrade.md](references/upgrade.md)。WordPress core、plugin、themeのupgrade
-- `php-upgrade` → [php-upgrade.md](references/php-upgrade.md)。PHP runtimeと依存の互換性upgrade
-- 対象が未指定でリポジトリから判別できない場合だけ、WordPressかPHPかを確認する
+引数なし・`plan` は読み取り専用。`apply` または実装の明示依頼があれば指定範囲を変更する。対象がリポジトリから分からない場合だけ確認する。
 
-各subcommandは引数なしと`plan`が読み取り専用。`apply`または「実装して」などの明示依頼がある場合だけ変更する。旧`demo`入力は`plan`として扱い、`issue-demo/`などの模擬GitHubファイルは生成しない。
+共通手順と対象ごとの確認項目は [upgrade.md](references/upgrade.md)。実行時点の公式資料で互換性を確認し、staging と復旧方法を確かめて検証する。設定ファイルや version 表示だけで動作確認済みにしない。
 
-# 安全境界
-
-- 作業前に復元可能なDB / uploads backup、staging、rollback手順の有無を確認する
-- 最新versionや互換性は実行時に公式WordPress / PHP / plugin / hosting資料で確認し、Skill内の固定versionを信頼しない
-- WordPress coreやvendorを直接編集せず、package manager、Composer、WP-CLI、管理対象のtheme / plugin sourceを正規経路で更新する
-- package追加、platform設定、DB migration、本番deployは対象リポジトリの承認境界に従う
-- backupやstagingが無い状態でproductionへ進めない。調査不能を互換性確認済みにしない
-- upgrade後はpublic page、管理画面、login、主要form、cron / queue、mail、cache、plugin固有導線を実環境相当で確認する
+依存・DB・hosting・本番反映は対象リポジトリの承認範囲に従う。復元可能な backup と rollback を確認できない状態で本番へ進めない。Issue・PR など共通の開発運用は `dev` の規約を使う。

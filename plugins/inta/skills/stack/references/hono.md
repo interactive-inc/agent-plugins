@@ -1,105 +1,33 @@
-# Hono Backend
+# Hono を採用済みの製品
 
-Honoを直接採用済みの製品向け。新規製品の基盤は [stack](../SKILL.md) のVoid方針に従う。
+既存の Hono 製品を扱う場合に読む。新規製品の基盤は [stack](../SKILL.md) の Void 方針に従う。API の構文は導入版と [Hono 公式資料](https://hono.dev/docs/) で確認する。
 
-Layered (Interface → Application → Infrastructure → Domain). Lib は横断のみ。
+## 標準配置
 
-## Layout
+既存製品の規約がなければ次にそろえる。不要な空ディレクトリは作らない。
 
-```
+```text
 api/
-├── domain/
-│   ├── entities/
-│   ├── values/
-│   └── errors/
-├── application/
-├── infrastructure/
-│   ├── repositories/
-│   ├── adapters/
-│   └── converters/
-├── interface/
-│   ├── routes/
-│   ├── middlewares/
-│   ├── serializers/
-│   └── factory.ts
-├── lib/
-├── migrations/
-├── drizzle.schema.ts
-├── env.d.ts
-└── index.ts
+  domain/             entities/・values/・errors/
+  application/        利用者目的ごとの操作
+  infrastructure/     repositories/・adapters/・converters/
+  interface/          routes/・middlewares/・serializers/・factory.ts
+  lib/                横断する内部処理
+  migrations/
+  drizzle.schema.ts
+  env.d.ts
+  index.ts
 ```
 
-## Layer Rules
+依存とユースケースの規約は [architecture](../../dev/references/design/architecture.md)、値の適用条件は [Value Object](../../dev/references/design/value-object.md) を正本にする。
 
-- Interface: validation、auth、HTTPException 変換
-- Application: 1ユースケース = 1具象クラス。公開操作は対象リポジトリの規約に沿った一つだけにする
-- Domain: Entity / Value Object / business rules、外部依存なし
-- Infrastructure: Repository / Adapter で DB ・外部 API を隔離
-- Lib: 横断的関心事のみ、外部サービス連携は含めない
+## 境界と命名
 
-## Domain
+- Entity は `xxx.entity.ts`、値オブジェクト class は `xxx.value.ts`、Repository は `xxx.repository.ts`、外部連携は `xxx.adapter.ts`。
+- Application は `create-customer.ts` のように目的を表す。HTTP Context を渡さず、入力と具体的な依存を入口で組み立てる。
+- Entity は DB レコードを知らない。レコードと Entity の変換は Repository が行い、外部 API・メール・ストレージは Adapter に置く。
+- HTTP の入力検証・認証との接続・レスポンス変換は Interface が所有する。エラーは [共通方針](../../dev/references/design/error-handling.md) に従い HTTP 境界で変換する。
+- `customers.$customer.orders.ts` のようなファイル名と実 URL の対応は、製品のルート登録方式で確認する。Hono 自体がファイルから自動登録する前提にしない。
+- DB の名前・型・migration は既存 schema にそろえる。DB や認証の独自ひな形をコピーせず、利用版の API と試験で確かめる。
 
-- Entity は DB を知らない（`fromRecord()` を持たない）。DB → Entity 変換は Repository の責務
-- Factory メソッドは具体名（`create()` より `createWithEmail()`）
-
-## Naming
-
-- Entity ⇒ `xxx.entity.ts`
-- Value Object class ⇒ `xxx.value.ts`（適用条件と非class moduleのsuffixはdevの[Value Object](../../dev/references/design/value-object.md)を参照）
-- Repository ⇒ `xxx.repository.ts`
-- Adapter ⇒ `xxx.adapter.ts`
-- Application operation ⇒ `動詞-名詞.ts`（`create-customer.ts`、`update-customer.ts`）
-- Route ⇒ `resource.$param.ts`（`customers.$customer.ts`）
-
-### Application Operation Prefix
-
-`create-` / `update-` / `delete-` / `fetch-` / `get-` / `approve-` / `reject-` / `publish-` / `cancel-`
-
-`write-` / `save-` / `upsert-` / `manage-` / `process-` / `handle-`のように、完了後の状態を特定できない総称は使わない。
-
-### Route File
-
-- `/customers` ⇒ `customers.ts`
-- `/customers/:customer` ⇒ `customers.$customer.ts`
-- `/customers/:customer/orders` ⇒ `customers.$customer.orders.ts`
-- `/customers/search` ⇒ `customers.search.ts`
-
-## References
-
-### Domain
-
-- [Entity](hono/domain-entity.md)
-- [Value Object](hono/domain-value.md)
-- [Error](hono/domain-error.md)
-
-### Application
-
-- [Application Operation](hono/application-service.md)
-
-### Infrastructure
-
-- [Repository](hono/infrastructure-repository.md)
-- [Adapter](hono/infrastructure-adapter.md)
-
-### Interface
-
-- [Route Handler](hono/interface-route-handler.md)
-- [Entry Point](hono/interface-entry-point.md)
-- [Error Handling](hono/interface-error-handling.md)
-
-### Common
-
-- [Drizzle Schema](hono/drizzle-schema.md)
-- [Lib](hono/lib-structure.md)
-
-## Agent tools
-
-横断ツールは [stack スキル](../SKILL.md) を参照。
-
-### hono-skill
-
-`vpx skills add yusukebe/hono-skill --agent <client-id> --skill hono-skill -y`。`client-id` は利用中agentの識別子へ置き換える。
-
-### sentry-for-ai
-
-Sentry 利用時。`npx skills add getsentry/sentry-for-ai`。前提: `sentry-cli`。
+仕様 ID と試験の接続は [testing](../../test/references/testing.md)。依存の追加は [stack](../SKILL.md) の `vp install` 方針に従う。

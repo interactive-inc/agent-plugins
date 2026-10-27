@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: [["list"], ["html", { outputFolder: "./specs/playwright-report", open: "never" }]],
   use: {
     baseURL: "http://your-site.localhost",
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
   },
   projects: [
     {

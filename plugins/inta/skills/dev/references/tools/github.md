@@ -1,6 +1,6 @@
 # GitHub リポジトリ運用
 
-Issue / PR の書式ではなく、リポジトリそのものの設定と衛生を保つ運用ルール。書式は [gh-templates.md](gh-templates.md) を参照する。
+Issue / PR の書式ではなく、リポジトリそのものの設定と衛生を保つ運用ルール。書式は [issue-pr.md](issue-pr.md) を参照する。
 
 ## リポジトリ設定の確認
 
@@ -27,3 +27,7 @@ PR を持たないブランチは、tip のコミット件名と差分を main �
 ## worktree の掃除
 
 マージ済みブランチに紐づく worktree は `git worktree remove` で片付ける。`git worktree list` に残った detached / 古い日付のエントリは棚卸しの対象にする。
+
+## コミット
+
+英語で [Conventional Commits](https://www.conventionalcommits.org/) に従う。対象リポジトリに別の明示規約があれば従う。

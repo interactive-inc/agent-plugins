@@ -19,6 +19,17 @@
 
 [check](skills/check/SKILL.md) は点検、[maintain](skills/maintain/SKILL.md) は挙動を変えない手入れ、[env](skills/env/SKILL.md) は環境整備です。この3つは人が明示的に呼び出します。
 
+## 短い呼び出し
+
+- `dev next`・`dev review`・`dev ci`・`dev pr-chain`：次の仕事、差分、CI、関連 PR。
+- `test changed|unit|api|a11y|visual|diff|perf`：必要な検証を選ぶ。
+- `check [full|trace|code|docs|readme|env]`：読み取り専用の点検。
+- `maintain code|docs|readme`：挙動を保つ整理。
+- `env [apply|skills]`・`stack migration`：環境整備と基盤移行。
+- `wordpress upgrade|php-upgrade [plan|apply]`・`orca [fanout] #番号`：更新と作業の引き渡し。
+
+スキル名は既存の短い名前を維持しています。各入口は必要な参照だけを読み、詳細な書式・標準配置・専門検証をそれぞれの正本へ分けます。
+
 ## 開発文書
 
 [docs](skills/docs/SKILL.md) は製品の正本からHTML・PDF・READMEを作成します。対象製品の書式を優先し、会社共通の見た目には依存しません。仕様や設計判断の管理は `dev` が担当します。

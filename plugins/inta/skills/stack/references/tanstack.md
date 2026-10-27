@@ -1,49 +1,11 @@
-# TanStack App
+# TanStack を採用済みの製品
 
-TanStackを採用済みの製品向け。新規製品の基盤は [stack](../SKILL.md) のVoid方針に従う。
+既存の TanStack Start / Query 製品を扱う場合に読む。新規製品へ自動採用せず、基盤は [stack](../SKILL.md) の Void 方針に従う。ルーティング・SSR・認証は導入版と [TanStack 公式資料](https://tanstack.com/) で確かめる。
 
-TanStack Start (React) + TanStack Query + Hono + Drizzle.
+- Hono の責務と配置は [hono.md](hono.md)。データ取得と更新時のキャッシュ整合は [data-fetching](../../dev/references/design/data-fetching.md) を正本にし、別の refetch 方針を重ねない。
+- 読み込み・空・成功・失敗・再試行を区別し、製品が採用する Suspense / ErrorBoundary の境界を使う。既存の取得方式を理由なく別方式へ移さない。
+- セッション表示と認可を区別する。クライアントのロール表示だけで権限を保証せず、サーバーで確認する。JWT・Cookie・ログインの独自実装例をコピーしない。
+- Cloudflare の binding・実行環境・DB 接続は、現在の設定と導入版の公式資料に照合する。
+- Storybook / MSW を使う場合は [UI の試験と表示例](../../test/references/storybook.md)。導入を全製品へ強制しない。
 
-## Patterns
-
-- hc client で型安全 API 呼び出し
-- 更新は refetch（`invalidateQueries` 使わない）
-- Suspense + `use()` でデータ取得
-- Skeleton で loading
-- query は子に渡す
-
-## References
-
-- [Hono API](tanstack/hono-api.md)
-- [hc client](tanstack/hc-client.md)
-- [Auth](tanstack/auth.md): JWT + Cookie、authMiddleware
-- [Session](tanstack/session-context.md): React Context + Query、useSession
-- [Suspense + use()](tanstack/suspense-use.md)
-- [Cloudflare](tanstack/cloudflare.md): Workers + D1、HonoEnv、databaseMiddleware
-- [TanStack Start BASIC auth](tanstack/tanstack-start/basic-auth.md)
-- [Storybook + MSW](tanstack/storybook-msw.md): コンポーネント開発の標準。ハンドラを story とテストで共有
-- [Storybook 量産の執筆規律](tanstack/storybook-authoring.md): フィクスチャの業務精度、型の詰まりの分岐、smoke ゲートとの整合
-
-## Agent tools
-
-横断ツールは [stack スキル](../SKILL.md) を参照。
-
-### shadcn/ui
-
-`components.json` 利用時。`vpx skills add shadcn/ui --agent <client-id> --skill shadcn -y`。
-
-### react-best-practices
-
-`vpx skills add vercel-labs/agent-skills --agent <client-id> --skill react-best-practices -y`。
-
-### next-best-practices
-
-Next.js 利用時。`vpx skills add vercel-labs/next-skills --agent <client-id> --skill next-best-practices -y`。Optional: `--skill next-upgrade`、`--skill next-cache-components`。
-
-### stitch-skills
-
-DESIGN.md ＋ shadcn 統合。`stitch-design` / `design-md` / `enhance-prompt` を `--global` で。shadcn 利用時は `shadcn-ui` も。
-
-### taste-design
-
-stitch-skills と併用、premium UI 基準。`.agents/skills/taste-design` を symlink。
+型を通すためのラッパーや二重検証を追加する前に、サーバーが公開する契約と導入版の型を調べる。未導入の道具の追加は [tools](tools.md) に従う。

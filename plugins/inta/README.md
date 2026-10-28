@@ -6,31 +6,63 @@
 
 標準の道具は `vp`、新規のWeb製品の基盤は `void`。依存の導入・追加は `vp install` を入口にし、配置と文書の書式は共通規約へそろえます。既存製品の移行は今回の目的と範囲を決めてから行います。
 
-## 開発する
+## コマンド一覧
 
-| 機能 | 用途 |
+現在は11個のスキルがあります。以下は Claude Code の呼び出し表記です。Codex では対応するスキルを指定し、同じ引数や自然文の依頼を渡します。
+
+| コマンド | 用途 | 引数なしの動き |
+| --- | --- | --- |
+| [/inta:dev](skills/dev/SKILL.md) | 機能追加・不具合修正を、対話から実装・試験・記録まで進める | 現状を読み、次の候補を対話する |
+| [/inta:refactor](skills/refactor/SKILL.md) | 好み・命名・配置・責務を全適用規約へそろえる | 製品の手書きコード全体を確認・修正・再検証 |
+| [/inta:test](skills/test/SKILL.md) | 差分・API・アクセシビリティ・画面・性能を検証する | 差分から必要な検証を選ぶ |
+| [/inta:check](skills/check/SKILL.md) | コード・文書・仕様接続・環境を読み取り専用で点検する | 現在の変更と直接影響する範囲を点検 |
+| [/inta:maintain](skills/maintain/SKILL.md) | 文書やコードを、挙動を保って整理する | 自然文から対象が分かれば進め、不明なら確認 |
+| [/inta:perf](skills/perf/SKILL.md) | 性能の問題を根拠で確かめ、振る舞いを保って改善する | 統計や共通経路から影響の大きい候補を選ぶ |
+| [/inta:stack](skills/stack/SKILL.md) | vp・Void・標準配置、技術選定と移行方針を扱う | 目的と既存構成を確認する |
+| [/inta:env](skills/env/SKILL.md) | 開発環境を点検・整備する | 読み取り専用で点検 |
+| [/inta:docs](skills/docs/SKILL.md) | 正本から HTML・PDF・README を作る | 成果物と正本を依頼から特定し、不明なら確認 |
+| [/inta:wordpress](skills/wordpress/SKILL.md) | WordPress・PHP の更新を調査・実施する | 読み取り専用の計画 |
+| [/inta:orca](skills/orca/SKILL.md) | 明示された Issue の実装を Orca の作業場所へ引き渡す | 対象 Issue と依頼範囲を確認する |
+
+`check`・`refactor`・`maintain`・`env` は人が明示して起動します。通常の開発に必要な試験・文書整理・規約への適合は `dev` に含まれ、毎回これらを別工程として呼ぶ必要はありません。
+
+## サブコマンドと引数
+
+`<対象>` にはパス・URL・Issue 番号など、そのコマンドに合う対象を渡します。引数はスキルへの指示であり、シェルで実行する CLI コマンドではありません。
+
+| 入力例 | 動き |
 | --- | --- |
-| [dev](skills/dev/SKILL.md) | 要望や不具合を整理し、実装・検証へ進める |
-| [refactor](skills/refactor/SKILL.md) | 好み・構造の全適用ルールを確認し、挙動を保ってそろえる |
-| [test](skills/test/SKILL.md) | 変更に必要な試験・操作性・見た目を検証する |
-| [perf](skills/perf/SKILL.md) | 既存の処理の遅さを調べ、改善する |
-| [stack](skills/stack/SKILL.md) | 技術の選定・移行方針を検討する |
-| [wordpress](skills/wordpress/SKILL.md) | WordPress・PHPの更新を計画・実施する |
-| [orca](skills/orca/SKILL.md) | Orcaの作業場所へ課題の実装を引き渡す |
+| `dev <自然文・Issue・PR>` | 依頼・既存記録の続きを開発する |
+| `dev next [対象]` | 次に取り組む候補を提案。`--all` で全体探索、`--write` で確定候補を既存の記録先へ追記 |
+| `dev review [対象]` | PR・差分・パスを読み取り専用でレビュー |
+| `dev ci [PR・run URL・ID]` | CI の失敗を読み取り専用で診断 |
+| `dev pr-chain [inspect・merge] <PR...>` | 関連 PR の依存と順序を確認。既定は点検、`merge` を明示したときだけマージ |
+| `refactor [パス・changed] [--check]` | 全体・指定パス・現在の差分を規約へ適合。`--check` は点検だけ |
+| `test changed・unit・api・a11y・visual・diff・perf` | 差分／振る舞い／API 契約／アクセシビリティ／実表示／2ソース比較／画面性能のいずれかを検証 |
+| `check changed・full・code・docs・readme・env [対象]` | 現在の変更／全体／指定領域を読み取り専用で点検 |
+| `check trace [changed・仕様ID・パス・unbound・all]` | 仕様・実装・試験の接続を点検。`unbound --limit N` で未接続候補を限定 |
+| `maintain docs・readme [対象]` | 既存文書を整理。`maintain code` は `refactor` と同じ規約を使う |
+| `perf [パス・画面・API・diff]` | 指定範囲の性能を調査・改善 |
+| `stack migration [package current target]` | 基盤・依存の移行を計画する |
+| `env apply` / `env skills` | 指定した環境変更を適用／技術構成に必要なスキルを導入 |
+| `docs html・pdf・readme <正本・依頼>` | 指定形式の文書を生成・更新し、検品 |
+| `wordpress upgrade・php-upgrade [plan・apply]` | WordPress／PHP を更新。`plan` は調査、`apply` は明示範囲の変更 |
+| `orca #番号` / `orca fanout #番号...` | 単一／複数 Issue を作業場所へ引き渡す |
 
-[check](skills/check/SKILL.md) は点検、[maintain](skills/maintain/SKILL.md) は挙動を変えない手入れ、[env](skills/env/SKILL.md) は環境整備です。`refactor` と合わせて人が明示的に呼び出します。
+表の「・」で並べた入力は選択肢です。例えば `test unit`、`docs readme` のように一つ選びます。外部への送信・push・PR・本番反映は、依頼された範囲で行います。
 
-## 短い呼び出し
+## 使い分けの例
 
-- `dev next`・`dev review`・`dev ci`・`dev pr-chain`：次の仕事、差分、CI、関連 PR。
-- `test changed|unit|api|a11y|visual|diff|perf`：必要な検証を選ぶ。
-- `check [full|trace|code|docs|readme|env]`：読み取り専用の点検。
-- `refactor [path|changed] [--check]`：全適用規約を確認・修正・再検証。指定なしは製品全体、`--check` は点検だけ。
-- `maintain code|docs|readme`：挙動を保つ整理。`code` は `refactor` と同じ規約を使う。
-- `env [apply|skills]`・`stack migration`：環境整備と基盤移行。
-- `wordpress upgrade|php-upgrade [plan|apply]`・`orca [fanout] #番号`：更新と作業の引き渡し。
+```text
+/inta:dev 顧客検索に絞り込みを追加して
+/inta:check code pages/
+/inta:refactor pages/ --check
+/inta:refactor pages/
+/inta:test changed
+/inta:docs readme
+```
 
-スキル名は既存の短い名前を維持しています。各入口は必要な参照だけを読み、詳細な書式・標準配置・専門検証をそれぞれの正本へ分けます。
+問題を見つけるだけなら `check`、コードを好み・構造の規約へそろえるなら `refactor`、既存文書の整理なら `maintain`、文書の新規作成や成果物生成なら `docs` を使います。`perf` は原因を調べて改善する入口、`test perf` は同条件で画面性能を測る入口です。
 
 ## 好みと方法論
 

@@ -9,6 +9,7 @@ Interactive Inc. が公開する開発支援の拡張機能です。配布元の
 | 呼び出し | 用途 |
 | --- | --- |
 | `inta:dev` | 対話を通じた継続開発 |
+| `inta:refactor` | 好み・構造を全適用規約へそろえる |
 | `inta:test` | 変更に必要な試験と検証 |
 | `inta:stack` | 技術基盤・配置・移行 |
 | `inta:perf` | 性能問題の検証と修正 |
@@ -40,6 +41,8 @@ codex plugin add inta@inta-agent-plugins
 `plugins/inta/plugin.json` は Agent Plugins形式、`.claude-plugin/plugin.json` と `.codex-plugin/plugin.json` は各クライアントの配布定義です。手順本体は一つで、呼び出し制御等のクライアント固有の設定は対応するクライアントで適用します。
 
 ## 旧版からの変更
+
+0.8.0では、表記の好みを preferences、分割・テスト容易性を方法論として分けました。`inta:refactor` で対象の全適用規約を確認・修正・再検証します。
 
 0.7.0では指示と参照構成を整理しました。スキル名と短いコマンドを維持し、重複したひな形を共通規約へ集約しています。Issue・PR のラベル、文書の書式、配置、検証の規約は残しています。
 

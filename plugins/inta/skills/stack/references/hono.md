@@ -23,7 +23,7 @@ api/
 
 ## 境界と命名
 
-- Entity は `xxx.entity.ts`、値オブジェクト class は `xxx.value.ts`、Repository は `xxx.repository.ts`、外部連携は `xxx.adapter.ts`。
+- Entity class は `XxxEntity`、生成 factory は `createWithEmail()` のような具体名。Entity は `xxx.entity.ts`、値オブジェクト class は `xxx.value.ts`、Repository は `xxx.repository.ts`、外部連携は `xxx.adapter.ts`。
 - Application は `create-customer.ts` のように目的を表す。HTTP Context を渡さず、入力と具体的な依存を入口で組み立てる。
 - Entity は DB レコードを知らない。レコードと Entity の変換は Repository が行い、外部 API・メール・ストレージは Adapter に置く。
 - HTTP の入力検証・認証との接続・レスポンス変換は Interface が所有する。エラーは [共通方針](../../dev/references/design/error-handling.md) に従い HTTP 境界で変換する。

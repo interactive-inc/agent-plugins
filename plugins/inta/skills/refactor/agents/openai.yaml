@@ -1,0 +1,6 @@
+interface:
+  display_name: "Refactor to Project Conventions"
+  short_description: "Apply coding preferences and testable file structure"
+  default_prompt: "Use $refactor to check every applicable preference and structural rule, fix violations without changing behavior, and verify the result."
+policy:
+  allow_implicit_invocation: false

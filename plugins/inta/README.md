@@ -11,24 +11,30 @@
 | 機能 | 用途 |
 | --- | --- |
 | [dev](skills/dev/SKILL.md) | 要望や不具合を整理し、実装・検証へ進める |
+| [refactor](skills/refactor/SKILL.md) | 好み・構造の全適用ルールを確認し、挙動を保ってそろえる |
 | [test](skills/test/SKILL.md) | 変更に必要な試験・操作性・見た目を検証する |
 | [perf](skills/perf/SKILL.md) | 既存の処理の遅さを調べ、改善する |
 | [stack](skills/stack/SKILL.md) | 技術の選定・移行方針を検討する |
 | [wordpress](skills/wordpress/SKILL.md) | WordPress・PHPの更新を計画・実施する |
 | [orca](skills/orca/SKILL.md) | Orcaの作業場所へ課題の実装を引き渡す |
 
-[check](skills/check/SKILL.md) は点検、[maintain](skills/maintain/SKILL.md) は挙動を変えない手入れ、[env](skills/env/SKILL.md) は環境整備です。この3つは人が明示的に呼び出します。
+[check](skills/check/SKILL.md) は点検、[maintain](skills/maintain/SKILL.md) は挙動を変えない手入れ、[env](skills/env/SKILL.md) は環境整備です。`refactor` と合わせて人が明示的に呼び出します。
 
 ## 短い呼び出し
 
 - `dev next`・`dev review`・`dev ci`・`dev pr-chain`：次の仕事、差分、CI、関連 PR。
 - `test changed|unit|api|a11y|visual|diff|perf`：必要な検証を選ぶ。
 - `check [full|trace|code|docs|readme|env]`：読み取り専用の点検。
-- `maintain code|docs|readme`：挙動を保つ整理。
+- `refactor [path|changed] [--check]`：全適用規約を確認・修正・再検証。指定なしは製品全体、`--check` は点検だけ。
+- `maintain code|docs|readme`：挙動を保つ整理。`code` は `refactor` と同じ規約を使う。
 - `env [apply|skills]`・`stack migration`：環境整備と基盤移行。
 - `wordpress upgrade|php-upgrade [plan|apply]`・`orca [fanout] #番号`：更新と作業の引き渡し。
 
 スキル名は既存の短い名前を維持しています。各入口は必要な参照だけを読み、詳細な書式・標準配置・専門検証をそれぞれの正本へ分けます。
+
+## 好みと方法論
+
+[preferences](skills/dev/references/preferences/index.md) は、表記や選択の違いによる不要な差分をなくすための統一です。[構造の方法論](skills/dev/references/code/structure.md) は、分割・責務・試験のしやすさを定めます。意図と正本を分け、開発でも refactor でも同じ規約を使います。
 
 ## 開発文書
 

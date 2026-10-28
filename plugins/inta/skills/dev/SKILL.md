@@ -30,14 +30,15 @@ disable-model-invocation: false
 | `ci` | [自動検査の失敗](commands/ci.md) |
 | `pr-chain` | [関連する変更の整理](commands/pr-chain.md) |
 
-引数なしでは、現状を読み次の候補を対話する。`check`・`maintain`・`env` は独立した人間起動の仕事で、開発中に自動実行しない。作業に伴う文書の整理や必要な試験は開発に含む。
+引数なしでは、現状を読み次の候補を対話する。`check`・`maintain`・`env`・`refactor` は独立した人間起動の仕事で、開発中に自動実行しない。作業に伴う文書の整理や必要な試験は開発に含む。
 
 ## 必要な規約だけ読む
 
 - 道具・開発基盤・標準配置：[inta:stack](../stack/SKILL.md)
 - 値と状態：[状態の表現](references/design/state-modeling.md)
 - 責務と依存方向：[設計](references/design/architecture.md)。業務の不変条件を定めるときは [Value Object](references/design/value-object.md)
-- 書き方：[TypeScript](references/code/typescript.md)、[React](references/code/react.md)
+- 作成・変更前に必ず読む：[preferences](references/preferences/index.md)、[構造・分割](references/code/structure.md)
+- 実装：[TypeScript](references/code/typescript.md)、[React](references/code/react.md)
 - 製品・画面の判断：[UX](references/design/ux-five-planes.md)、[画面の導線](references/design/page-routing.md)
 - API・保存・性能：[API](references/design/api.md)、[DB](references/design/database.md)、[Performance](references/design/performance.md)、既存処理の改善は [inta:perf](../perf/SKILL.md)
 - 記録：[文書の入口](references/docs/index.md)、[文章](references/docs/writing-rules.md)、[整合確認](references/docs/validation.md)

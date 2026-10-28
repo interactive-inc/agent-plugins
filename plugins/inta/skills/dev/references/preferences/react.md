@@ -24,4 +24,4 @@ export function CustomerName(props: Props) {
 }
 ```
 
-状態・取得・エラー境界の方法論は [React の設計](../design/react.md)。SSR / SPA など製品単位の選択は [stack](../../../stack/SKILL.md) の Void 方針と導入版の機能に従う。
+状態・取得・エラー境界の方法論は [React の設計](../design/react.md)。SSR / SPA など製品単位の選択は [stack](../guides/stack/index.md) の Void 方針と導入版の機能に従う。

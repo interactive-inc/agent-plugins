@@ -1,6 +1,0 @@
-interface:
-  display_name: "Maintain Product"
-  short_description: "Apply one human-requested maintenance change"
-  default_prompt: "Use $maintain to apply one explicitly scoped, behavior-preserving maintenance change."
-policy:
-  allow_implicit_invocation: false

@@ -33,7 +33,7 @@ gh pr edit <number> --attach ./before.png --attach ./after.png
 gh pr comment <number> --attach ./walkthrough.mp4
 ```
 
-- 本文にlocal pathを`![alt](/tmp/pr-screenshots/<run>/after.png)`の形で書いておくと、そのpathがupload後のURLへ置換される。書いていなければ本文末尾へ追加される
+- 本文にlocal pathを`![alt](../../../../../../../../../../private/tmp/pr-screenshots/<run>/after.png)`の形で書いておくと、そのpathがupload後のURLへ置換される。書いていなければ本文末尾へ追加される
 - 差し替えoptionは無い。古い画像を消すには、新しい画像を`--attach`した後に`--body` / `--body-file`で本文を丸ごと書き換え、古い埋め込みURLを手動で外す
 - 投稿直後に`gh pr view --web`または`gh pr view --json body`でrender結果を確認する
 - `--attach`が使えない場合は画像なしの文章証拠へ切り替え、別のhostingを勝手に使わない

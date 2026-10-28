@@ -17,7 +17,7 @@ UI / HTTP検証でdev serverが必要な場合の共通境界。実際のcommand
 - Issueの検証ではIssue用linked worktreeのserverを使い、primary checkoutのブランチへ切り替えない
 - worktree serverが禁止されている、またはenv、DB、port、cleanupを安全に分離できない場合は、primary checkoutで代用せず検証のblockerとして報告する
 - migrationがshared local DBを先行させる場合は、人間判断が必要な変更として止める
-- portlessやcertificate、system serviceの新規導入は、人間が`inta:env`を明示実行した場合だけ提案・適用する
+- portlessやcertificate、system serviceの新規導入は、利用者が環境整備を依頼・承認した範囲でだけ適用する
 
 ## During verification
 

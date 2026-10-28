@@ -6,63 +6,52 @@
 
 標準の道具は `vp`、新規のWeb製品の基盤は `void`。依存の導入・追加は `vp install` を入口にし、配置と文書の書式は共通規約へそろえます。既存製品の移行は今回の目的と範囲を決めてから行います。
 
-## コマンド一覧
+## 人が使う4つの入口
 
-現在は11個のスキルがあります。以下は Claude Code の呼び出し表記です。Codex では対応するスキルを指定し、同じ引数や自然文の依頼を渡します。
-
-| コマンド | 用途 | 引数なしの動き |
+| コマンド | 頼みたいこと | 変更するか |
 | --- | --- | --- |
-| [/inta:dev](skills/dev/SKILL.md) | 機能追加・不具合修正を、対話から実装・試験・記録まで進める | 現状を読み、次の候補を対話する |
-| [/inta:refactor](skills/refactor/SKILL.md) | 好み・命名・配置・責務を全適用規約へそろえる | 製品の手書きコード全体を確認・修正・再検証 |
-| [/inta:test](skills/test/SKILL.md) | 差分・API・アクセシビリティ・画面・性能を検証する | 差分から必要な検証を選ぶ |
-| [/inta:check](skills/check/SKILL.md) | コード・文書・仕様接続・環境を読み取り専用で点検する | 現在の変更と直接影響する範囲を点検 |
-| [/inta:maintain](skills/maintain/SKILL.md) | 文書やコードを、挙動を保って整理する | 自然文から対象が分かれば進め、不明なら確認 |
-| [/inta:perf](skills/perf/SKILL.md) | 性能の問題を根拠で確かめ、振る舞いを保って改善する | 統計や共通経路から影響の大きい候補を選ぶ |
-| [/inta:stack](skills/stack/SKILL.md) | vp・Void・標準配置、技術選定と移行方針を扱う | 目的と既存構成を確認する |
-| [/inta:env](skills/env/SKILL.md) | 開発環境を点検・整備する | 読み取り専用で点検 |
-| [/inta:docs](skills/docs/SKILL.md) | 正本から HTML・PDF・README を作る | 成果物と正本を依頼から特定し、不明なら確認 |
-| [/inta:wordpress](skills/wordpress/SKILL.md) | WordPress・PHP の更新を調査・実施する | 読み取り専用の計画 |
-| [/inta:orca](skills/orca/SKILL.md) | 明示された Issue の実装を Orca の作業場所へ引き渡す | 対象 Issue と依頼範囲を確認する |
+| [/inta:dev](skills/dev/SKILL.md) | 作りたい・直したい・相談したい | 合意した範囲を実装し、試験と記録まで進める |
+| [/inta:check](skills/check/SKILL.md) | 問題や抜けがないか見てほしい | 読み取り専用。問題と根拠を報告 |
+| [/inta:refactor](skills/refactor/SKILL.md) | 動作を変えず、書き方と構造をそろえてほしい | 全適用規約を確認・修正・再検証 |
+| [/inta:test](skills/test/SKILL.md) | ちゃんと動くか確かめてほしい | 検証だけの依頼では製品コードを変更しない |
 
-`check`・`refactor`・`maintain`・`env` は人が明示して起動します。通常の開発に必要な試験・文書整理・規約への適合は `dev` に含まれ、毎回これらを別工程として呼ぶ必要はありません。
+`dev` が日常の入口です。通常の開発にも規約への適合・試験・文書整理が含まれ、4つを毎回順番に呼ぶ必要はありません。`check` と `refactor` は人が明示して起動する独立した点検・整理です。
 
-## サブコマンドと引数
-
-`<対象>` にはパス・URL・Issue 番号など、そのコマンドに合う対象を渡します。引数はスキルへの指示であり、シェルで実行する CLI コマンドではありません。
-
-| 入力例 | 動き |
-| --- | --- |
-| `dev <自然文・Issue・PR>` | 依頼・既存記録の続きを開発する |
-| `dev next [対象]` | 次に取り組む候補を提案。`--all` で全体探索、`--write` で確定候補を既存の記録先へ追記 |
-| `dev review [対象]` | PR・差分・パスを読み取り専用でレビュー |
-| `dev ci [PR・run URL・ID]` | CI の失敗を読み取り専用で診断 |
-| `dev pr-chain [inspect・merge] <PR...>` | 関連 PR の依存と順序を確認。既定は点検、`merge` を明示したときだけマージ |
-| `refactor [パス・changed] [--check]` | 全体・指定パス・現在の差分を規約へ適合。`--check` は点検だけ |
-| `test changed・unit・api・a11y・visual・diff・perf` | 差分／振る舞い／API 契約／アクセシビリティ／実表示／2ソース比較／画面性能のいずれかを検証 |
-| `check changed・full・code・docs・readme・env [対象]` | 現在の変更／全体／指定領域を読み取り専用で点検 |
-| `check trace [changed・仕様ID・パス・unbound・all]` | 仕様・実装・試験の接続を点検。`unbound --limit N` で未接続候補を限定 |
-| `maintain docs・readme [対象]` | 既存文書を整理。`maintain code` は `refactor` と同じ規約を使う |
-| `perf [パス・画面・API・diff]` | 指定範囲の性能を調査・改善 |
-| `stack migration [package current target]` | 基盤・依存の移行を計画する |
-| `env apply` / `env skills` | 指定した環境変更を適用／技術構成に必要なスキルを導入 |
-| `docs html・pdf・readme <正本・依頼>` | 指定形式の文書を生成・更新し、検品 |
-| `wordpress upgrade・php-upgrade [plan・apply]` | WordPress／PHP を更新。`plan` は調査、`apply` は明示範囲の変更 |
-| `orca #番号` / `orca fanout #番号...` | 単一／複数 Issue を作業場所へ引き渡す |
-
-表の「・」で並べた入力は選択肢です。例えば `test unit`、`docs readme` のように一つ選びます。外部への送信・push・PR・本番反映は、依頼された範囲で行います。
-
-## 使い分けの例
+## そのまま頼む例
 
 ```text
-/inta:dev 顧客検索に絞り込みを追加して
-/inta:check code pages/
-/inta:refactor pages/ --check
+/inta:dev 顧客検索に絞り込みを追加したい
+/inta:dev この API が遅いので調べて改善して
+/inta:dev WordPress と PHP の更新計画を立てて
+/inta:dev README を今の実装に合わせて
+/inta:check この変更で問題が起きないか見て
 /inta:refactor pages/
-/inta:test changed
-/inta:docs readme
+/inta:test 変更した検索画面を確認して
 ```
 
-問題を見つけるだけなら `check`、コードを好み・構造の規約へそろえるなら `refactor`、既存文書の整理なら `maintain`、文書の新規作成や成果物生成なら `docs` を使います。`perf` は原因を調べて改善する入口、`test perf` は同条件で画面性能を測る入口です。
+専門分野のコマンド名を覚える必要はありません。AI は [専門ガイド](skills/dev/references/guides/index.md) から、基盤・環境・性能・WordPress・作業の引き渡しなど必要な手順を選びます。ガイドを読むだけで、インストール・外部送信・本番反映の許可が増えることはありません。
+
+## 覚えておくと便利な指定
+
+| 入力 | 動き |
+| --- | --- |
+| `dev next` | 次に取り組む候補を提案。`--all` で全体探索、`--write` で既存の記録先へ追記 |
+| `dev review <PR・パス>` | 差分を読み取り専用でレビュー |
+| `dev ci <PR・run>` | CI の失敗を診断 |
+| `dev pr-chain <PR...>` | 関連 PR の依存とマージ順を確認。マージは明示依頼時だけ |
+| `check full` | 製品全体を読み取り専用で点検 |
+| `check code・docs・readme・env <対象>` | コード・文書・入口・環境のいずれかを点検 |
+| `check trace <仕様ID・パス>` | 仕様・実装・試験の接続を点検 |
+| `refactor [パス・changed] [--check]` | 指定なしは製品全体、`changed` は差分。`--check` は規約の点検だけ |
+| `test changed・unit・api・a11y・visual・diff・perf` | 差分・単体・API・アクセシビリティ・実表示・見た目比較・性能のいずれかを検証 |
+
+表の「・」は選択肢です。例えば `/inta:test unit` のように一つ選びます。これらはシェルの CLI ではなく、スキルへ渡す依頼の指定です。
+
+## 旧コマンドからの移行
+
+`stack`・`env`・`perf`・`wordpress`・`orca`・`maintain` は専門ガイドへ統合しました。今後は `dev` にやりたいことを伝えてください。コード全体の規約整理は `refactor`、点検だけなら `check` を使います。
+
+`docs` の README 更新は `dev` へ統合しました。配布資料の生成機能は公開プラグインから外しています。旧コマンドの自動転送はありません。
 
 ## 好みと方法論
 
@@ -70,13 +59,11 @@
 
 ## 開発文書
 
-[docs](skills/docs/SKILL.md) は製品の正本からHTML・PDF・READMEを作成します。対象製品の書式を優先し、会社共通の見た目には依存しません。仕様や設計判断の管理は `dev` が担当します。
-
-提案資料、社内の説明資料、試作画面・動画、会社共通の見た目は収録しません。
+README・`.docs`・AGENTS.md の作成・更新・整理は `dev` に含みます。「README を今の実装に合わせて」「判断を .docs に残して」と自然文で依頼できます。HTML・PDF・スライドなどの配布資料作成は収録しません。
 
 ## 補助担当
 
-Claude Code 向けには `fable`・`opus`・`sonnet`・`worker`・`hacker`・`loop` を収録しています。各担当の定義は [agents](agents/) にあります。Codex は共通の手順を直接利用します。
+Claude Code 向けには `fable`・`opus`・`sonnet`・`worker`・`hacker`・`loop` を収録しています。各担当の定義は [agents](agents) にあります。Codex は共通の手順を直接利用します。
 
 ## 適用範囲
 

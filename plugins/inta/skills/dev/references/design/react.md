@@ -6,7 +6,7 @@
 
 単純な値は `useState`、更新パターンが複数なら Reducer、関連する値と判断は Value Object、順序を制約するなら FSM を使う。[状態の表現](state-modeling.md) に従い、画面から独立して試験する。
 
-新規 Web 製品は [stack](../../../stack/SKILL.md) の Void 方針と導入版の取得・更新方式を使う。既存の React Query + Hono RPC 製品は [data-fetching](data-fetching.md) にそろえる。新たな取得方式を重ねない。
+新規 Web 製品は [stack](../guides/stack/index.md) の Void 方針と導入版の取得・更新方式を使う。既存の React Query + Hono RPC 製品は [data-fetching](data-fetching.md) にそろえる。新たな取得方式を重ねない。
 
 ## データ取得と境界
 

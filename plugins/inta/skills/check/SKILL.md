@@ -16,7 +16,7 @@ disable-model-invocation: true
 | `full` | [製品全体](references/scopes.md#full) |
 | `code` / `docs` / `readme` と対象 | [指定領域](references/scopes.md) |
 | `trace` と対象 | [仕様と検証の接続](commands/trace.md) |
-| `env` | [開発環境](../env/SKILL.md) の読み取り専用点検 |
+| `env` | [開発環境](../dev/references/guides/environment/index.md) の読み取り専用点検 |
 
 比較基点と範囲を決め、現在の実装・規約・再現条件で裏付けられた問題だけを報告する。利用者への影響、根拠となる場所、推奨する次の対応を添え、バグ・証拠不足・環境要因を区別する。未検査を合格へ数えない。
 

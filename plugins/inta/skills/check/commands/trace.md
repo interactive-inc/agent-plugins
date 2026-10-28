@@ -70,5 +70,5 @@ Application / Domain、endpoint E2E、Journey E2E、smokeの責任を混ぜな�
 
 - `inta:check`: 人間の明示実行を受け、既定ではchangedまたは上限付きunbound、`full`ではallを選ぶ
 - `inta:test`: 開発差分に必要なunit / a11y / visual / diffを実行し、仕様監査を自動起動しない
-- `inta:maintain`: この結果から挙動不変の保守だけを別作業として行う
+- `文書・構成の整理`: この結果から挙動不変の保守だけを別作業として行う
 - `inta:dev`: confirmed bugまたは仕様変更を別の開発作業として扱う

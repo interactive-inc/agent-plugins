@@ -14,7 +14,7 @@ disable-model-invocation: true
 
 - 好みと書式：[preferences](../dev/references/preferences/index.md)。TypeScript / React の各 ID を含め、対象に適用する規則をすべて確認する。
 - 方法論：[ファイル分割とテスト容易性](../dev/references/code/structure.md)、[依存・ユースケース](../dev/references/design/architecture.md)、[React の境界](../dev/references/design/react.md)。
-- 基盤と配置：[stack](../stack/SKILL.md)。文書も対象なら [文書規約](../dev/references/docs/index.md)。
+- 基盤と配置：[stack](../dev/references/guides/stack/index.md)。文書も対象なら [文書規約](../dev/references/docs/index.md)。
 
 ## 進め方
 

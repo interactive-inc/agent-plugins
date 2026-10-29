@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Code"
+  short_description: "Review changes and classify PR merge lanes"
+  default_prompt: "Use $review to review the requested changes, classify their PR lane, or configure the product's merge policy."

@@ -12,7 +12,7 @@
 
 [preferences](../../dev/references/preferences/index.md) と [構造・分割](../../dev/references/code/structure.md) を読み取り専用で照合する。
 
-変更に必要な試験は [test changed](../../test/commands/changed.md)。加えて、型と I/O 境界、認可、状態・失敗・再試行・並行実行を [レビュー](../../dev/references/tools/review.md) と [設計規約](../../dev/references/design/architecture.md) に照合する。
+変更に必要な試験は [test changed](../../test/commands/changed.md)。加えて、型と I/O 境界、認可、状態・失敗・再試行・並行実行を [設計規約](../../dev/references/design/architecture.md) に照合する。
 
 未使用検出や巨大ファイルの集計は候補探しに使う。削除候補は re-export・動的参照・framework の入口・公開 API まで確認する。行数だけで違反とせず、責務や変更理由の混在を示す。試験の skip・retry・時刻依存も、実際の検出力に影響するか確かめる。
 

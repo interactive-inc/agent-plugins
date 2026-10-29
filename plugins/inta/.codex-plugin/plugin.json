@@ -1,6 +1,6 @@
 {
   "name": "inta",
-  "version": "0.9.0+codex.20261028154721",
+  "version": "0.10.0+codex.20261029062453",
   "description": "社外の開発者にも提供する製品開発・検証・開発文書・保守の支援",
   "author": {
     "name": "Interactive Inc.",
@@ -25,7 +25,8 @@
     "capabilities": [],
     "defaultPrompt": [
       "inta:devでこの開発の依頼を進めて",
-      "inta:docs readmeで製品の説明書を更新して"
+      "inta:devで製品のREADMEを更新して",
+      "inta:dev lanesでPRのレーンとマージ条件を設定して"
     ]
   }
 }

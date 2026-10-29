@@ -15,8 +15,8 @@
 
 ## Merge
 
-1. ユーザーが対象PR群とmergeを明示していること、対象リポジトリのmerge方式と権限を確認する
-2. 順序ごとに最新state、required checks、review、mergeabilityを再取得する
+1. ユーザーが対象PR群とmergeを明示していること、対象リポジトリのmerge方式と権限、[レーン方針](../references/tools/pr-lanes.md)を確認する。設定による通常開発のマージ許可は、このコマンドの `inspect` をマージへ変えない
+2. 順序ごとに最新state、required checks、review、mergeabilityとレーンを再取得する。後続PRもレーンの確認条件を省略しない
 3. 1件ずつmergeし、結果を確認してから次へ進む。先行merge後に後続PRが変化したら再検査する
 4. branch更新、rebase、conflict解消、admin bypassを暗黙に行わない。必要ならその地点で止めて具体的なblockerを報告する
 5. 一部成功後に失敗した場合は、merge済みと未処理を明確に分け、既にmergeしたPRを戻さない

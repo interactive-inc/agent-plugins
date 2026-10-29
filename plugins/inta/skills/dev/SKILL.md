@@ -1,7 +1,7 @@
 ---
 name: dev
 description: "Develop products through ongoing dialogue, focused implementation, tests, and maintained project context."
-argument-hint: "[next|review|ci|pr-chain|自然文|Issue番号]"
+argument-hint: "[next|review|ci|pr-chain|lanes|自然文|Issue番号]"
 user-invocable: true
 disable-model-invocation: false
 ---
@@ -29,6 +29,7 @@ disable-model-invocation: false
 | `review` | [差分の確認](references/tools/review.md) |
 | `ci` | [自動検査の失敗](commands/ci.md) |
 | `pr-chain` | [関連する変更の整理](commands/pr-chain.md) |
+| `lanes`・PR レーンの設定 | [レーンとマージ方針](references/tools/pr-lanes.md) |
 
 引数なしでは、現状を読み次の候補を対話する。`check`・`refactor` は独立した人間起動の仕事で、開発中に全体点検・全体整理を自動実行しない。作業に伴う文書の整理や必要な試験は開発に含む。
 
@@ -44,4 +45,4 @@ disable-model-invocation: false
 - 製品・画面の判断：[UX](references/design/ux-five-planes.md)、[画面の導線](references/design/page-routing.md)
 - API・保存・性能：[API](references/design/api.md)、[DB](references/design/database.md)、[Performance](references/design/performance.md)、既存処理の改善は [性能改善ガイド](references/guides/performance/index.md)
 - 記録：[文書の入口](references/docs/index.md)、[文章](references/docs/writing-rules.md)、[整合確認](references/docs/validation.md)
-- 外部へ届けるとき：[GitHub](references/tools/github.md)、[課題・変更提案の書式](references/tools/issue-pr.md)、[変更履歴](references/tools/changelog.md)
+- 外部へ届けるとき：[GitHub](references/tools/github.md)、[課題・変更提案の書式](references/tools/issue-pr.md)、PR 作成・更新・マージ前は必ず [レーン](references/tools/pr-lanes.md)、[変更履歴](references/tools/changelog.md)

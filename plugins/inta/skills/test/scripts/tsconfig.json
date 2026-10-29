@@ -10,6 +10,6 @@
     "skipLibCheck": true,
     "esModuleInterop": true
   },
-  "include": ["a11y/*.ts", "diff/*.ts", "diff/*.d.ts"],
+  "include": ["a11y/*.ts", "a11y/*.d.ts", "diff/*.ts", "diff/*.d.ts"],
   "exclude": ["a11y/node_modules"]
 }

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Find and Plan Bugs"
+  short_description: "Find bugs and organize Issues with plans and estimates"
+  default_prompt: "Use $inta:debug to investigate bugs with code, tests, and UI checks by default, use code mode for static inspection only, and organize Issues with fix plans and estimates."

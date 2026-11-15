@@ -3,7 +3,6 @@ name: worker
 description: "Implement and test an assigned scope without further delegation."
 model: opus
 effort: high
-permissionMode: bypassPermissions
 skills:
   - dev
   - agent-browser

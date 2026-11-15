@@ -3,7 +3,6 @@ name: sonnet
 description: "Implement lightweight development work with advisor-supported decisions."
 model: sonnet
 effort: xhigh
-permissionMode: bypassPermissions
 skills:
   - dev
   - agent-browser

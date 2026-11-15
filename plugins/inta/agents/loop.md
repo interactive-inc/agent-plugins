@@ -2,7 +2,6 @@
 name: loop
 description: "Inspect an authorized screen scope and report at most one verified defect."
 model: sonnet
-permissionMode: bypassPermissions
 memory: project
 skills:
   - agent-browser

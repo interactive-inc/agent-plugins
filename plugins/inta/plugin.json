@@ -1,11 +1,11 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "inta",
-  "version": "0.10.5",
+  "version": "0.10.8",
   "description": "社外の開発者にも提供する製品開発・検証・開発文書・保守の支援",
   "author": {
     "name": "Interactive Inc.",
-    "email": "info@inta.co.jp"
+    "email": "takata@inta.co.jp"
   },
   "homepage": "https://github.com/interactive-inc/agent-plugins/tree/main/plugins/inta",
   "repository": "https://github.com/interactive-inc/agent-plugins",

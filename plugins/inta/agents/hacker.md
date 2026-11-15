@@ -3,7 +3,6 @@ name: hacker
 description: "Inspect explicitly authorized security boundaries and report verified findings."
 model: opus
 effort: high
-permissionMode: bypassPermissions
 background: true
 isolation: worktree
 metadata:
